@@ -3,6 +3,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.pytest-tmp/
 .ruff_cache/
 .env
 data/
@@ -10,6 +11,7 @@ artifacts/
 models/
 node_modules/
 web/dist/
+web/public/pdfjs/
 *.tsbuildinfo
 tmp/
 *.log

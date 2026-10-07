@@ -6,7 +6,7 @@ COPY web/ ./
 RUN npm run build
 
 FROM python:3.11-slim-bookworm
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HF_HUB_DISABLE_TELEMETRY=1 ANONYMIZED_TELEMETRY=False
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HF_HUB_DISABLE_TELEMETRY=1 ANONYMIZED_TELEMETRY=False PYTHONPATH=/app
 WORKDIR /app
 COPY requirements.linux.lock ./
 RUN pip install --no-cache-dir --require-hashes -r requirements.linux.lock

@@ -1,0 +1,30 @@
+{
+  "journal": {
+    "sentiment": "positive",
+    "emotion": "neutral",
+    "moodScore": 10,
+    "summary": "I enjoyed lunch with my friend. I felt happy and relaxed afterward.",
+    "crisisRisk": "LOW",
+    "confidence": 0.9378
+  },
+  "upload_status": "READY",
+  "answer": {
+    "status": "ANSWERED",
+    "answer": "Orchid staff receive 23 days of annual leave [1]",
+    "citations": [
+      {
+        "document_id": "db95ada65c8e465ba22c9f35475588a3",
+        "filename": "new-policy.pdf",
+        "page": 1,
+        "chunk_id": "5a8808975ed249abb71d3abd9a511b70_0",
+        "quote": "Orchid staff receive 23 days of annual leave. Requests require the supervisor\u2019s\napproval."
+      }
+    ]
+  },
+  "external_connections_blocked": [
+    "203.0.113.1"
+  ],
+  "unexpected_external_attempts": [],
+  "scope": "Python socket audit guard in the API/inference process; not an OS firewall. Local Ollama is allowed; PDF extraction subprocess is not audit-hook instrumented.",
+  "generator": "qwen4b"
+}

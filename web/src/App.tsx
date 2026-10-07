@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { ArrowRight, Check, ChevronRight, FileText, KeyRound, LoaderCircle, LogOut, NotebookPen, Plus, ShieldCheck, Trash2, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, ExternalLink, FileText, KeyRound, LoaderCircle, LogOut, NotebookPen, Plus, ShieldCheck, Trash2, X } from 'lucide-react';
 
 type Journal = { sentiment: string; emotion: string; moodScore: number; summary: string; crisisRisk: string; confidence: number };
 type Doc = { id: string; filename: string; state: string; pages: number; chunks: number; error: string | null };
 type Citation = { document_id: string; filename: string; page: number; chunk_id: string; quote: string };
 type Answer = { status: string; answer: string; citations: Citation[] };
 type Health = { status: string; authEnabled: boolean; failure: string | null };
+const PdfPreview = lazy(() => import('./PdfPreview'));
 
 export default function App() {
   const [view, setView] = useState<'journal' | 'documents'>('journal');
@@ -23,6 +24,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
   const [pdfUrl, setPdfUrl] = useState('');
+  const [previewPage, setPreviewPage] = useState(1);
   const [elapsed, setElapsed] = useState<number | null>(null);
   const cancel = useRef<AbortController | null>(null);
   const uploadRequest = useRef<XMLHttpRequest | null>(null);
@@ -58,6 +60,7 @@ export default function App() {
     let alive = true;
     let objectUrl = '';
     setPdfUrl('');
+    setPreviewPage(1);
     if (selected && document?.state === 'READY') {
       fetch(`/documents/${selected}/file`, { headers: key ? { Authorization: `Bearer ${key}` } : {} })
         .then(r => { if (!r.ok) throw new Error('PDF preview unavailable'); return r.blob(); })
@@ -150,7 +153,7 @@ export default function App() {
         </div> : <div className="documents-layout">
           <input className="hidden" ref={uploadInput} type="file" accept="application/pdf,.pdf" onChange={e => upload(e.target.files?.[0])} />
           <section className="document-list"><div className="section-label"><h2>Library</h2><span>{docs.length}</span></div>{docs.length ? docs.map(doc => <div className={`document-row ${selected === doc.id ? 'selected' : ''}`} key={doc.id}><button className="document-select" disabled={!!busy} onClick={() => { setSelected(doc.id); setAnswer(null); setQuestion(''); setError(''); }}><FileText size={20} /><span><strong>{doc.filename}</strong><small>{doc.state === 'READY' ? `${doc.pages} pages · ${doc.chunks} chunks` : doc.state}</small></span>{doc.state === 'READY' && <Check size={14} />}</button><button className="icon" title={`Delete ${doc.filename}`} disabled={!!busy} onClick={() => remove(doc)}><Trash2 size={15} /></button></div>) : <div className="empty library-empty"><FileText size={30} strokeWidth={1.4} /><span>No documents</span></div>}</section>
-          <section className="document-question"><div className="section-label"><h2>{document?.filename || 'Document questions'}</h2>{document?.state === 'READY' && <span className="ready-label">READY</span>}</div>{document ? <><form onSubmit={ask}><label htmlFor="question">Question</label><textarea id="question" rows={3} maxLength={1500} placeholder="Ask a question about this document" value={question} disabled={!!busy} onChange={e => { setQuestion(e.target.value); setAnswer(null); }} required /><button className="primary" disabled={!!busy || !question.trim() || document.state !== 'READY' || health?.status !== 'ready'}>Ask document<ArrowRight size={16} /></button></form>{answer && <div className="answer" aria-live="polite"><div className="answer-status">{answer.status.replaceAll('_', ' ')}</div><p>{answer.answer}</p>{answer.citations.map((citation, i) => <details key={`${citation.chunk_id}-${i}`}><summary>[{i + 1}] {citation.filename} · Page {citation.page}</summary><blockquote>{citation.quote}</blockquote></details>)}</div>}{pdfUrl && <div className="pdf-preview"><h3>Source document</h3><iframe title={`Preview of ${document.filename}`} src={pdfUrl} /></div>}</> : <div className="empty"><FileText size={34} strokeWidth={1.4} /><span>No document selected</span></div>}</section>
+          <section className="document-question"><div className="section-label"><h2>{document?.filename || 'Document questions'}</h2>{document?.state === 'READY' && <span className="ready-label">READY</span>}</div>{document ? <><form onSubmit={ask}><label htmlFor="question">Question</label><textarea id="question" rows={3} maxLength={1500} placeholder="Ask a question about this document" value={question} disabled={!!busy} onChange={e => { setQuestion(e.target.value); setAnswer(null); }} required /><button className="primary" disabled={!!busy || !question.trim() || document.state !== 'READY' || health?.status !== 'ready'}>Ask document<ArrowRight size={16} /></button></form>{answer && <div className="answer" aria-live="polite"><div className="answer-status">{answer.status.replaceAll('_', ' ')}</div><p>{answer.answer}</p>{answer.citations.map((citation, i) => <details key={`${citation.chunk_id}-${i}`} onToggle={e => { if (e.currentTarget.open) setPreviewPage(citation.page); }}><summary>[{i + 1}] {citation.filename} · Page {citation.page}</summary><blockquote>{citation.quote}</blockquote></details>)}</div>}{pdfUrl && <div className="pdf-preview"><div className="section-label"><h3>Source document</h3><a className="icon" href={`${pdfUrl}#page=${previewPage}&view=FitH`} target="_blank" rel="noreferrer" title="Open source PDF" aria-label="Open source PDF"><ExternalLink size={16} /></a></div><Suspense fallback={<div role="status">Loading source document</div>}><PdfPreview url={pdfUrl} page={previewPage} onPageChange={setPreviewPage} /></Suspense></div>}</> : <div className="empty"><FileText size={34} strokeWidth={1.4} /><span>No document selected</span></div>}</section>
         </div>}
         </>}
       </main>

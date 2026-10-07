@@ -255,6 +255,8 @@ def create_app(settings: Settings | None = None, model_factory=Models, document_
     dist = ROOT / "web" / "dist"
     if dist.exists():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")
+        if (dist / "pdfjs").exists():
+            app.mount("/pdfjs", StaticFiles(directory=dist / "pdfjs"), name="pdfjs")
 
         @app.get("/", include_in_schema=False)
         async def index():

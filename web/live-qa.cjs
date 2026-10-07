@@ -15,6 +15,7 @@ const { spawnSync } = require('node:child_process');
   const browser = await chromium.launch({ headless: true, channel: 'msedge', args: ['--disable-gpu'] });
   const report = [];
   let documentId;
+  try {
   for (const [name, width, height] of [['desktop', 1440, 960], ['mobile', 390, 844]]) {
     const context = await browser.newContext({ viewport: { width, height },
       ...(process.env.RECORD_VIDEO === '1' ? { recordVideo: { dir: output, size: { width, height } } } : {}) });
@@ -56,25 +57,41 @@ const { spawnSync } = require('node:child_process');
     assert.ok(answer.answer.includes('18'));
     assert.ok(answer.citations.some(c => c.page === 1 && c.document_id === documentId));
     await page.locator('.answer details').first().locator('summary').click();
-    await page.locator('iframe').waitFor();
+    const canvas = page.locator('canvas[data-rendered=true]');
+    await canvas.waitFor();
+    const pixels = await canvas.evaluate(element => {
+      const data = element.getContext('2d').getImageData(0, 0, element.width, element.height).data;
+      let dark = 0;
+      for (let i = 0; i < data.length; i += 16) if (data[i + 3] && data[i] < 180 && data[i + 1] < 180 && data[i + 2] < 180) dark++;
+      return dark;
+    });
+    assert.ok(pixels > 50, 'Source PDF canvas is blank');
     const preview = await context.request.get(`/documents/${documentId}/file`.replace(/^/, process.env.APP_URL || 'http://127.0.0.1:8000'));
     assert.equal(preview.status(), 200);
     assert.ok((await preview.body()).subarray(0, 5).toString() === '%PDF-');
     await page.screenshot({ path: path.join(output, name + '-document-answer.png'), fullPage: true });
+    await page.getByRole('button', { name: 'Next page', exact: true }).click();
+    await page.locator('canvas[aria-label="Source document page 2"][data-rendered=true]').waitFor();
+    assert.equal(await page.getByLabel('Source page', { exact: true }).inputValue(), '2');
+    await page.getByRole('button', { name: 'Previous page', exact: true }).click();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     await page.getByLabel('Question', { exact: true }).fill('What was Delta workshop revenue in 2018?');
     const unknown = page.waitForResponse(r => r.url().endsWith('/questions') && r.request().method() === 'POST');
     await page.getByRole('button', { name: 'Ask document', exact: true }).click();
     const unsupported = await unknown;
     assert.equal(unsupported.status(), 200, await unsupported.text());
-    assert.equal((await unsupported.json()).status, 'INSUFFICIENT_EVIDENCE');
-    assert.deepEqual((await unsupported.json()).citations, []);
+    const unsupportedBody = await unsupported.json();
+    assert.equal(unsupportedBody.status, 'INSUFFICIENT_EVIDENCE');
+    assert.deepEqual(unsupportedBody.citations, []);
     const video = page.video();
     await context.close();
     if (video) await video.saveAs(path.join(output, name + '-walkthrough.webm'));
-    report.push({ name, errors, overflow, journalSeconds, journal, answer, unsupported: await unsupported.json() });
+    report.push({ name, errors, overflow, sourceCanvasDarkSamples: pixels, pageNavigation: true,
+      journalSeconds, journal, answer, unsupported: unsupportedBody });
   }
+  } finally {
   await browser.close();
+  }
   fs.writeFileSync(path.join(root, 'reports', 'live-browser.json'), JSON.stringify(report, null, 2));
   assert.ok(report.every(r => !r.errors.length && !r.overflow));
   console.log(JSON.stringify(report.map(r => ({ name: r.name, errors: r.errors, overflow: r.overflow, journalSeconds: r.journalSeconds })), null, 2));

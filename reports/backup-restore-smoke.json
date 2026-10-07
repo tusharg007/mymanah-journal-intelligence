@@ -1,0 +1,25 @@
+{
+  "generator": "qwen4b",
+  "backup_quiesced": true,
+  "raw_pdf_hash_preserved": true,
+  "generation_preserved": true,
+  "vectors_before": 2,
+  "vectors_after": 2,
+  "query_without_reingestion": {
+    "status": "ANSWERED",
+    "answer": "Delta workshop employees receive 18 days of annual leave. [1]",
+    "citations": [
+      {
+        "document_id": "bb5f688c86a2482da1e0eef3c5af0da8",
+        "filename": "delta-workshop-policy.pdf",
+        "page": 1,
+        "chunk_id": "802d5303a9f84126b3e26b5c93d409f5_0",
+        "quote": "Delta workshop employees receive 18 days of annual leave. Leave requests require\napproval from the workshop manager. Contractors receive no annual leave."
+      }
+    ]
+  },
+  "unauthenticated_journal_status": 401,
+  "other_principal_metadata_status": 404,
+  "other_principal_pdf_status": 404,
+  "scope": "Real models and restored SQLite/Chroma/PDF data through in-process ASGI API; ephemeral keys are not retained."
+}
