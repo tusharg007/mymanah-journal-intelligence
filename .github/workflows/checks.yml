@@ -1,0 +1,39 @@
+name: checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install --require-hashes -r requirements.linux.lock
+      - run: pip install --no-deps -e .
+      - run: ruff check mymanah scripts tests evals
+      - run: pytest -m "not live" -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --ignore-scripts && npm run build
+        working-directory: web
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Linux CPU image
+        run: docker build --tag mymanah-check .
+      - name: Check real dependency imports and non-root writable data
+        run: >-
+          docker run --rm --network none mymanah-check python -c
+          "import os, pathlib, torch, transformers, sentence_transformers, chromadb, pypdf;
+          from mymanah.api import create_app;
+          assert os.getuid() == 10001;
+          pathlib.Path('/app/data/smoke').write_text('packaging check');
+          assert create_app().title == 'MyManah Journal Intelligence';
+          print('Linux imports and non-root storage passed; model inference requires mounted artifacts')"

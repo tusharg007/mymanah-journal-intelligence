@@ -1,0 +1,12 @@
+.git
+.venv
+models
+data
+artifacts
+backups
+tmp
+web/node_modules
+web/dist
+*.pdf
+IMPLEMENTATION_PLAN.md
+.env

@@ -1,0 +1,25 @@
+{
+  "hardware": "Windows laptop, 16 GB RAM, RTX 3050 Laptop 4 GB VRAM",
+  "selected_generator": "qwen4b",
+  "comparison_limitations": "Quality uses identical synthetic development cases, not clinical data. Timing is not a controlled speed comparison: security-updated dependencies and available RAM differed between runs.",
+  "qwen4b": {
+    "ollama_version": "0.40.0",
+    "initial_failure": "CUDA_Host allocation of 986356224 bytes failed while CPU classifiers and embeddings were loaded",
+    "load_correction": "LLAMA_ARG_FIT_TARGET=256; one resident generator; user closed Chrome. No user processes or browser data were deleted.",
+    "gpu_layers": "37/37",
+    "journal_validated_responses": "49/50",
+    "journal_p50_seconds": 11.22946889999912,
+    "journal_p95_seconds": 15.562174140000206,
+    "rag_responses": "30/30",
+    "rag_automated_matches": "27/30",
+    "reports": ["development-qwen4b.json", "rag-qwen4b.json"],
+    "interpretation": "Selected for substantially fewer controlled validation failures. Does not imply zero semantic errors."
+  },
+  "qwen1b": {
+    "journal_validated_responses": "41/50",
+    "rag_responses": "21/30",
+    "rag_automated_matches": "19/30",
+    "reports": ["development-qwen1b.json", "rag-qwen1b.json"],
+    "interpretation": "Faster, but rejected because of frequent summary/claim validation failures and an unrelated grounded answer on an unanswerable question. No automatic fallback."
+  }
+}

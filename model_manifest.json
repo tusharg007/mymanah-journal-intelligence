@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "sentiment": {
+    "repo": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+    "revision": "3216a57f2a0d9c45a2e6c20157c20c49fb4bf9c7",
+    "license": "cc-by-4.0",
+    "weight": "pytorch_model.bin",
+    "sha256": "4d24a3e32a88ed1c4e5b789fc6644e2e767500554e954b27dccf52a8e762cbae"
+  },
+  "nli": {
+    "repo": "MoritzLaurer/deberta-v3-base-zeroshot-v2.0-c",
+    "revision": "bddf8c5411c34ac3565e16e04384fd68b2618dda",
+    "license": "mit",
+    "weight": "model.safetensors",
+    "sha256": "605e40d2020f4c66666db3e98a4bc277b6214565eac95f35c1a5027a93ee0ef0"
+  },
+  "embedding": {
+    "repo": "intfloat/multilingual-e5-small",
+    "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "license": "mit",
+    "weight": "model.safetensors",
+    "sha256": "1a55775f53449dac10a2bcbc312469fac40b96d53198c407081a831f81c98477"
+  },
+  "generators": {
+    "qwen4b": {
+      "repo": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+      "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+      "license": "apache-2.0",
+      "file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+      "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+      "ollama_model": "mymanah-qwen4b",
+      "tokenizer_repo": "Qwen/Qwen3-4B-Instruct-2507",
+      "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+    },
+    "qwen1b": {
+      "repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+      "license": "apache-2.0",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+      "ollama_model": "mymanah-qwen1b",
+      "tokenizer_repo": "Qwen/Qwen2.5-1.5B-Instruct",
+      "tokenizer_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+    }
+  }
+}

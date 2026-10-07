@@ -1,0 +1,22 @@
+.venv/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+data/
+artifacts/
+models/
+node_modules/
+web/dist/
+*.tsbuildinfo
+tmp/
+*.log
+.coverage
+htmlcov/
+test-results/
+playwright-report/
+backups/
+IMPLEMENTATION_PLAN.md
+Generative AI & Machine Learning Engineer Intern.pdf

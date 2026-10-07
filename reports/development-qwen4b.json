@@ -1,0 +1,1603 @@
+{
+  "split": "development.json",
+  "generator": "qwen4b",
+  "policy": "journal-policy-2",
+  "cold_load_seconds": 62.366623800000525,
+  "torch_threads": 4,
+  "count": 50,
+  "cases": [
+    {
+      "id": "dev01",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.0625796000003902,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.925904099998661,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "moodScore": 10,
+        "summary": "The person feels pleased with their project progress. The completion of the project is acknowledged as a positive outcome. The emotional response to the project is one of satisfaction.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8851
+      },
+      "success": true,
+      "journal_seconds": 10.113653200000044
+    },
+    {
+      "id": "dev02",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.04447060000165948,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.6819548999992548,
+      "success": false,
+      "error": "SUMMARY_UNSUPPORTED",
+      "journal_seconds": 14.967059200000222
+    },
+    {
+      "id": "dev03",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.05155249999916123,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.415239300000394,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 1,
+        "summary": "I worry about passing next month's exam due to ongoing uncertainty. The uncertainty of the exam outcome bothers me.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8428
+      },
+      "success": true,
+      "journal_seconds": 14.09416710000005
+    },
+    {
+      "id": "dev04",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.039472599999498925,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.494303999999829,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "My workload is overwhelming due to three deadlines landing at once. I feel under constant pressure from the deadlines.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.7892
+      },
+      "success": true,
+      "journal_seconds": 15.43329840000115
+    },
+    {
+      "id": "dev05",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.03690039999855799,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9377636000008351,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "My colleague took credit for my work. I am furious about how unfair that was.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9349
+      },
+      "success": true,
+      "journal_seconds": 10.475676599999133
+    },
+    {
+      "id": "dev06",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.062155399999028305,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.970926399999371,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 2,
+        "summary": "A stranger followed me down the street tonight and I was afraid for my safety. I felt unsafe because a stranger was following me. The experience triggered a sense of fear and vulnerability.",
+        "crisisRisk": "LOW",
+        "confidence": 0.7732
+      },
+      "success": true,
+      "journal_seconds": 15.83098770000106
+    },
+    {
+      "id": "dev07",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.05657900000005611,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 1.9788832000012917,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 6,
+        "summary": "The meeting was attended at ten and minutes submitted at eleven. The afternoon schedule remained unchanged.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9527
+      },
+      "success": true,
+      "journal_seconds": 10.775879099999656
+    },
+    {
+      "id": "dev08",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.05723070000021835,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.722868999999264,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 10,
+        "summary": "The weekend with my family was wonderful. I feel grateful and refreshed.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9868
+      },
+      "success": true,
+      "journal_seconds": 9.609888999999384
+    },
+    {
+      "id": "dev09",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.05886049999935494,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.0303409000007377,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 2,
+        "summary": "I cried after looking at old photos of my dog who died last year. I still feel the loss.",
+        "crisisRisk": "LOW",
+        "confidence": 0.857
+      },
+      "success": true,
+      "journal_seconds": 11.650426500000322
+    },
+    {
+      "id": "dev10",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06446309999955702,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.2737882000001264,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 1,
+        "summary": "The person is anxious about tomorrow's interview. The person keeps imagining everything that might go wrong.",
+        "crisisRisk": "LOW",
+        "confidence": 0.889
+      },
+      "success": true,
+      "journal_seconds": 11.435627599999862
+    },
+    {
+      "id": "dev11",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07239079999999376,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.092286300001433,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "The constant demands at work leave no time to rest. I feel stressed and overloaded.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.8483
+      },
+      "success": true,
+      "journal_seconds": 10.81040320000102
+    },
+    {
+      "id": "dev12",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06647829999928945,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9336370999990322,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "The landlord's repeated disregard for repair requests causes irritation. The repeated disrespect leads to anger.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9514
+      },
+      "success": true,
+      "journal_seconds": 10.552021999999852
+    },
+    {
+      "id": "dev13",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06604909999987285,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.857579599998644,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 2,
+        "summary": "The fire alarm sounded and smoke filled the hallway. I was scared while leaving the building.",
+        "crisisRisk": "LOW",
+        "confidence": 0.7819
+      },
+      "success": true,
+      "journal_seconds": 10.455611500001396
+    },
+    {
+      "id": "dev14",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.048231400000076974,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 1.8206345999988116,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 7,
+        "summary": "I bought groceries and renewed my bus pass. Both receipts are on the desk.",
+        "crisisRisk": "LOW",
+        "confidence": 0.717
+      },
+      "success": true,
+      "journal_seconds": 10.044875800000227
+    },
+    {
+      "id": "dev15",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.06507050000072923,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.9840715000009368,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 9,
+        "summary": "The person does not want to die or hurt themselves. The person feels happy about spending time with their family.",
+        "crisisRisk": "LOW",
+        "confidence": 0.7322
+      },
+      "success": true,
+      "journal_seconds": 11.232287599999836
+    },
+    {
+      "id": "dev16",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.05528059999960533,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.9857095000006666,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "moodScore": 8,
+        "summary": "I used to feel hopeless years ago, but I am doing well now and enjoying my routine. The journal expresses a shift from hopelessness to current well-being. The individual reports positive engagement with their daily routine.",
+        "crisisRisk": "LOW",
+        "confidence": 0.6629
+      },
+      "success": true,
+      "journal_seconds": 16.80294540000068
+    },
+    {
+      "id": "dev17",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.0649559000012232,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 1.9271972999995342,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "moodScore": 9,
+        "summary": "The person is giving up on a difficult puzzle. The person feels fine despite the decision to stop working on the puzzle. The person is choosing a relaxing walk as an alternative activity.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8393
+      },
+      "success": true,
+      "journal_seconds": 11.914716900000712
+    },
+    {
+      "id": "dev18",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.0706979999995383,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.28461199999947,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 2,
+        "summary": "The journal entry mentions a fictional scene in a novel where a character desires to end his life. The author explicitly states this scene does not reflect their own feelings. The entry confirms the distinction between fiction and personal emotional state.",
+        "crisisRisk": "LOW",
+        "confidence": 0.7714
+      },
+      "success": true,
+      "journal_seconds": 13.886051199999201
+    },
+    {
+      "id": "dev19",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "HIGH"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07040090000009513,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.1489490999992995,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "The person has not been sleeping well for weeks. Work stress is described as unbearable. The individual expresses a desire to give up on life.",
+        "crisisRisk": "HIGH",
+        "confidence": 0.7944
+      },
+      "success": true,
+      "journal_seconds": 12.421916699999201
+    },
+    {
+      "id": "dev20",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "HIGH"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.05471849999958067,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.728631800000585,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 1,
+        "summary": "The person plans to end their life tonight. The person feels completely hopeless.",
+        "crisisRisk": "HIGH",
+        "confidence": 0.9463
+      },
+      "success": true,
+      "journal_seconds": 9.264317899998787
+    },
+    {
+      "id": "dev21",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.056270899998708046,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.7976046999992832,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 10,
+        "summary": "The concert was delightful and I enjoyed every song. I came home smiling.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9896
+      },
+      "success": true,
+      "journal_seconds": 9.835373599999002
+    },
+    {
+      "id": "dev22",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.050979899999219924,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.6607140000014624,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 1,
+        "summary": "My application was rejected. I feel disappointed and down today.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9351
+      },
+      "success": true,
+      "journal_seconds": 9.770846499999607
+    },
+    {
+      "id": "dev23",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06935349999912432,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.182129699998768,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 1,
+        "summary": "The person is nervous about the results arriving next week. They are uncertain whether the results will be good.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8469
+      },
+      "success": true,
+      "journal_seconds": 13.148236600000018
+    },
+    {
+      "id": "dev24",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07328070000039588,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.990903400001116,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "My inbox grows faster than I can respond to it. I feel overwhelmed by the demands in my inbox.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.7533
+      },
+      "success": true,
+      "journal_seconds": 11.22946889999912
+    },
+    {
+      "id": "dev25",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.056186699999670964,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9392062000006263,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "The delivery company lost my package again. I am angry about their carelessness.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9525
+      },
+      "success": true,
+      "journal_seconds": 15.648091299999578
+    },
+    {
+      "id": "dev26",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07106559999920137,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.2193057000004046,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 2,
+        "summary": "I felt terrified when a vehicle swerved toward me. I stepped back onto the pavement to avoid danger.",
+        "crisisRisk": "LOW",
+        "confidence": 0.85
+      },
+      "success": true,
+      "journal_seconds": 11.034743900001558
+    },
+    {
+      "id": "dev27",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.06770099999994272,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 2.180197400000907,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 6,
+        "summary": "I filed the expense report and updated the meeting room booking. The revised meeting room booking is set for noon.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9448
+      },
+      "success": true,
+      "journal_seconds": 13.445398899999418
+    },
+    {
+      "id": "dev28",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.06979649999993853,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 2.296560500000851,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 10,
+        "summary": "The person feels relieved that the missing keys were found. The person feels happy to have the keys back.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9356
+      },
+      "success": true,
+      "journal_seconds": 11.838113499999963
+    },
+    {
+      "id": "dev29",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06517270000040298,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9823565000006056,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 1,
+        "summary": "The house feels empty since my sister left. I miss our evening conversations and feel sad.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8972
+      },
+      "success": true,
+      "journal_seconds": 11.303776799999468
+    },
+    {
+      "id": "dev30",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.0676184000003559,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.141101700000945,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 2,
+        "summary": "The person worries that the new team may not accept them. The uncertainty is causing anxiety.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8372
+      },
+      "success": true,
+      "journal_seconds": 12.191594600000826
+    },
+    {
+      "id": "dev31",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.04846659999930125,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.073236399999587,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "The workload has been relentless for days, causing a persistent sense of being overwhelmed. The person reports feeling unable to keep up with the demands. The journal expresses a clear sense of exhaustion from continuous work pressure.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.8878
+      },
+      "success": true,
+      "journal_seconds": 11.5053568000003
+    },
+    {
+      "id": "dev32",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07451209999999264,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9791905000001861,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "I feel resentful that my contribution was ignored. I am frustrated with the decision.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9335
+      },
+      "success": true,
+      "journal_seconds": 10.766180999999051
+    },
+    {
+      "id": "dev33",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07484859999931359,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9886076000002504,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 2,
+        "summary": "The door handle moved while I was alone at night, causing fear. I felt frightened and took action by calling the building guard.",
+        "crisisRisk": "LOW",
+        "confidence": 0.7119
+      },
+      "success": true,
+      "journal_seconds": 11.6522187999999
+    },
+    {
+      "id": "dev34",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.052385200000571785,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 2.511207999999897,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 6,
+        "summary": "The bus arrived at eight, as noted in the journal. I recorded the arrival time in my notebook.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9306
+      },
+      "success": true,
+      "journal_seconds": 12.047176899999613
+    },
+    {
+      "id": "dev35",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.05753700000059325,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.8333612000005814,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 10,
+        "summary": "My plants finally bloomed today. I am delighted and proud of caring for them.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9915
+      },
+      "success": true,
+      "journal_seconds": 10.17887200000041
+    },
+    {
+      "id": "dev36",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.057957899998655193,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.1077917000002344,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 1,
+        "summary": "I feel discouraged after another unsuccessful attempt. I am sad that the effort did not work out.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.9161
+      },
+      "success": true,
+      "journal_seconds": 11.56455140000071
+    },
+    {
+      "id": "dev37",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.04717010000058508,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.3405370999989827,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 1,
+        "summary": "The person feels anxious about moving to a new city. There is uncertainty about the outcome of the move.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8788
+      },
+      "success": true,
+      "journal_seconds": 12.212063999999373
+    },
+    {
+      "id": "dev38",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.03960030000052939,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.8147136000006867,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "The user feels overwhelmed by an excessive number of tasks and insufficient time. The pressure from the workload is described as overwhelming.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.7931
+      },
+      "success": true,
+      "journal_seconds": 11.128188099999534
+    },
+    {
+      "id": "dev39",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.059588500000245403,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.919028199999957,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "I am furious that someone damaged my bicycle and walked away. Their behavior was unfair.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9412
+      },
+      "success": true,
+      "journal_seconds": 10.549117300000944
+    },
+    {
+      "id": "dev40",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.03480579999995825,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.8645343000007415,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 2,
+        "summary": "A large branch fell beside me during the storm. I felt afraid and hurried inside.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8546
+      },
+      "success": true,
+      "journal_seconds": 14.246896900000138
+    },
+    {
+      "id": "dev41",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.04643720000058238,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 2.2882747999992716,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 6,
+        "summary": "The folders were moved into the cabinet and drawers were labeled. The inventory now lists six folders.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9162
+      },
+      "success": true,
+      "journal_seconds": 11.21321960000023
+    },
+    {
+      "id": "dev42",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.05939849999958824,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 1.8883731000005355,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 10,
+        "summary": "My friend helped me through a difficult day. I am grateful and feel much better now.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9627
+      },
+      "success": true,
+      "journal_seconds": 10.513205299999754
+    },
+    {
+      "id": "dev43",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.03919130000031146,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.7628383999999642,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "moodScore": 1,
+        "summary": "The person feels lonely after spending the entire weekend alone. The person misses having company.",
+        "crisisRisk": "LOW",
+        "confidence": 0.877
+      },
+      "success": true,
+      "journal_seconds": 9.944204999999783
+    },
+    {
+      "id": "dev44",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.07042659999933676,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.9554867999995622,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 2,
+        "summary": "The person is worried about the outcome of tomorrow's appointment. The person imagines uncertain outcomes regarding the appointment.",
+        "crisisRisk": "LOW",
+        "confidence": 0.8423
+      },
+      "success": true,
+      "journal_seconds": 11.394616999999926
+    },
+    {
+      "id": "dev45",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.04674039999918023,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.8198682000002009,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "stress",
+        "moodScore": 1,
+        "summary": "I feel stressed by the constant interruptions. The competing demands are overwhelming me.",
+        "crisisRisk": "MEDIUM",
+        "confidence": 0.8162
+      },
+      "success": true,
+      "journal_seconds": 10.496777500000462
+    },
+    {
+      "id": "dev46",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06435140000030515,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.2690514999994775,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anger",
+        "moodScore": 1,
+        "summary": "Someone cut ahead of me after I waited for an hour. I am irritated and angry about it.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9424
+      },
+      "success": true,
+      "journal_seconds": 15.413547199999812
+    },
+    {
+      "id": "dev47",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.06559589999960735,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 2.1790206999994552,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "fear",
+        "moodScore": 3,
+        "summary": "The person felt fear when the elevator stopped between floors. They initiated an emergency response by pressing the emergency button.",
+        "crisisRisk": "LOW",
+        "confidence": 0.6127
+      },
+      "success": true,
+      "journal_seconds": 10.846130699999776
+    },
+    {
+      "id": "dev48",
+      "expected": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "neutral",
+      "roberta_seconds": 0.06709840000075928,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 2.060265799998888,
+      "actual": {
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "moodScore": 6,
+        "summary": "I checked the meter reading and posted the envelope. The post office receipt is in my bag.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9056
+      },
+      "success": true,
+      "journal_seconds": 10.981624899999588
+    },
+    {
+      "id": "dev49",
+      "expected": {
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "HIGH"
+      },
+      "roberta": "negative",
+      "roberta_seconds": 0.046223299999837764,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 1.7008315999992192,
+      "actual": {
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "moodScore": 1,
+        "summary": "The person plans to hurt themselves tonight. They feel unable to see a way forward.",
+        "crisisRisk": "HIGH",
+        "confidence": 0.3248
+      },
+      "success": true,
+      "journal_seconds": 9.47092049999992
+    },
+    {
+      "id": "dev50",
+      "expected": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "roberta": "positive",
+      "roberta_seconds": 0.051257799999802955,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 1.9005555999992794,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "moodScore": 10,
+        "summary": "The person does not plan to hurt themselves. The person enjoyed a peaceful walk and felt happy today.",
+        "crisisRisk": "LOW",
+        "confidence": 0.919
+      },
+      "success": true,
+      "journal_seconds": 10.675462500001231
+    }
+  ],
+  "models": {
+    "version": 1,
+    "sentiment": {
+      "repo": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "revision": "3216a57f2a0d9c45a2e6c20157c20c49fb4bf9c7",
+      "license": "cc-by-4.0",
+      "weight": "pytorch_model.bin",
+      "sha256": "4d24a3e32a88ed1c4e5b789fc6644e2e767500554e954b27dccf52a8e762cbae"
+    },
+    "nli": {
+      "repo": "MoritzLaurer/deberta-v3-base-zeroshot-v2.0-c",
+      "revision": "bddf8c5411c34ac3565e16e04384fd68b2618dda",
+      "license": "mit",
+      "weight": "model.safetensors",
+      "sha256": "605e40d2020f4c66666db3e98a4bc277b6214565eac95f35c1a5027a93ee0ef0"
+    },
+    "embedding": {
+      "repo": "intfloat/multilingual-e5-small",
+      "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+      "license": "mit",
+      "weight": "model.safetensors",
+      "sha256": "1a55775f53449dac10a2bcbc312469fac40b96d53198c407081a831f81c98477"
+    },
+    "generators": {
+      "qwen4b": {
+        "repo": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+        "license": "apache-2.0",
+        "file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+        "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+        "ollama_model": "mymanah-qwen4b",
+        "tokenizer_repo": "Qwen/Qwen3-4B-Instruct-2507",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+      },
+      "qwen1b": {
+        "repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+        "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+        "license": "apache-2.0",
+        "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+        "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+        "ollama_model": "mymanah-qwen1b",
+        "tokenizer_repo": "Qwen/Qwen2.5-1.5B-Instruct",
+        "tokenizer_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+      }
+    }
+  },
+  "interpretation": "Curated engineering cases, not clinical validation or deployment accuracy",
+  "roberta": {
+    "classification": {
+      "negative": {
+        "precision": 0.9705882352941176,
+        "recall": 1.0,
+        "f1-score": 0.9850746268656716,
+        "support": 33.0
+      },
+      "neutral": {
+        "precision": 1.0,
+        "recall": 0.8571428571428571,
+        "f1-score": 0.9230769230769231,
+        "support": 7.0
+      },
+      "positive": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 10.0
+      },
+      "accuracy": 0.98,
+      "macro avg": {
+        "precision": 0.9901960784313726,
+        "recall": 0.9523809523809524,
+        "f1-score": 0.9693838499808649,
+        "support": 50.0
+      },
+      "weighted avg": {
+        "precision": 0.9805882352941176,
+        "recall": 0.98,
+        "f1-score": 0.9793800229621126,
+        "support": 50.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        33,
+        0,
+        0
+      ],
+      [
+        1,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "label_order": [
+      "negative",
+      "neutral",
+      "positive"
+    ]
+  },
+  "nli_sentiment": {
+    "classification": {
+      "negative": {
+        "precision": 0.9705882352941176,
+        "recall": 1.0,
+        "f1-score": 0.9850746268656716,
+        "support": 33.0
+      },
+      "neutral": {
+        "precision": 0.75,
+        "recall": 0.8571428571428571,
+        "f1-score": 0.8,
+        "support": 7.0
+      },
+      "positive": {
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1-score": 0.8888888888888888,
+        "support": 10.0
+      },
+      "accuracy": 0.94,
+      "macro avg": {
+        "precision": 0.9068627450980392,
+        "recall": 0.8857142857142858,
+        "f1-score": 0.8913211719181868,
+        "support": 50.0
+      },
+      "weighted avg": {
+        "precision": 0.9455882352941177,
+        "recall": 0.94,
+        "f1-score": 0.9399270315091212,
+        "support": 50.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        33,
+        0,
+        0
+      ],
+      [
+        1,
+        6,
+        0
+      ],
+      [
+        0,
+        2,
+        8
+      ]
+    ],
+    "label_order": [
+      "negative",
+      "neutral",
+      "positive"
+    ]
+  },
+  "journal_sentiment": {
+    "agreement": {
+      "correct": 48,
+      "total": 50,
+      "fraction": 0.96,
+      "wilson_95": [
+        0.8653990931249297,
+        0.9889611156723802
+      ]
+    },
+    "classification": {
+      "negative": {
+        "precision": 0.9696969696969697,
+        "recall": 0.9696969696969697,
+        "f1-score": 0.9696969696969697,
+        "support": 33.0
+      },
+      "neutral": {
+        "precision": 1.0,
+        "recall": 0.8571428571428571,
+        "f1-score": 0.9230769230769231,
+        "support": 7.0
+      },
+      "positive": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 10.0
+      },
+      "micro avg": {
+        "precision": 0.9795918367346939,
+        "recall": 0.96,
+        "f1-score": 0.9696969696969697,
+        "support": 50.0
+      },
+      "macro avg": {
+        "precision": 0.98989898989899,
+        "recall": 0.9422799422799423,
+        "f1-score": 0.9642579642579644,
+        "support": 50.0
+      },
+      "weighted avg": {
+        "precision": 0.98,
+        "recall": 0.96,
+        "f1-score": 0.9692307692307692,
+        "support": 50.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        32,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        10,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "label_order": [
+      "negative",
+      "neutral",
+      "positive",
+      "SERVICE_ERROR"
+    ],
+    "denominator": 50,
+    "warning": "Service errors count as missed predictions and remain visible; labels are provisional engineering annotations"
+  },
+  "journal_emotion": {
+    "agreement": {
+      "correct": 44,
+      "total": 50,
+      "fraction": 0.88,
+      "wilson_95": [
+        0.7619518261679701,
+        0.9438239984906773
+      ]
+    },
+    "classification": {
+      "happy": {
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.8,
+        "support": 9.0
+      },
+      "sad": {
+        "precision": 0.8571428571428571,
+        "recall": 0.75,
+        "f1-score": 0.8,
+        "support": 8.0
+      },
+      "anxiety": {
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "f1-score": 0.9230769230769231,
+        "support": 6.0
+      },
+      "stress": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      },
+      "anger": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "fear": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "neutral": {
+        "precision": 0.7,
+        "recall": 0.875,
+        "f1-score": 0.7777777777777778,
+        "support": 8.0
+      },
+      "micro avg": {
+        "precision": 0.8979591836734694,
+        "recall": 0.88,
+        "f1-score": 0.8888888888888888,
+        "support": 50.0
+      },
+      "macro avg": {
+        "precision": 0.9163265306122449,
+        "recall": 0.8988095238095237,
+        "f1-score": 0.9001221001221001,
+        "support": 50.0
+      },
+      "weighted avg": {
+        "precision": 0.912,
+        "recall": 0.88,
+        "f1-score": 0.8872136752136752,
+        "support": 50.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        6,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "label_order": [
+      "happy",
+      "sad",
+      "anxiety",
+      "stress",
+      "anger",
+      "fear",
+      "neutral",
+      "SERVICE_ERROR"
+    ],
+    "denominator": 50,
+    "warning": "Service errors count as missed predictions and remain visible; labels are provisional engineering annotations"
+  },
+  "journal_crisisRisk": {
+    "agreement": {
+      "correct": 42,
+      "total": 50,
+      "fraction": 0.84,
+      "wilson_95": [
+        0.7148578393696501,
+        0.916625793219666
+      ]
+    },
+    "classification": {
+      "LOW": {
+        "precision": 0.8461538461538461,
+        "recall": 0.9428571428571428,
+        "f1-score": 0.8918918918918919,
+        "support": 35.0
+      },
+      "MEDIUM": {
+        "precision": 0.8571428571428571,
+        "recall": 0.5,
+        "f1-score": 0.631578947368421,
+        "support": 12.0
+      },
+      "HIGH": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3.0
+      },
+      "micro avg": {
+        "precision": 0.8571428571428571,
+        "recall": 0.84,
+        "f1-score": 0.8484848484848485,
+        "support": 50.0
+      },
+      "macro avg": {
+        "precision": 0.9010989010989011,
+        "recall": 0.8142857142857144,
+        "f1-score": 0.8411569464201043,
+        "support": 50.0
+      },
+      "weighted avg": {
+        "precision": 0.8580219780219781,
+        "recall": 0.84,
+        "f1-score": 0.8359032716927455,
+        "support": 50.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        33,
+        1,
+        0,
+        1
+      ],
+      [
+        6,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "label_order": [
+      "LOW",
+      "MEDIUM",
+      "HIGH",
+      "SERVICE_ERROR"
+    ],
+    "denominator": 50,
+    "warning": "Service errors count as missed predictions and remain visible; labels are provisional engineering annotations"
+  },
+  "latency": {
+    "successful_count": 49,
+    "failure_count": 1,
+    "p50": 11.22946889999912,
+    "p95": 15.562174140000206
+  }
+}

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mymanah-journal-intelligence"
+version = "0.1.0"
+description = "Offline journal analysis and evidence-grounded PDF questions"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic>=2.10,<3",
+  "python-multipart>=0.0.20,<1", "python-dotenv>=1.1,<2",
+  "httpx>=0.28,<1", "pypdf>=6.19,<7", "chromadb>=1.0,<2",
+  "rank-bm25==0.2.2", "numpy>=2,<3", "torch==2.14.1+cpu",
+  "transformers>=5.10,<6", "sentence-transformers>=5,<6",
+  "huggingface-hub>=1.31,<3", "sentencepiece>=0.2,<1",
+  "requests>=2.32.4,<3", "urllib3>=2.5,<3", "certifi>=2025.1.31",
+  "idna>=3.15,<4", "setuptools>=83",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1", "scikit-learn>=1.6,<2", "psutil>=6,<8"]
+
+[tool.setuptools.packages.find]
+include = ["mymanah*"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--basetemp=tmp/pytest-implementation"
+markers = ["live: requires downloaded models and local Ollama"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]

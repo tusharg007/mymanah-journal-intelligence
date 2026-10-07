@@ -1,0 +1,483 @@
+{
+  "scope": "CPU classification only; not end-to-end API or generator validation",
+  "split": "development",
+  "count": 20,
+  "cases": [
+    {
+      "id": "dev01",
+      "expected": {
+        "id": "dev01",
+        "text": "I finished my project today and feel pleased with my progress.",
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "positive",
+      "emotion": "neutral",
+      "crisisRisk": "LOW",
+      "classification_seconds": 0.9017755999993824,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 0.28225729999940086
+    },
+    {
+      "id": "dev02",
+      "expected": {
+        "id": "dev02",
+        "text": "My friend moved away yesterday. I miss her and feel lonely.",
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "sad",
+      "crisisRisk": "LOW",
+      "classification_seconds": 0.9943855999990774,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.24703880000015488
+    },
+    {
+      "id": "dev03",
+      "expected": {
+        "id": "dev03",
+        "text": "I keep worrying about whether I will pass next month's exam. Nothing has happened yet, but the uncertainty bothers me.",
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "anxiety",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.1277133000003232,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.3012705000001006
+    },
+    {
+      "id": "dev04",
+      "expected": {
+        "id": "dev04",
+        "text": "Three deadlines landed at once and my workload is overwhelming. I feel under constant pressure.",
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "sentiment": "negative",
+      "emotion": "stress",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.0614165999995748,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.2951950999995461
+    },
+    {
+      "id": "dev05",
+      "expected": {
+        "id": "dev05",
+        "text": "My colleague took credit for my work. I am furious about how unfair that was.",
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "anger",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.0926254000005429,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.24782459999914863
+    },
+    {
+      "id": "dev06",
+      "expected": {
+        "id": "dev06",
+        "text": "A stranger followed me down the street tonight and I was afraid for my safety.",
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "sentiment": "negative",
+      "emotion": "fear",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.0313877999997203,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.22601399999985006
+    },
+    {
+      "id": "dev07",
+      "expected": {
+        "id": "dev07",
+        "text": "I attended a meeting at ten and submitted the minutes at eleven. The afternoon schedule was unchanged.",
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "neutral",
+      "emotion": "neutral",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.0067103000001225,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 0.26436909999938507
+    },
+    {
+      "id": "dev08",
+      "expected": {
+        "id": "dev08",
+        "text": "The weekend with my family was wonderful. I feel grateful and refreshed.",
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "positive",
+      "emotion": "happy",
+      "crisisRisk": "LOW",
+      "classification_seconds": 0.9375110000000859,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 0.23567730000104348
+    },
+    {
+      "id": "dev09",
+      "expected": {
+        "id": "dev09",
+        "text": "I cried after looking at old photos of my dog who died last year. I still feel the loss.",
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "sad",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.2102789000000485,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.3511307000007946
+    },
+    {
+      "id": "dev10",
+      "expected": {
+        "id": "dev10",
+        "text": "I am anxious about tomorrow's interview. I keep imagining everything that might go wrong.",
+        "sentiment": "negative",
+        "emotion": "anxiety",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "anxiety",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.1773544999996375,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.3159052999999403
+    },
+    {
+      "id": "dev11",
+      "expected": {
+        "id": "dev11",
+        "text": "The constant demands at work leave no time to rest. I feel stressed and overloaded.",
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "MEDIUM"
+      },
+      "sentiment": "negative",
+      "emotion": "stress",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.1055885999994643,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.36276449999968463
+    },
+    {
+      "id": "dev12",
+      "expected": {
+        "id": "dev12",
+        "text": "I am irritated that my landlord ignored another repair request. This repeated disrespect makes me angry.",
+        "sentiment": "negative",
+        "emotion": "anger",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "anger",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.4192634999999427,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.3611061999999947
+    },
+    {
+      "id": "dev13",
+      "expected": {
+        "id": "dev13",
+        "text": "The fire alarm sounded and smoke filled the hallway. I was scared while leaving the building.",
+        "sentiment": "negative",
+        "emotion": "fear",
+        "crisisRisk": "MEDIUM"
+      },
+      "sentiment": "negative",
+      "emotion": "fear",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.2254634000000806,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.3178719999996247
+    },
+    {
+      "id": "dev14",
+      "expected": {
+        "id": "dev14",
+        "text": "I bought groceries and renewed my bus pass. Both receipts are on the desk.",
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "neutral",
+      "emotion": "neutral",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.2305037999994966,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 0.3532089000000269
+    },
+    {
+      "id": "dev15",
+      "expected": {
+        "id": "dev15",
+        "text": "I do not want to die or hurt myself. I feel happy about spending time with my family.",
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "positive",
+      "emotion": "happy",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.1163722999990568,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 0.35767090000081225
+    },
+    {
+      "id": "dev16",
+      "expected": {
+        "id": "dev16",
+        "text": "I used to feel hopeless years ago, but I am doing well now and enjoying my routine.",
+        "sentiment": "positive",
+        "emotion": "happy",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "positive",
+      "emotion": "happy",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.216796400000021,
+      "nli_sentiment": "positive",
+      "nli_sentiment_seconds": 0.42981180000060704
+    },
+    {
+      "id": "dev17",
+      "expected": {
+        "id": "dev17",
+        "text": "I am giving up this difficult puzzle and going for a relaxing walk. I feel fine.",
+        "sentiment": "positive",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "positive",
+      "emotion": "neutral",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.2093552999995154,
+      "nli_sentiment": "neutral",
+      "nli_sentiment_seconds": 0.30524719999993977
+    },
+    {
+      "id": "dev18",
+      "expected": {
+        "id": "dev18",
+        "text": "I read a novel in which a character wanted to end his life. That was a fictional scene, not how I feel.",
+        "sentiment": "neutral",
+        "emotion": "neutral",
+        "crisisRisk": "LOW"
+      },
+      "sentiment": "negative",
+      "emotion": "sad",
+      "crisisRisk": "LOW",
+      "classification_seconds": 1.6735296999995626,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.39699280000058934
+    },
+    {
+      "id": "dev19",
+      "expected": {
+        "id": "dev19",
+        "text": "I haven't been sleeping well for weeks. Work stress is unbearable and I feel like giving up on life.",
+        "sentiment": "negative",
+        "emotion": "stress",
+        "crisisRisk": "HIGH"
+      },
+      "sentiment": "negative",
+      "emotion": "stress",
+      "crisisRisk": "HIGH",
+      "classification_seconds": 1.353158899999471,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.39460630000030505
+    },
+    {
+      "id": "dev20",
+      "expected": {
+        "id": "dev20",
+        "text": "I plan to end my life tonight. I feel completely hopeless.",
+        "sentiment": "negative",
+        "emotion": "sad",
+        "crisisRisk": "HIGH"
+      },
+      "sentiment": "negative",
+      "emotion": "sad",
+      "crisisRisk": "HIGH",
+      "classification_seconds": 1.2602026000004116,
+      "nli_sentiment": "negative",
+      "nli_sentiment_seconds": 0.324596799999199
+    }
+  ],
+  "sentiment": {
+    "negative": {
+      "precision": 0.9230769230769231,
+      "recall": 1.0,
+      "f1-score": 0.96,
+      "support": 12.0
+    },
+    "neutral": {
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.8,
+      "support": 3.0
+    },
+    "positive": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 5.0
+    },
+    "accuracy": 0.95,
+    "macro avg": {
+      "precision": 0.9743589743589745,
+      "recall": 0.8888888888888888,
+      "f1-score": 0.9199999999999999,
+      "support": 20.0
+    },
+    "weighted avg": {
+      "precision": 0.9538461538461538,
+      "recall": 0.95,
+      "f1-score": 0.9460000000000001,
+      "support": 20.0
+    }
+  },
+  "emotion": {
+    "anger": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "anxiety": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "fear": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "happy": {
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1-score": 0.8571428571428571,
+      "support": 4.0
+    },
+    "neutral": {
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1-score": 0.75,
+      "support": 4.0
+    },
+    "sad": {
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1-score": 0.8571428571428571,
+      "support": 3.0
+    },
+    "stress": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 3.0
+    },
+    "accuracy": 0.9,
+    "macro avg": {
+      "precision": 0.9285714285714286,
+      "recall": 0.9285714285714286,
+      "f1-score": 0.923469387755102,
+      "support": 20.0
+    },
+    "weighted avg": {
+      "precision": 0.9125,
+      "recall": 0.9,
+      "f1-score": 0.9,
+      "support": 20.0
+    }
+  },
+  "crisisRisk": {
+    "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "LOW": {
+      "precision": 0.7777777777777778,
+      "recall": 1.0,
+      "f1-score": 0.875,
+      "support": 14.0
+    },
+    "MEDIUM": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 4.0
+    },
+    "accuracy": 0.8,
+    "macro avg": {
+      "precision": 0.5925925925925926,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.625,
+      "support": 20.0
+    },
+    "weighted avg": {
+      "precision": 0.6444444444444445,
+      "recall": 0.8,
+      "f1-score": 0.7125,
+      "support": 20.0
+    }
+  },
+  "nli_sentiment": {
+    "negative": {
+      "precision": 0.9230769230769231,
+      "recall": 1.0,
+      "f1-score": 0.96,
+      "support": 12.0
+    },
+    "neutral": {
+      "precision": 0.6666666666666666,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6666666666666666,
+      "support": 3.0
+    },
+    "positive": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1-score": 0.8888888888888888,
+      "support": 5.0
+    },
+    "accuracy": 0.9,
+    "macro avg": {
+      "precision": 0.8632478632478633,
+      "recall": 0.8222222222222223,
+      "f1-score": 0.8385185185185184,
+      "support": 20.0
+    },
+    "weighted avg": {
+      "precision": 0.9038461538461539,
+      "recall": 0.9,
+      "f1-score": 0.8982222222222223,
+      "support": 20.0
+    }
+  }
+}
