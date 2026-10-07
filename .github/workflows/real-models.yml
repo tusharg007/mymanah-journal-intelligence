@@ -18,8 +18,8 @@ jobs:
           assert shutil.disk_usage('.').free > 10 * 1024**3, 'At least 10 GiB is required before model downloads'
           PY
           mkdir models data artifacts
-          sudo chown 10001:10001 models data
           chmod 0770 models data
+          sudo chown 10001:10001 models data
           key=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
           echo "::add-mask::$key"
           echo "API_KEYS=local:$key" >> "$GITHUB_ENV"

@@ -4,11 +4,11 @@ Local Hugging Face inference for journal analysis and evidence-grounded PDF ques
 
 ## Implementation Status
 
-Both workflows use actual downloaded models, and the 4B generator is selected from two measured candidates. Development evaluation includes 50 journals and 30 questions against a newly uploaded ten-page PDF. Raw results and failures are retained in `reports/`. Verification status is tracked below; an unexecuted profile is not advertised as tested. The approved `IMPLEMENTATION_PLAN.md` is unchanged and excluded from public source control along with the supplied assessment PDF.
+Both workflows use actual downloaded models, and the 4B generator is selected from two measured candidates. Development evaluation includes 50 journals and 30 questions against a newly uploaded ten-page PDF, followed by 100 frozen held-out journals. Native inference, offline operation, browser workflows, authentication and persisted-index restoration have been executed. Raw results and failures are retained in `reports/`; an unexecuted profile is not advertised as tested. The approved `IMPLEMENTATION_PLAN.md` is unchanged and excluded from public source control along with the supplied assessment PDF. Submission notes and actual walkthrough recordings are in `docs/`.
 
 ## Windows Setup
 
-Python 3.11, Node 22+, about 12-15 GB free disk, and Ollama 0.40.0. This machine uses CPU classification/embeddings and NVIDIA GPU offload for generation. Use a project-local environment; do not install into an unrelated project's environment.
+Python 3.11, Node 22.13+, about 12-15 GB free project disk plus adequate system-drive/pagefile headroom, and Ollama 0.40.0. This machine uses CPU classification/embeddings and NVIDIA GPU offload for generation. Use a project-local environment; do not install into an unrelated project's environment.
 
 ```powershell
 uv venv .venv --python 3.11
@@ -21,6 +21,13 @@ Set-Location ..
 ```
 
 The official portable Windows runtime can reside at `artifacts/ollama/ollama.exe`. Put that directory on the current session's PATH, or use an official installed Ollama executable. Runtime release: [Ollama 0.40.0](https://github.com/ollama/ollama/releases/tag/v0.40.0). Windows AMD64 ZIP SHA-256: `3623e256762ca89bd6fa99b0cc4106401919ce9df926411673e632e3ea287bb5`.
+
+To obtain the portable runtime explicitly:
+
+```powershell
+.venv\Scripts\python.exe scripts\download_runtime.py
+Expand-Archive -LiteralPath artifacts\ollama-windows-amd64.zip -DestinationPath artifacts\ollama
+```
 
 ```powershell
 $env:PATH = "$PWD\artifacts\ollama;$env:PATH"
@@ -114,7 +121,7 @@ On this 16 GB RAM / RTX 3050 Laptop 4 GB machine, reducing Ollama's fitting rese
 - Journal: validate -> CPU RoBERTa/NLI classification in parallel with Ollama summary -> source/numeric/NLI support checks -> versioned crisis/mood rules -> exact response.
 - PDF: bounded subprocess extraction -> per-page tokenizer chunks -> canonical SQLite chunks -> explicit E5 vectors in a document-generation-specific Chroma collection -> retrieval probe -> READY publication.
 - RAG: scoped dense and BM25+ retrieval -> reciprocal rank fusion -> evidence budget -> structured claims -> quote/numeric/NLI checks -> server-resolved citations. No outside facts or unverified streaming.
-- One API worker, one active interactive request, two waiting requests and one ingestion lane. Model adapters share a bounded CPU lock; timed-out model work retains admission until it actually completes.
+- One API worker, one active interactive request, two waiting requests and one ingestion lane. Each principal has 10 interactive requests and 2 uploads per minute. Model adapters share a bounded CPU lock; timed-out model work retains admission until it actually completes.
 - Upload timeout/cancellation invalidates its publication token. A duplicate waiter's timeout does not cancel the owner. Restart cleans unpublished indexes and interrupted uploads. Deletion makes a document unavailable before cleanup.
 - Journal contents are transient. PDFs persist until deletion. No raw journal, question, PDF text, prompts, generated answers or keys in application logs. Data/model directories and secrets are excluded from Git.
 
@@ -151,6 +158,18 @@ These runs were not a controlled speed comparison: dependency versions and avail
 
 Known journal errors include a positive completion entry classified as neutral emotion, and six of twelve expected MEDIUM cases classified LOW on development data. The three development HIGH examples were correctly classified, which is far too little evidence for clinical reliability. Exact class counts, service errors, confusion matrices and Wilson intervals are in the reports. Summary/claim NLI validation can both reject valid paraphrases and accept mistakes; it is not a proof of factual correctness. See `reports/CORRECTIONS.md`, `reports/SECURITY.md`, and `evals/README.md`.
 
+### Frozen Held-Out Results
+
+The 100 separately authored, provisional English cases produced 96 validated responses and four `SUMMARY_UNSUPPORTED` errors. Service errors count as missed predictions, not successful labels. Successful-request p50/p95: 11.71/18.39 seconds; the 10-15-second target is not met for every entry.
+
+| Output | Matching labels / all cases | Wilson 95% interval | Macro-F1 |
+| --- | --- | --- | --- |
+| Sentiment | 95 / 100 | 88.8%-97.8% | 0.956 |
+| Dominant emotion | 93 / 100 | 86.3%-96.6% | 0.949 |
+| Screening priority | 81 / 100 | 72.2%-87.5% | 0.836 |
+
+The fine-tuned RoBERTa baseline matched 99/100 sentiment annotations (macro-F1 0.976), versus NLI sentiment's 97/100 (macro-F1 0.951). Sentiment counts: 72 negative, 14 neutral, 14 positive. Emotions: 14 each except 16 sad. Screening: 70 LOW, 28 MEDIUM, 2 HIGH. Only 13/28 MEDIUM examples matched; both HIGH examples matched. Simple synthetic language and only two HIGH examples prevent real-world or clinical generalization. Labels were authored before observing outputs, are not independently human/clinician validated, and were not revised after the run. No post-holdout semantic tuning was performed.
+
 ## Backup and Restore
 
 Stop the API before either command. Keep archives outside `data/`, and restore only to an empty destination:
@@ -164,16 +183,43 @@ $env:DATA_DIR = "$PWD\restored-data"
 
 After readiness, ask a real question against a restored document to verify its persisted index, not only the SQLite integrity check. Backup archives contain uploaded PDF text and must be treated as private. Journals are not persisted. Unsetting `DATA_DIR` restores the normal data location on the next restart.
 
+With the API stopped, `python -m scripts.rehearse_backup` repeats the real synthetic-Delta restore and keyed owner-isolation check. It requires the document created by the browser verification, preserves its generation/vector count and source hash, then performs a real question without reingestion. Ephemeral keys and private archives are excluded from the public reports.
+
 ## Docker and GPU Evaluation
 
-Docker uses a CPU-classifier image and a local Ollama container sharing a network namespace. Models/data persist on mounted local volumes; API keys are mandatory for the Docker-published binding. Set `API_KEYS`, then `docker compose up --build`. Import the verified mounted GGUF explicitly using a container-local Modelfile (`FROM /models/qwen4b/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`) and `docker compose exec ollama ollama create mymanah-qwen4b -f /models/qwen4b/Modelfile.container`. Do not reuse a Windows absolute Modelfile path inside Linux.
+Docker uses a CPU-classifier image and a local Ollama container sharing a network namespace. Models/data persist on mounted local volumes; API keys are mandatory for the Docker-published binding. Bootstrap the selected artifacts explicitly, then start/import Ollama before starting the API:
+
+```bash
+uv venv .venv --python 3.11
+uv pip install --python .venv/bin/python --require-hashes -r requirements.linux.lock
+uv pip install --python .venv/bin/python --no-deps -e .
+.venv/bin/python scripts/bootstrap.py --skip-import --generator qwen4b
+mkdir -p data
+sudo chown 10001:10001 data
+export API_KEYS="reviewer:$(.venv/bin/python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+docker compose build api
+docker compose up -d ollama
+docker compose exec ollama ollama create mymanah-qwen4b -f /models/qwen4b/Modelfile.container
+docker compose up -d api
+```
+
+Do not reuse a Windows absolute Modelfile path inside Linux. `Modelfile.container` refers to `/models/qwen4b/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`. For existing open-mode documents, a key named `local` keeps that owner's namespace; a new principal intentionally gets a separate library.
+
+First bootstrap the selected models with `python scripts/bootstrap.py --skip-import --generator qwen4b`. Stop the native API before using the same data directory through Docker. On a fresh Linux checkout, create `data/`, grant UID 10001 ownership (`sudo chown 10001:10001 data`), and ensure mounted public model artifacts are readable by that UID. Do not recursively change ownership of unrelated or existing private directories. Start/import Ollama before starting the API; if the API has already failed startup because the alias was absent, restart `api` after import. Readiness does not automatically recover a failed initial load.
 
 For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --build` only with a verified NVIDIA container runtime. GPU nodes/notebooks run the same package and evaluation commands, not a separate notebook implementation or hosted inference provider. Docker/GPU profiles require execution verification before being marked tested.
 
 ## Verification Status
 
-Native models, candidate comparisons, synchronous ingestion and deterministic tests have been executed. Held-out evaluation, fresh live/browser verification, offline rehearsal, persisted-index restore and walkthrough recording are being completed. Docker execution is currently blocked by insufficient C: drive space; the CPU and Linux GPU profiles are present but not yet execution-verified. No hiring-team email has been sent. Dependency audit limitations are explicitly retained rather than claiming a zero-vulnerability result.
+- 63 deterministic tests pass on Windows and Linux; two additional actual-model live tests pass natively. Ruff and frontend production build pass.
+- Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Actual recordings preserve inference waiting time.
+- Offline smoke passed with non-loopback Python sockets blocked. This is an API-process guard, not an OS firewall or instrumentation of Ollama/PDF subprocesses.
+- Quiesced backup/restore passed with preserved PDF bytes, generation and vectors, a real restored-index question, 401 for unauthenticated keyed access and 404 for another principal's document/source access.
+- Linux CI built the image and verified actual non-root API startup/static/model-manifest paths plus fail-closed missing-model readiness without network access. Full real-model Docker inference is a separate manual integration workflow; its measured outcome is tracked in `reports/`. The Linux GPU profile is not execution-verified.
+- No public deployment, paid GPU job, or hiring-team email was started. Dependency audit gaps and residual Chroma advisories are documented, not presented as a zero-vulnerability result.
 
 ## Attribution
 
 CardiffNLP's English sentiment model is based on the Twitter/XLM-T research lineage; retain its [model card and attribution](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest). Additional upstream cards: [DeBERTa NLI](https://huggingface.co/MoritzLaurer/deberta-v3-base-zeroshot-v2.0-c), [E5](https://huggingface.co/intfloat/multilingual-e5-small), [Qwen 4B GGUF](https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF), [Qwen 1.5B GGUF](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF). Upstream model licenses are separate from application code.
+
+Source rendering uses Mozilla [PDF.js](https://github.com/mozilla/pdf.js) (Apache 2.0), pinned through the frontend lock. Worker, fonts, CMaps and image decoders are bundled locally; uploaded PDF scripts/forms/annotations are not executed by the canvas preview. No PDF assets are fetched from a CDN.

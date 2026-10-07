@@ -1,0 +1,70 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "overflow": false,
+    "sourceCanvasDarkSamples": 422,
+    "pageNavigation": true,
+    "journalSeconds": 16.641,
+    "journal": {
+      "sentiment": "positive",
+      "emotion": "happy",
+      "moodScore": 10,
+      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
+      "crisisRisk": "LOW",
+      "confidence": 0.9906
+    },
+    "answer": {
+      "status": "ANSWERED",
+      "answer": "Delta workshop employees receive 18 days of annual leave. [1]",
+      "citations": [
+        {
+          "document_id": "bb5f688c86a2482da1e0eef3c5af0da8",
+          "filename": "delta-workshop-policy.pdf",
+          "page": 1,
+          "chunk_id": "802d5303a9f84126b3e26b5c93d409f5_0",
+          "quote": "Delta workshop employees receive 18 days of annual leave. Leave requests require\napproval from the workshop manager. Contractors receive no annual leave."
+        }
+      ]
+    },
+    "unsupported": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+      "citations": []
+    }
+  },
+  {
+    "name": "mobile",
+    "errors": [],
+    "overflow": false,
+    "sourceCanvasDarkSamples": 123,
+    "pageNavigation": true,
+    "journalSeconds": 14.541,
+    "journal": {
+      "sentiment": "positive",
+      "emotion": "happy",
+      "moodScore": 10,
+      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
+      "crisisRisk": "LOW",
+      "confidence": 0.9906
+    },
+    "answer": {
+      "status": "ANSWERED",
+      "answer": "Delta workshop employees receive 18 days of annual leave. [1]",
+      "citations": [
+        {
+          "document_id": "bb5f688c86a2482da1e0eef3c5af0da8",
+          "filename": "delta-workshop-policy.pdf",
+          "page": 1,
+          "chunk_id": "802d5303a9f84126b3e26b5c93d409f5_0",
+          "quote": "Delta workshop employees receive 18 days of annual leave. Leave requests require\napproval from the workshop manager. Contractors receive no annual leave."
+        }
+      ]
+    },
+    "unsupported": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+      "citations": []
+    }
+  }
+]
