@@ -1,0 +1,107 @@
+{
+  "split": "heldout.json",
+  "total": 100,
+  "validated_responses": 96,
+  "service_errors_excluded_from_bins": 4,
+  "bins": [
+    {
+      "lower_inclusive": 0,
+      "upper_bound": 0.5,
+      "upper_inclusive": false,
+      "count": 1,
+      "mean_selected_score": 0.4815,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 1,
+        "total": 1,
+        "fraction": 1.0,
+        "wilson_95": [
+          0.20654931437723745,
+          1.0
+        ]
+      }
+    },
+    {
+      "lower_inclusive": 0.5,
+      "upper_bound": 0.7,
+      "upper_inclusive": false,
+      "count": 7,
+      "mean_selected_score": 0.5618285714285715,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 5,
+        "total": 7,
+        "fraction": 0.7142857142857143,
+        "wilson_95": [
+          0.35893445183261935,
+          0.9177810759959433
+        ]
+      }
+    },
+    {
+      "lower_inclusive": 0.7,
+      "upper_bound": 0.8,
+      "upper_inclusive": false,
+      "count": 19,
+      "mean_selected_score": 0.7628315789473683,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 19,
+        "total": 19,
+        "fraction": 1.0,
+        "wilson_95": [
+          0.8318207759473837,
+          1.0
+        ]
+      }
+    },
+    {
+      "lower_inclusive": 0.8,
+      "upper_bound": 0.9,
+      "upper_inclusive": false,
+      "count": 34,
+      "mean_selected_score": 0.8552794117647059,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 34,
+        "total": 34,
+        "fraction": 1.0,
+        "wilson_95": [
+          0.8984854458466761,
+          0.9999999999999999
+        ]
+      }
+    },
+    {
+      "lower_inclusive": 0.9,
+      "upper_bound": 0.95,
+      "upper_inclusive": false,
+      "count": 25,
+      "mean_selected_score": 0.926644,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 23,
+        "total": 25,
+        "fraction": 0.92,
+        "wilson_95": [
+          0.7503389104960468,
+          0.9777795987151524
+        ]
+      }
+    },
+    {
+      "lower_inclusive": 0.95,
+      "upper_bound": 1,
+      "upper_inclusive": true,
+      "count": 10,
+      "mean_selected_score": 0.9824599999999999,
+      "joint_sentiment_emotion_agreement": {
+        "correct": 10,
+        "total": 10,
+        "fraction": 1.0,
+        "wilson_95": [
+          0.7224672001371107,
+          0.9999999999999999
+        ]
+      }
+    }
+  ],
+  "interpretation": "Returned confidence is the uncalibrated minimum selected sentiment/emotion score. Bins compare joint label agreement on provisional synthetic annotations, not correctness of summary, risk or every field. Small counts cannot establish calibration; no fitting was performed.",
+  "brier_score": null,
+  "brier_limitation": "Per-class probability vectors were not retained. Do not invent task-wise Brier scores from a minimum-selected-score heuristic."
+}

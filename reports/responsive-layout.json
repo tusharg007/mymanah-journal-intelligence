@@ -1,0 +1,30 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "journalOverflow": false,
+    "documentOverflow": false,
+    "sourceOverflow": false
+  },
+  {
+    "name": "mobile",
+    "errors": [],
+    "journalOverflow": false,
+    "documentOverflow": false,
+    "sourceOverflow": false
+  },
+  {
+    "name": "compact",
+    "errors": [],
+    "journalOverflow": false,
+    "documentOverflow": false,
+    "sourceOverflow": false
+  },
+  {
+    "name": "wide",
+    "errors": [],
+    "journalOverflow": false,
+    "documentOverflow": false,
+    "sourceOverflow": false
+  }
+]

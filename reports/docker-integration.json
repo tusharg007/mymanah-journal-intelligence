@@ -1,0 +1,62 @@
+{
+  "profile": "Linux Docker CPU, real pinned models",
+  "workflow": ".github/workflows/real-models.yml",
+  "run_url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37673144901",
+  "commit": "9c64ccbb1213f7bdbb38d2704c81484cdf35149b",
+  "conclusion": "success",
+  "job_started_at_utc": "2026-10-07T19:15:52Z",
+  "job_completed_at_utc": "2026-10-07T19:21:00Z",
+  "job_elapsed_seconds": 308,
+  "job_limit_minutes": 30,
+  "runner": {
+    "label": "ubuntu-latest",
+    "logical_cpus": 4,
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "reported_memory": "15 GiB",
+    "gpu": false
+  },
+  "generator": "qwen4b",
+  "model_manifest": "model_manifest.json",
+  "fresh_artifact_download_and_hash_verification": true,
+  "actual_model_readiness": true,
+  "keyed_mode_unauthenticated_journal_status": 401,
+  "tests": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "junit": "reports/docker-integration.junit.xml",
+    "suite_seconds": 56.165,
+    "journal_contract_test_seconds": 19.740,
+    "new_pdf_question_and_abstention_test_seconds": 35.552
+  },
+  "observed_server_request_timings": {
+    "source": "Synthetic-only container-services.log from the linked workflow artifact; metadata request logs mapped to the sequential live tests",
+    "journal_seconds": 19.692,
+    "new_two_page_pdf_ready_seconds": 0.8976,
+    "immediate_supported_question_seconds": 26.2428,
+    "unsupported_question_seconds": 8.3751
+  },
+  "verified_workflows": [
+    "Exact six-field journal response with actual classification and generation",
+    "New two-page PDF returns READY before the immediate supported question",
+    "Answer cites the uploaded document and correct source page",
+    "Unsupported revenue question abstains without citations",
+    "Synthetic document deletion returns 204"
+  ],
+  "integration_containers_and_network_removed": true,
+  "stack_stopped_at_utc": "2026-10-07T19:20:58Z",
+  "previous_attempt": {
+    "run_url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37671988325",
+    "conclusion": "failure",
+    "stage": "Mount preparation, before model downloads",
+    "cause": "chmod was attempted after transferring directory ownership to UID 10001",
+    "correction": "Apply permissions before changing ownership; one corrected retry was authorized"
+  },
+  "limitations": [
+    "Two smoke tests verify integration, not model accuracy, sustained throughput or latency percentiles",
+    "CPU journal timing exceeds the 10-15-second warm short-entry target",
+    "Linux NVIDIA GPU profile remains unexecuted; native Windows GPU offload is separately measured",
+    "No paid GPU job or public deployment was started"
+  ]
+}

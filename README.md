@@ -4,7 +4,7 @@ Local Hugging Face inference for journal analysis and evidence-grounded PDF ques
 
 ## Implementation Status
 
-Both workflows use actual downloaded models, and the 4B generator is selected from two measured candidates. Development evaluation includes 50 journals and 30 questions against a newly uploaded ten-page PDF, followed by 100 frozen held-out journals. Native inference, offline operation, browser workflows, authentication and persisted-index restoration have been executed. Raw results and failures are retained in `reports/`; an unexecuted profile is not advertised as tested. The approved `IMPLEMENTATION_PLAN.md` is unchanged and excluded from public source control along with the supplied assessment PDF. Submission notes and actual walkthrough recordings are in `docs/`.
+Both workflows use actual downloaded models, and the 4B generator is selected from two measured candidates. Development evaluation includes 50 journals and 30 questions against a newly uploaded ten-page PDF, followed by 100 frozen held-out journals. Native inference, full Linux CPU Docker inference, offline operation, browser workflows, authentication and persisted-index restoration have been executed. Raw results and failures are retained in `reports/`; an unexecuted profile is not advertised as tested. The approved `IMPLEMENTATION_PLAN.md` is unchanged and excluded from public source control along with the supplied assessment PDF. Submission notes and actual walkthrough recordings are in `docs/`.
 
 ## Windows Setup
 
@@ -138,6 +138,7 @@ Starting hard deadlines: short journal 30 seconds, larger journal 60, question 4
 .venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --output reports\development-qwen4b.json --rag-output reports\rag-qwen4b.json
 .venv\Scripts\python.exe -m evals.benchmark --generator qwen1b --output reports\development-qwen1b.json --rag-output reports\rag-qwen1b.json
 .venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --cases evals\heldout.json --output reports\heldout-qwen4b.json
+.venv\Scripts\python.exe -m evals.reliability reports\heldout-qwen4b.json reports\heldout-score-reliability.json
 .venv\Scripts\python.exe -m scripts.offline_check
 ```
 
@@ -169,6 +170,8 @@ The 100 separately authored, provisional English cases produced 96 validated res
 | Screening priority | 81 / 100 | 72.2%-87.5% | 0.836 |
 
 The fine-tuned RoBERTa baseline matched 99/100 sentiment annotations (macro-F1 0.976), versus NLI sentiment's 97/100 (macro-F1 0.951). Sentiment counts: 72 negative, 14 neutral, 14 positive. Emotions: 14 each except 16 sad. Screening: 70 LOW, 28 MEDIUM, 2 HIGH. Only 13/28 MEDIUM examples matched; both HIGH examples matched. Simple synthetic language and only two HIGH examples prevent real-world or clinical generalization. Labels were authored before observing outputs, are not independently human/clinician validated, and were not revised after the run. No post-holdout semantic tuning was performed.
+
+`reports/heldout-score-reliability.json` reports selected-score bins, joint sentiment/emotion agreement and Wilson intervals without fitting calibration. The 0.90-0.95 bin contains 23/25 jointly matching labels, so high scores can still be wrong. Four service errors are excluded from the bins but explicitly retained in coverage counts. Per-class probability vectors were not retained; task-wise Brier scores are not invented from this minimum-score heuristic.
 
 ## Backup and Restore
 
@@ -207,15 +210,17 @@ Do not reuse a Windows absolute Modelfile path inside Linux. `Modelfile.containe
 
 First bootstrap the selected models with `python scripts/bootstrap.py --skip-import --generator qwen4b`. Stop the native API before using the same data directory through Docker. On a fresh Linux checkout, create `data/`, grant UID 10001 ownership (`sudo chown 10001:10001 data`), and ensure mounted public model artifacts are readable by that UID. Do not recursively change ownership of unrelated or existing private directories. Start/import Ollama before starting the API; if the API has already failed startup because the alias was absent, restart `api` after import. Readiness does not automatically recover a failed initial load.
 
-For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --build` only with a verified NVIDIA container runtime. GPU nodes/notebooks run the same package and evaluation commands, not a separate notebook implementation or hosted inference provider. Docker/GPU profiles require execution verification before being marked tested.
+The [real-model Linux CPU integration](https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37673144901) passed on a fresh four-vCPU / 15 GiB runner after downloading/hash-verifying the selected artifacts. Both live tests passed: journal contract and newly uploaded PDF with immediate supported question, citations and abstention. Observed server timings were 19.69 seconds for the journal, 0.898 seconds for the two-page READY upload, and 26.24 seconds for the supported question. These are individual observations, not latency percentiles. The stack was stopped after the bounded job. Exact evidence and the initial mount-permission failure are retained in `reports/docker-integration.json` and `reports/docker-integration.junit.xml`.
+
+For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --build` only with a verified NVIDIA container runtime. GPU nodes/notebooks run the same package and evaluation commands, not a separate notebook implementation or hosted inference provider. The Linux GPU profile still requires execution verification before being marked tested.
 
 ## Verification Status
 
-- 63 deterministic tests pass on Windows and Linux; two additional actual-model live tests pass natively. Ruff and frontend production build pass.
-- Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Actual recordings preserve inference waiting time.
+- 65 deterministic tests pass on Windows; the prior 63-test suite also passed on Linux. Two additional actual-model live tests pass both natively and in Linux CPU Docker. Ruff and frontend production build pass; the final Linux checks run on each push.
+- Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Layout checks at widths 320, 390, 1440 and 1920 pixels report no page/source overflow or JavaScript errors (`reports/responsive-layout.json`). Actual recordings preserve inference waiting time.
 - Offline smoke passed with non-loopback Python sockets blocked. This is an API-process guard, not an OS firewall or instrumentation of Ollama/PDF subprocesses.
 - Quiesced backup/restore passed with preserved PDF bytes, generation and vectors, a real restored-index question, 401 for unauthenticated keyed access and 404 for another principal's document/source access.
-- Linux CI built the image and verified actual non-root API startup/static/model-manifest paths plus fail-closed missing-model readiness without network access. Full real-model Docker inference is a separate manual integration workflow; its measured outcome is tracked in `reports/`. The Linux GPU profile is not execution-verified.
+- Linux CI built the image and verified actual non-root API startup/static/model-manifest paths plus fail-closed missing-model readiness without network access. The separate full real-model CPU Docker integration passed. The Linux GPU profile is not execution-verified.
 - No public deployment, paid GPU job, or hiring-team email was started. Dependency audit gaps and residual Chroma advisories are documented, not presented as a zero-vulnerability result.
 
 ## Attribution

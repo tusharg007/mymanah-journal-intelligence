@@ -14,13 +14,13 @@ Loopback review is credential-free by default. API keys are opt-in, remote bindi
 
 ## Evidence
 
-- Windows and Linux deterministic suites: 63 passing tests; native real-model contract/PDF suite: two passing tests.
+- Windows deterministic suite: 65 passing tests; the prior 63-test suite also passed on Linux, with final Linux checks run on each push. Native and Linux CPU Docker real-model contract/PDF suites: two passing tests each.
 - Generator comparison: 4B validated 49/50 development journals and returned 30/30 document-question responses; 1.5B validated 41/50 journals and returned 21/30 question responses. Failures are retained.
 - Frozen 100-case English evaluation: 96 validated responses; label agreement including service errors is 95/100 sentiment, 93/100 emotion and 81/100 screening priority. Successful-request p50/p95 is 11.71/18.39 seconds on the tested laptop.
 - Fine-tuned sentiment baseline: RoBERTa 99/100 matching annotations, versus NLI sentiment 97/100. Counts, macro metrics, confusion matrices and uncertainty are published.
 - New ten-page PDF: synchronous READY in 0.865 seconds. Expected-page retrieval hit 27/27 answerable/partial cases. Automated end-to-end matches were 27/30; one is a matcher false negative and two are conservative full abstentions instead of partial answers.
-- Desktop/mobile real workflows, nonblank PDF canvas, source-page navigation, offline API-process smoke and restored-index/keyed-isolation rehearsal passed.
-- Linux image build and non-root fail-closed startup passed. Full Docker model integration is reported separately; Linux GPU execution is not yet verified.
+- Desktop/mobile real workflows, nonblank PDF canvas, source-page navigation, four-width responsive checks, offline API-process smoke and restored-index/keyed-isolation rehearsal passed.
+- Linux image build, non-root fail-closed startup and [full real-model CPU Docker integration](https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37673144901) passed. The fresh CPU runner observed a 19.69-second journal and a 0.898-second two-page READY upload; these are smoke observations, not latency percentiles. Linux GPU execution is not yet verified.
 
 ## Assumptions and Limitations
 
