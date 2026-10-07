@@ -35,7 +35,6 @@ torch = { index = "pytorch-cpu" }
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-addopts = "--basetemp=tmp/pytest-implementation"
 markers = ["live: requires downloaded models and local Ollama"]
 
 [tool.ruff]
