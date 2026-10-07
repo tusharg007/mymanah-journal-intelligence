@@ -8,6 +8,7 @@ backups
 tmp
 web/node_modules
 web/dist
+web/public/pdfjs
 *.pdf
 IMPLEMENTATION_PLAN.md
 .env

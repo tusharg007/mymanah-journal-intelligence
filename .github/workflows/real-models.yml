@@ -1,0 +1,74 @@
+name: real-model Docker integration
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cpu-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      COMPOSE_PROJECT_NAME: mymanah-real-model-ci
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare isolated model and data mounts
+        run: |
+          python - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 10 * 1024**3, 'At least 10 GiB is required before model downloads'
+          PY
+          mkdir models data artifacts
+          sudo chown 10001:10001 models data
+          chmod 0770 models data
+          key=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
+          echo "::add-mask::$key"
+          echo "API_KEYS=local:$key" >> "$GITHUB_ENV"
+          lscpu
+          free -h
+          df -h .
+      - name: Build the production image
+        run: docker compose build api
+      - name: Download and verify selected pinned HF artifacts explicitly
+        run: >-
+          docker run --rm --user 10001 --volume "$PWD/models:/app/models"
+          mymanah-real-model-ci-api python scripts/bootstrap.py --skip-import --generator qwen4b
+      - name: Start local Ollama and import the verified GGUF
+        run: |
+          docker compose up -d ollama
+          for attempt in $(seq 1 30); do
+            if docker compose exec -T ollama ollama list; then break; fi
+            sleep 2
+          done
+          docker compose exec -T ollama ollama create mymanah-qwen4b -f /models/qwen4b/Modelfile.container
+      - name: Start the real API and wait for actual model readiness
+        run: |
+          docker compose up -d api
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --max-time 5 http://127.0.0.1:8000/health/ready; then ready=1; break; fi
+            sleep 5
+          done
+          test "$ready" = 1
+          status=$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 5 -H 'Content-Type: application/json' --data '{"text":"Today was an ordinary day."}' http://127.0.0.1:8000/analyze-journal)
+          test "$status" = 401
+      - name: Run real-model journal and new-PDF integration tests
+        run: |
+          container=$(docker compose ps -q api)
+          docker cp tests "$container:/tmp/tests"
+          docker compose exec -T -e "LIVE_API_KEY=${API_KEYS#local:}" -e PYTHONPATH=/tmp:/app api python -m pytest /tmp/tests/test_live.py -m live -q --basetemp=/tmp/model-integration -p no:cacheprovider --junitxml=/tmp/container-live.xml
+      - name: Retain synthetic-only diagnostics and test results
+        if: always()
+        run: |
+          docker compose logs --no-color > artifacts/container-services.log 2>&1 || true
+          container=$(docker compose ps -q api)
+          if test -n "$container"; then docker cp "$container:/tmp/container-live.xml" artifacts/container-live.xml || true; fi
+          docker compose ps > artifacts/container-status.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-model-container-check
+          path: artifacts/
+          retention-days: 7
+      - name: Stop only this integration stack
+        if: always()
+        run: docker compose down

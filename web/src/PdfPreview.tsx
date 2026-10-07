@@ -45,9 +45,12 @@ export default function PdfPreview({ url, page, onPageChange }: {
     pdf.getPage(page).then(async source => {
       if (!alive || !canvas.current) return;
       const natural = source.getViewport({ scale: 1 });
+      if (![natural.width, natural.height].every(value => Number.isFinite(value) && value > 0)) {
+        throw new Error('Invalid source page dimensions');
+      }
       const scale = Math.min((width - 24) / natural.width * zoom,
         2000 / natural.width, 5000 / natural.height);
-      const view = source.getViewport({ scale: Math.max(.05, scale) });
+      const view = source.getViewport({ scale });
       const ratio = Math.min(window.devicePixelRatio || 1, 2,
         Math.sqrt(8_000_000 / (view.width * view.height)));
       const target = canvas.current;
