@@ -32,6 +32,33 @@ class RAG:
     def __init__(self, documents, storage, models):
         self.documents, self.storage, self.models = documents, storage, models
 
+    @staticmethod
+    def supported_question(question: str, evidence: list[dict]) -> tuple[str, list[str]]:
+        # Preserve modifiers: maternity evidence must not be used to answer paternity leave.
+        aliases = {"vacation": "annual", "allowance": "entitlement", "holidays": "leave",
+                   "probationary": "probation", "reimbursement": "expenses", "reimbursements": "expenses"}
+        generic = set("what which how many much long is are was were do does can may i we you the a an "
+                      "of for to in on at with from my our their this that it its please tell me about "
+                      "document handbook employee employees company say says describe details policy policies "
+                      "entitlement allowance allowed available provide provides get receive have has paid days "
+                      "day time limit maximum minimum requirements rules schedule schedules".split())
+
+        def terms(text):
+            return {aliases.get(word, word) for word in words(text)}
+
+        present = terms(" ".join(chunk["text"] for chunk in evidence))
+        supported, missing = [], []
+        clauses = re.split(r"\s+(?:and|&)\s+|;\s*", question, flags=re.I)
+        for clause in clauses:
+            content = terms(clause) - generic
+            modifiers = re.findall(r"\b([a-z]+)\s+(?:leave|flights?|cards?|options?|vesting|accommodation)\b", clause.lower())
+            absent_modifier = any(aliases.get(term, term) not in present for term in modifiers if term not in generic)
+            if absent_modifier or (content and not content.intersection(present)):
+                missing.append(clause)
+            else:
+                supported.append(clause)
+        return " and ".join(supported), missing
+
     def retrieve(self, document: dict, question: str) -> list[dict]:
         chunks = self.storage.canonical(document["id"])
         if not chunks:
@@ -96,7 +123,11 @@ class RAG:
         if not evidence:
             self.storage.get(document_id, owner, ready=True)
             return self.abstain()
-        payload = {"question": question, "evidence": [{"chunk_id": c["id"], "text": c["text"]} for c in evidence]}
+        supported_question, missing = self.supported_question(question, evidence)
+        if not supported_question:
+            self.storage.get(document_id, owner, ready=True)
+            return self.abstain()
+        payload = {"question": supported_question, "evidence": [{"chunk_id": c["id"], "text": c["text"]} for c in evidence]}
         draft = None
         for attempt in range(2):
             try:
@@ -114,14 +145,17 @@ class RAG:
             return self.abstain()
         answer = "\n".join(f"{self.policy_answer_text(claim.text, citation.quote)} [{i}]"
                            for i, (claim, citation) in enumerate(zip(draft.claims, citations, strict=True), 1))
-        if not draft.complete:
+        complete = draft.complete and not missing
+        if not complete:
             # Model-generated 'missing' prose is not trusted as an additional factual claim.
             answer += "\nThe document does not provide sufficient evidence for every part of this question."
-        return AnswerResponse(status="ANSWERED" if draft.complete else "PARTIAL", answer=answer, citations=citations)
+            if missing:
+                answer += " Uncovered question: " + " and ".join(missing)
+        return AnswerResponse(status="ANSWERED" if complete else "PARTIAL", answer=answer, citations=citations)
 
     @staticmethod
     def policy_answer_text(claim: str, verified_quote: str) -> str:
-        if re.search(r"\b(?:approv(?:al|ed)|subject to|provided that|only if|unless|must be used by|carry[- ]over)\b", verified_quote, re.I):
+        if re.search(r"\b(?:approv(?:al|ed)|required|subject to|provided that|only if|unless|must be used by|carry[- ]over)\b", verified_quote, re.I):
             return " ".join(verified_quote.split())
         return claim
 

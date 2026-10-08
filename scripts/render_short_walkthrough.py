@@ -36,9 +36,9 @@ def main():
     }, indent=2), encoding="utf8")
     print(f"Short walkthrough: {duration:.2f}s", flush=True)
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", "25", "-i", str(destination), "-frames:v", "1",
-                    str(ROOT / "artifacts/walkthrough-v4/short-opening.png")], check=True)
+                    str(ROOT / "artifacts/walkthrough-v5/short-opening.png")], check=True)
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-sseof", "-0.25", "-i", str(destination), "-frames:v", "1",
-                    str(ROOT / "artifacts/walkthrough-v4/short-final.png")], check=True)
+                    str(ROOT / "artifacts/walkthrough-v5/short-final.png")], check=True)
 
 
 if __name__ == "__main__":

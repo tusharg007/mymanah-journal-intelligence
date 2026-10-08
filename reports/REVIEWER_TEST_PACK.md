@@ -78,7 +78,7 @@ failures or a claim that all 76 cases pass.
 
 ## Policy 3 Follow-Up
 
-The current correction uses a narrow current-personal-giving-up/hopelessness plus
+That correction used a narrow current-personal-giving-up/hopelessness plus
 supported-distress HIGH rule, a strong-positive/neutral-emotion consistency rule,
 gentler mood mapping, constrained exact-source summary quotes and explicit float32
 CPU NLI. Long entries retain full-entry sentiment and safety scoring, with emotion
@@ -104,5 +104,28 @@ Low happy confidence for J12 is retained rather than cosmetically increased.
 The targeted document follow-up received fresh 201/READY in 0.906 seconds.
 R2/R8/R18 include all predicted qualifying facts with exact quotes on the correct
 pages; R19 and R17 pass. R12 and R14 still return `ANSWER_UNSUPPORTED` rather than
-the predicted partial/abstention status. Those errors remain unresolved. This is
+the predicted partial/abstention status. Those errors were unresolved at policy 3. This was
 five matching targeted cases and two service errors, not a new 76-case pass count.
+
+## Policy 4 Follow-Up
+
+Current decision confidence uses the normalized selected emotion score, or the
+winning sentiment score when positive/neutral consistency supplies happy. J2/J12
+now return 0.9773/0.9736. Every journal starts actual local LLM generation; verified
+third-person text is retained rather than forcibly replaced with risk quotes.
+After two failures a bounded extractive candidate must still pass evidence checks.
+One-fact entries receive non-repeating scope text. Generation token counts and
+summary path metadata accompany the [current journal report](JOURNAL_POLICY4_REGRESSION.md).
+
+The ten unchanged user-supplied unseen entries were run once without retries or
+tuning. All ten returned valid responses; eight matched the specified labels.
+U6 returned anger/MEDIUM instead of sad/HIGH; U10 returned MEDIUM rather than HIGH
+while excluding its injected instruction. U7/U8/U9 returned LOW/LOW/MEDIUM.
+The [complete unseen report](UNSEEN_REVIEW_10.md) includes inputs, six-field
+responses, confidence interpretation, timings and generation evidence. High
+emotion confidence does not validate the independent screening risk.
+
+The [current document regression](POLICY4_CONDITION_REGRESSION.md) rechecks R12/R14
+and prior qualifier cases. Original policy-3 failures above remain historical
+observations. Current latency uses independent nanosecond clock intervals; the
+old equal 13.406-second values retain their original rounded precision.

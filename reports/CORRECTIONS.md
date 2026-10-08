@@ -89,8 +89,50 @@ sentence for explicit approval/carry-over/qualifying language. It does not repai
 failed claims or add uncited facts. Conditions outside the selected quote can still
 be missed. The targeted report records both complete results and residual failures.
 
-The deterministic suite now contains 96 passing Windows tests. Separate real-model
+At that stage the deterministic suite contained 96 passing Windows tests. Separate real-model
 regressions are published in `JOURNAL_POLICY3_REGRESSION.md` and
 `POLICY_CONDITION_REGRESSION.md`. Original development, held-out and 76-case raw
 observations are not overwritten; they precede these corrections. Small regression
 sets demonstrate observed behavior, not zero-error guarantees or clinical safety.
+
+## Policy Version 4: Decision Scores and Generated Summaries
+
+The positive/neutral emotion consistency decision now reports winning sentiment
+confidence, rather than a discarded tiny happy NLI score. Other responses report
+the normalized selected emotion score. Positive sentiment consistently resolves
+neutral emotion to happy without the previous 0.80 cutoff. Confidence remains
+uncalibrated and is not a joint probability of every output field being correct.
+
+Every journal begins an actual Qwen3 4B generation call alongside classification.
+Third-person generated sentences retain constrained source quotes and factual
+verification. HIGH-risk results no longer force all sentences to literal quotes.
+A single factual sentence receives deterministic scope text instead of duplication.
+After two failed generation/verification attempts, bounded verbatim extracts must
+still pass the evidence checks; deadline errors remain errors. Inference metadata
+records output token counts, summary path and confidence source without user text.
+
+RAG checks content-topic absence in retrieved evidence before generation. It
+abstains on absent topics such as paternity leave and generates only supported
+parts of mixed questions, marking verified answers PARTIAL and naming uncovered
+parts. Qualifier preservation now includes explicit 'required' language, retaining
+the sick-leave medical-certificate condition. The lexical guard is conservative
+and imperfect; absence from retrieved chunks is not proof of whole-document absence.
+
+The ten user-supplied unseen inputs were run once, unchanged, with implementation
+hashes retained and no subsequent tuning. Eight matched every specified label;
+U6/U10 remained screening misses and U6 also disagreed on emotion. Confidence
+checks are decision-score consistency checks, not correctness guarantees. The
+earlier frozen held-out percentiles remain explicitly pre-change measurements.
+Separate current development timings retain input hashes and full clock precision.
+
+The final deterministic suite contains 109 passing tests. The current reports are
+`JOURNAL_POLICY4_REGRESSION.md`, `UNSEEN_REVIEW_10.md` and
+`POLICY4_CONDITION_REGRESSION.md`; all prior raw measurements are preserved.
+
+After the unseen run, a separate development boundary check found that an
+unpunctuated extract plus scope text could count as only one sentence. Presentation
+now appends terminal punctuation before joining sentences. This is a formatting
+correction, not a model/prompt/policy or confidence adjustment. No unseen inputs
+were rerun. Their original implementation hashes and results are retained; the
+release differs only in this presentation helper, which leaves the already
+punctuated assessment summaries unchanged.

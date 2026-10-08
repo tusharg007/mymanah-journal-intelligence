@@ -13,9 +13,17 @@ dedicated local review instance, not a shared production service.
 
 `development.json` contains the original 50 English journals plus four policy-version-3 regression cases (dev51-dev54). `long-journal-development.txt` adds a natural long-entry latency check. These additions are not included in the original 50-case generator comparison. `heldout.json` contains 100 separately authored English journals, written before observing model outputs; its published measurements predate policy version 3. `rag_cases.json` contains a readable ten-page synthetic policy and 30 questions, including exceptions, partial evidence, missing facts, and injected instructions. They are artificial, non-identifying fixtures with provisional engineering annotations, not clinician-reviewed data. Candidate review of label ambiguities is required before final performance claims.
 
-Current corrections are checked with `python -m scripts.journal_regression` and
-`python -m scripts.policy_condition_regression`. These write separate post-change
+Current corrections are checked with `python -m scripts.journal_regression --output reports/journal-policy4-regression.json` and
+`python -m scripts.policy_condition_regression --output reports/policy4-condition-regression.json`. These write separate post-change
 reports and do not replace the original 76-case or frozen held-out observations.
+
+`unseen-review-10.json` preserves the user's ten unchanged entries and specified
+expectations. `python -m scripts.unseen_review` runs them once without HTTP retries
+and refuses to overwrite an existing report. Input and implementation hashes,
+every response, confidence source and generator metadata are retained in
+`reports/unseen-review-10.json`. No model, hypothesis, threshold or prompt changes
+are made after observing this run. The cases remain an assessment set rather than
+development tuning data. Ten predicted cases do not establish broad generalization.
 
 The held-out set is deliberately balanced by dominant emotion except for two extra explicit-danger cases. Its sentiment distribution is not balanced; publish class counts and macro metrics, not only overall accuracy. Its simple writing and explicit emotion words can inflate apparent quality. It does not establish real-world, clinical, multilingual or nuanced-journal accuracy. Expanded negation/contrast cases belong in development and critical regression suites.
 

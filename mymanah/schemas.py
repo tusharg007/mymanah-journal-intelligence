@@ -33,7 +33,7 @@ class SummarySentence(StrictModel):
 
 
 class SummaryDraft(StrictModel):
-    sentences: list[SummarySentence] = Field(min_length=2, max_length=3)
+    sentences: list[SummarySentence] = Field(min_length=1, max_length=3)
 
 
 class QuestionRequest(StrictModel):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import re
 
-POLICY_VERSION = "journal-policy-3"
+POLICY_VERSION = "journal-policy-4"
 EMOTIONS = {
     "happy": "The writer feels good, pleased, joyful, grateful or happy about their experience.",
     "sad": "The writer currently feels sad, lonely, sorrowful or low in spirits.",

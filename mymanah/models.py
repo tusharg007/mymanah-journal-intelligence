@@ -186,6 +186,9 @@ class Models:
             payload = response.json()
             if not payload.get("done") or payload.get("done_reason") == "length":
                 raise ServiceError("GENERATION_INCOMPLETE", "Local generation did not complete")
+            logging.getLogger(__name__).info(
+                "Local generation completed schema=%s prompt_tokens=%s output_tokens=%s duration_ns=%s",
+                schema.__name__, payload.get("prompt_eval_count"), payload.get("eval_count"), payload.get("total_duration"))
             return schema.model_validate_json(payload["response"])
         except TimeoutError as exc:
             raise ServiceError("INFERENCE_TIMEOUT", "Inference deadline exhausted", 504) from exc

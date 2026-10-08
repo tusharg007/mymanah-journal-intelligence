@@ -1,6 +1,7 @@
 """Recheck omitted policy conditions with fresh real-model document ingestion."""
 from __future__ import annotations
 
+import argparse
 import json
 from datetime import datetime, timezone
 from io import BytesIO
@@ -11,6 +12,9 @@ from scripts.reviewer_protocol import FACTS, FIXTURES, ROOT, Run
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default="reports/policy4-condition-regression.json")
+    args = parser.parse_args()
     run = Run()
     report = {"scope": "Post-correction targeted policy-condition regression; AI-assisted self-test pack with predicted expectations", "cases": []}
     writer = PdfWriter(clone_from=BytesIO((FIXTURES / "Employee_Handbook_Test.pdf").read_bytes()))
@@ -34,7 +38,7 @@ def main():
                 checks["predicted_page"] = any(c["page"] == int(case["Page"]) for c in body.get("citations", []))
             row = {"id": case_id, "question": case["Question"], "predicted_expectation": {k: case[k] for k in ("Status", "Answer must contain", "Page")}, "actual": actual, "checks": checks}
             report["cases"].append(row)
-            (ROOT / "reports/policy-condition-regression.json").write_text(json.dumps(report, indent=2), encoding="utf8")
+            (ROOT / args.output).write_text(json.dumps(report, indent=2), encoding="utf8")
             print(json.dumps(row), flush=True)
     finally:
         if run.handbook:

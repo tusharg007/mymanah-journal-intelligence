@@ -43,24 +43,24 @@ def test_mood_reserves_lowest_values_for_high_risk_and_caps_mixed_positive():
     assert mood(positive, 0, "LOW", "happy") > mood(positive, 0, "LOW", "anxiety")
 
 
-def test_risk_summary_preserves_original_actor_and_intensity():
-    source = "My friend told me she has been thinking about hurting herself. I am worried about her."
-    draft = SummaryDraft(sentences=[
-        {"text": "My friend is actively considering self-harm.", "quote": source.split(". ")[0] + "."},
-        {"text": "The writer is worried.", "quote": "I am worried about her."},
-    ])
-    JournalService(None).literal_risk_quotes(source, draft)
-    assert draft.sentences[0].text == "My friend told me she has been thinking about hurting herself."
-    assert draft.sentences[1].text == "The writer is worried."
+def test_extractive_fallback_preserves_original_actor_and_intensity():
+    quotes = ["My friend told me she has been thinking about hurting herself.", "I am worried about her."]
+    draft = JournalService(None).extractive_summary(quotes)
+    assert draft.sentences[0].text == quotes[0]
+    assert draft.sentences[1].text == quotes[1]
 
 
-def test_literal_summary_never_uses_a_fabricated_source_quote():
-    draft = SummaryDraft(sentences=[
-        {"text": "The writer is worried.", "quote": "I plan to end my life."},
-        {"text": "The writer attended an interview.", "quote": "I attended an interview."},
-    ])
-    JournalService(None).literal_risk_quotes("I am worried. I attended an interview.", draft)
-    assert draft.sentences[0].text == "The writer is worried."
+@pytest.mark.parametrize("quote", ["I want to end my life.", "I want to end my life"])
+def test_single_fact_summary_uses_truthful_second_sentence_without_repetition(quote):
+    quotes = [quote]
+    draft = JournalService(None).extractive_summary(quotes)
+    assert JournalService.presentation_summary(draft, quotes) == "I want to end my life. No further details are given."
+
+
+def test_confidence_follows_final_emotion_decision():
+    result = {"sentiment": {"positive": .96}, "emotion": {"happy": .0026, "neutral": .91}}
+    assert JournalService.decision_confidence(result, "positive", "happy", True) == .96
+    assert JournalService.decision_confidence(result, "positive", "neutral", False) == .91
 
 
 def test_summary_quote_inventory_is_verbatim_and_deduplicated():

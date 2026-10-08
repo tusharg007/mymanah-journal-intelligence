@@ -50,17 +50,18 @@ def main() -> None:
         "Inputs come from an AI-assisted self-test pack with predicted expectations supplied",
         "by the candidate. These predictions are not ground truth. Mood ranges are provisional",
         "guesses and are recorded separately from sentiment, emotion and risk agreement.",
-        "Confidence is the system's uncalibrated score, not a probability of correctness.",
+        "Confidence is the normalized selected emotion score, or sentiment confidence when the",
+        "happy consistency rule applies. It is uncalibrated and does not score summary or risk correctness.",
         "",
         "## Coverage",
         "",
         "| Workflow | Desktop | Mobile |",
         "| --- | ---: | ---: |",
         f"| Journal analysis | {len(desktop['journals'])} inputs | {len(mobile['journals'])} inputs |",
-        "| PDF questions | 2 supported, 1 unsupported | 2 supported, 1 unsupported |",
+        "| PDF questions | 2 answered, 1 partial, 2 abstentions | 2 answered, 1 partial, 2 abstentions |",
         "| Uploaded document | Fresh upload, READY | Reused indexed document, READY |",
         "",
-        "The videos contain 16 journal requests across 11 distinct test inputs: five inputs",
+        "The videos contain 18 journal requests across 13 distinct test inputs: five inputs",
         "are repeated in the mobile workflow. The PDF is the three-page `Employee_Handbook_Test.pdf`.",
         "",
         "## Journal Analysis",
@@ -97,6 +98,10 @@ def main() -> None:
         ]
         if mrow:
             lines += [f"**Mobile summary:** {cell(mrow['actual']['summary'])}", ""]
+        for name, row in (("Desktop", drow), ("Mobile", mrow)):
+            if row:
+                lines += [f"**{name} response JSON:**", "", "```json",
+                          json.dumps(row["actual"], ensure_ascii=False, indent=2), "```", ""]
         desktop_mismatches = journal_outcome(expected, actual)
         mobile_mismatches = journal_outcome(expected, mrow["actual"]) if mrow else []
         if not desktop_mismatches and (not mrow or not mobile_mismatches):
@@ -120,31 +125,41 @@ def main() -> None:
         "",
         "Both workflows selected the same three-page handbook. Desktop uploaded a fresh",
         "copy and received HTTP 201 with status `READY`, three pages and three chunks.",
-        "Mobile reused that indexed document. Both then asked the same three questions.",
+        "Mobile reused that indexed document. Both then asked the same five questions.",
         "",
         "| Input question | Workflow | HTTP / status | Actual answer | Citation and source quote | Latency |",
         "| --- | --- | --- | --- | --- | ---: |",
     ]
     for name, run in (("Desktop", desktop), ("Mobile", mobile)):
         for result in run["responses"]:
-            citation = result["result"]["citations"][0]
-            quote = cell(citation["quote"])
+            citations = result["result"]["citations"]
+            reference = "<br>".join(f"[{index}] Page {citation['page']}: {cell(citation['quote'])}"
+                                      for index, citation in enumerate(citations, 1)) if citations else "None (no citations)"
             lines.append(
                 f"| {cell(result['question'])} | {name} | HTTP 200 / `{result['result']['status']}` | "
-                f"{cell(result['result']['answer'])} | Page {citation['page']}: “{quote}” | {result['seconds']:.2f}s |"
+                f"{cell(result['result']['answer'])} | {reference} | {result['seconds']:.2f}s |"
             )
         result = run["unsupported"]
         question = "What is the stock option vesting schedule?"
         lines.append(
             f"| {question} | {name} | HTTP 200 / `{result['status']}` | {cell(result['answer'])} | None (no citations) | - |"
         )
+    lines += ["", "### Complete Document Responses", ""]
+    for name, run in (("Desktop", desktop), ("Mobile", mobile)):
+        for row in run["responses"] + [{"question": "What is the stock option vesting schedule?", "result": run["unsupported"]}]:
+            lines += [f"**{name}: {row['question']}**", "", "Request:", "", "```json",
+                      json.dumps({"question": row["question"]}, ensure_ascii=False, indent=2), "```", "",
+                      "Actual HTTP 200 response:", "", "```json",
+                      json.dumps(row["result"], ensure_ascii=False, indent=2), "```", ""]
     lines += [
         "",
         "The annual-leave answer gives the 24-day allowance and cites page 2. The probation answer gives",
         "15 days and cites page 3. The unsupported stock-option question is declined without",
-        "citations. These observed answers should be read alongside the full 76-case",
+        "citations. Paternity leave also abstains; the mixed question returns verified sick leave",
+        "with PARTIAL status and identifies the uncovered stock-option question.",
+        "These observed answers should be read alongside the full 76-case",
         "[AI-assisted self-test report](../reports/REVIEWER_TEST_PACK.md), which retains original",
-        "document questions and mismatches. The separate [policy-condition regression](../reports/POLICY_CONDITION_REGRESSION.md)",
+        "document questions and mismatches. The current [policy-condition regression](../reports/POLICY4_CONDITION_REGRESSION.md)",
         "checks carry-over caps/expiry and approval requirements after the correction.",
         "",
         "## Recording Details",

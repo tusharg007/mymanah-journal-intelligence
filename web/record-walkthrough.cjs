@@ -6,7 +6,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'artifacts', 'walkthrough-v4');
+const output = path.join(root, 'artifacts', 'walkthrough-v5');
 const origin = process.env.APP_URL || 'http://127.0.0.1:8000';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pack = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'reviewer-test-pack.json'), 'utf8'));
@@ -15,10 +15,13 @@ const scenarios = [
   ['J5', 'Interview anxiety'], ['J6', 'Workload stress'], ['J7', 'Grief'], ['J8', 'Fear after a threat'],
   ['J12', 'Negation: not sad'], ['J13', 'Mixed excitement and worry'],
   ['J9', 'Explicit risk language'],
+  ['J17', 'One-fact entry with an instruction attack'], ['long01', 'A full 512-word journal'],
 ];
 const questions = [
   { text: 'What is the annual leave allowance?', number: '24', page: 2 },
   { text: 'What is the notice period during probation?', number: '15', page: 3 },
+  { text: 'What is the sick leave policy and what is the stock option policy?', number: '10', page: 2, status: 'PARTIAL' },
+  { text: 'How many days of paternity leave are offered?', status: 'INSUFFICIENT_EVIDENCE' },
 ];
 
 function resultCaption(result, expected) {
@@ -93,29 +96,42 @@ function resultCaption(result, expected) {
         const result = await response.json();
         responses.push({ question: item.text, seconds: (Date.now() - requestStarted) / 1000, result });
         await page.locator('.answer p').filter({ hasText: result.answer }).waitFor();
-        assert.equal(result.status, 'ANSWERED');
+        assert.equal(result.status, item.status || 'ANSWERED');
+        if (item.status === 'INSUFFICIENT_EVIDENCE') {
+          assert.deepEqual(result.citations, []);
+          await frame('.answer', 'Completed paternity-leave abstention',
+            'Paternity leave is absent from the handbook.\nThe response abstains without reusing maternity leave.', 14000);
+          return result;
+        }
         assert.ok(result.answer.includes(item.number));
         assert.ok(result.citations.some(c => c.document_id === uploadedId && c.page === item.page));
         const citation = page.locator('.answer details').filter({ hasText: `Page ${item.page}` }).first();
         await citation.locator('summary').click();
         await page.locator(`canvas[aria-label="Source document page ${item.page}"][data-rendered=true]`).waitFor();
-        await frame('.answer', `Completed answer - page ${item.page}`,
+        await frame('.answer', `${item.status === 'PARTIAL' ? 'Completed partial answer' : 'Completed answer'} - page ${item.page}`,
           `Read the answer and expanded source quote.\nCitation points to page ${item.page} of the uploaded PDF.`, 12000);
-        await frame('.pdf-preview', `Original PDF - page ${item.page}`,
+        await frame('.pdf-preview', `${item.status === 'PARTIAL' ? 'Original PDF for partial answer' : 'Original PDF'} - page ${item.page}`,
           'Compare the answer with the original PDF.\nThe cited page is rendered below.', 8000);
         return result;
       }
 
       try {
-        chapter('Start', 'MyManah | AI-assisted self-test inputs\nActual local inference; policy version 3.');
+        chapter('Start', 'MyManah | AI-assisted self-test inputs\nActual local inference; policy version 4.');
         await page.goto(origin, { waitUntil: 'networkidle' });
         await page.getByText('Models ready', { exact: true }).waitFor();
         await pause(3500);
         const selected = name === 'desktop' ? scenarios : scenarios.filter(([id]) => ['J2', 'J5', 'J7', 'J1', 'J9'].includes(id));
         for (const [id, title] of selected) {
-          const expected = pack.cases.find(row => row.id === id);
+          const expected = id === 'long01' ? { Input: fs.readFileSync(path.join(root, 'evals', 'long-journal-development.txt'), 'utf8'),
+            Sentiment: 'positive', Emotion: 'happy', Risk: 'LOW', Mood: 'not prescribed' }
+            : pack.cases.find(row => row.id === id);
           chapter(`${id} - ${title}`, `${id} | ${title}\nAI-assisted input with predicted expectations.`);
-          await type(page.getByLabel('Journal entry'), expected.Input);
+          if (id === 'long01') {
+            await page.getByLabel('Journal entry').fill(expected.Input);
+            await pause(5000);
+          } else {
+            await type(page.getByLabel('Journal entry'), expected.Input);
+          }
           const responsePromise = page.waitForResponse(r => r.url().endsWith('/analyze-journal') && r.request().method() === 'POST');
           const requestStarted = Date.now();
           await page.getByRole('button', { name: 'Analyze', exact: true }).click();
@@ -160,6 +176,8 @@ function resultCaption(result, expected) {
           'The supplied handbook has three pages.\nInspect the original document before asking.', 7000);
         await ask(questions[0]);
         await ask(questions[1]);
+        await ask(questions[2]);
+        await ask(questions[3]);
 
         chapter('Question outside the document', 'Ask for information the PDF does not contain.');
         const unknownText = 'What is the stock option vesting schedule?';
@@ -181,6 +199,11 @@ function resultCaption(result, expected) {
         reports.push({ name, viewport: { width, height }, journals, upload,
           documentId: uploadedId, responses, unsupported, chapters, evidence,
           errors, end: seconds(), recording: 'Uninterrupted real-time UI capture; every completed result is held visibly.' });
+      } catch (error) {
+        const failure = { name, url: page.url(), message: error.message, errors, journals, chapters, evidence };
+        fs.writeFileSync(path.join(output, `${name}-failure-report.json`), JSON.stringify(failure, null, 2));
+        try { await page.screenshot({ path: path.join(output, `${name}-failure.png`), timeout: 5000 }); } catch {}
+        throw error;
       } finally {
         const video = page.video();
         await context.close();

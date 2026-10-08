@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import time
@@ -19,7 +20,7 @@ from scripts.reviewer_journals import allowed
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--cases", nargs="*")
-    parser.add_argument("--output", default="reports/journal-policy3-regression.json")
+    parser.add_argument("--output", default="reports/journal-policy4-regression.json")
     args = parser.parse_args()
     pack = json.loads((ROOT / "evals/reviewer-test-pack.json").read_text(encoding="utf8"))
     original = json.loads((ROOT / "reports/reviewer-journals.json").read_text(encoding="utf8"))
@@ -41,11 +42,21 @@ def main():
     with httpx.Client(base_url="http://127.0.0.1:8000", timeout=75, trust_env=False) as client:
         assert client.get("/health/ready").status_code == 200
         for case in rows:
-            start = time.monotonic()
+            log = ROOT / "artifacts/reviewer-pack/api-stderr.log"
+            log_start = log.stat().st_size if log.exists() else 0
+            start = time.perf_counter_ns()
             response = client.post("/analyze-journal", json={"text": case["text"]})
-            elapsed = time.monotonic() - start
+            elapsed_ns = time.perf_counter_ns() - start
+            elapsed = elapsed_ns / 1_000_000_000
             body = response.json()
-            row = {**case, "http_status": response.status_code, "seconds": round(elapsed, 3), "actual": body}
+            row = {**case, "input_sha256": hashlib.sha256(case["text"].encode()).hexdigest(),
+                   "http_status": response.status_code, "seconds": elapsed, "elapsed_ns": elapsed_ns, "actual": body}
+            if log.exists():
+                with log.open("rb") as handle:
+                    handle.seek(log_start)
+                    row["inference_observations"] = [line for line in handle.read().decode("utf8", errors="replace").splitlines()
+                                                     if "Local generation completed" in line or "Journal summary path=" in line
+                                                     or "Journal confidence source=" in line]
             if response.status_code == 200:
                 JournalResponse.model_validate(body)
                 checks = {}
