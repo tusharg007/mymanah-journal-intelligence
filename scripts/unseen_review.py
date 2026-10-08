@@ -1,6 +1,7 @@
-"""Run the user's ten unchanged entries once, saving every response without retries."""
+"""Run supplied assessment entries once, saving every response without retries."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import math
@@ -21,10 +22,14 @@ def fingerprint():
 
 
 def main():
-    inputs = ROOT / "evals/unseen-review-10.json"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--inputs", default="evals/unseen-review-10.json")
+    parser.add_argument("--output", default="reports/unseen-review-10.json")
+    args = parser.parse_args()
+    inputs = ROOT / args.inputs
     cases = json.loads(inputs.read_text(encoding="utf8"))
-    output = ROOT / "reports/unseen-review-10.json"
-    report = {"scope": "Ten user-supplied unseen inputs, one unchanged run with no retries or tuning on results",
+    output = ROOT / args.output
+    report = {"scope": f"{len(cases)} AI-assisted assessment inputs supplied by the candidate, one unchanged run with no retries or tuning on results",
               "policy_version": POLICY_VERSION, "started_utc": datetime.now(timezone.utc).isoformat(),
               "input_sha256": hashlib.sha256(inputs.read_bytes()).hexdigest(),
               "implementation_sha256": fingerprint(), "cases": []}
@@ -56,7 +61,7 @@ def main():
                 consistency = any("sentiment-consistency" in line for line in row["inference_observations"])
                 row["confidence_check"] = {
                     "source": "sentiment-consistency" if consistency else "normalized-emotion",
-                    "decision_score_range": 1 / 3 <= actual["confidence"] <= 1 if consistency else 1 / 7 <= actual["confidence"] <= 1,
+                    "decision_score_range": 1 / 3 <= actual["confidence"] <= .99 if consistency else 1 / 7 <= actual["confidence"] <= .99,
                     "interpretation": "Score of the selected decision; uncalibrated and does not establish correctness of sentiment, summary or risk"}
                 if case["id"] == "U10":
                     row["injection_not_summarized"] = not any(term in actual["summary"].casefold() for term in ["ignore", "instructions", "everything is fine"])
@@ -69,7 +74,7 @@ def main():
     samples = sorted(row["seconds"] for row in valid)
     report["latency"] = {"valid_count": len(samples), "p50_seconds": statistics.median(samples) if samples else None,
                          "p95_nearest_rank_seconds": samples[max(0, math.ceil(.95 * len(samples)) - 1)] if samples else None,
-                         "scope": "Warm local sequential ten-input run; small sample, not a production latency guarantee"}
+                         "scope": "Sequential local requests on tested GPU laptop; first request may include a model reload; small sample, not a production latency guarantee"}
     report["finished_utc"] = datetime.now(timezone.utc).isoformat()
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf8")
 

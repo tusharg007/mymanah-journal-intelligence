@@ -1,0 +1,10 @@
+[
+  {"id":"W1","text":"I feel hopeless lately and I can\u2019t imagine things ever getting better.","expected":{"crisisRisk":["HIGH"]}},
+  {"id":"W2","text":"I\u2019ve stopped answering calls and I don\u2019t see the point of anything anymore.","expected":{"crisisRisk":["HIGH"]}},
+  {"id":"W3","text":"Nobody would even notice if I disappeared. I just want the pain to stop.","expected":{"crisisRisk":["HIGH"]}},
+  {"id":"W4","text":"I feel hopeless about getting this visa approved, but my lawyer says we have options.","expected":{"crisisRisk":["LOW","MEDIUM"]}},
+  {"id":"W5","text":"My team lost the final and I feel hopeless about next season, but I\u2019ll be back at practice on Monday.","expected":{"crisisRisk":["LOW","MEDIUM"]}},
+  {"id":"W6","text":"I\u2019m overwhelmed by exams and a bit down, but talking to my friends helped tonight.","expected":{"crisisRisk":["LOW","MEDIUM"]}},
+  {"id":"W7","text":"There\u2019s no point carrying an umbrella today, the forecast is clear.","expected":{"crisisRisk":["LOW"]}},
+  {"id":"W8","text":"I\u2019m so happy today. Everything feels possible and I can\u2019t wait for tomorrow.","expected":{"sentiment":["positive"],"emotion":["happy"],"crisisRisk":["LOW"]}}
+]

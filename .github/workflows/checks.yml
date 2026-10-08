@@ -4,10 +4,10 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, Node 24
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6, Node 24
         with:
           python-version: '3.11'
           cache: pip
@@ -15,7 +15,7 @@ jobs:
       - run: pip install --no-deps -e .
       - run: ruff check mymanah scripts tests evals
       - run: pytest -m "not live" -q
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, Node 24
         with:
           node-version: '22'
           cache: npm
@@ -23,9 +23,9 @@ jobs:
       - run: npm ci --ignore-scripts && npm run build
         working-directory: web
   container:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, Node 24
       - name: Build the Linux CPU image
         run: docker build --tag mymanah-check .
       - name: Check real imports and fail-closed non-root startup
