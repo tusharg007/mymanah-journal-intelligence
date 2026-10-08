@@ -110,5 +110,4 @@ confidence/mood are uncalibrated, and verification can accept unsupported detail
 or reject valid paraphrases. [Security notes](../reports/SECURITY.md) retain scoped
 Chroma advisories and the CPU-Torch audit coverage gap. No zero-vulnerability,
 zero-hallucination or zero-bug claim is made. Public hosting needs additional TLS,
-proxy, secret-management and operational controls. No public deployment, paid GPU
-job or employer email has been started.
+proxy, secret-management and operational controls. No public deployment is claimed.

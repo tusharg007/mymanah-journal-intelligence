@@ -27,7 +27,9 @@ const { execFileSync } = require('node:child_process');
     const repository = await page.goto(base, { waitUntil: 'domcontentloaded', timeout: 60000 });
     if (repository.status() !== 200) throw new Error(`Public repository: HTTP ${repository.status()}`);
     report.repository_status = repository.status();
-    for (const file of ['SUBMISSION.md', 'WALKTHROUGH.md']) {
+    const documents = ['SUBMISSION.md', 'WALKTHROUGH.md'];
+    if (process.argv.includes('--include-email')) documents.push('COVER_EMAIL.md');
+    for (const file of documents) {
       const source = `${base}/blob/main/docs/${file}`;
       const response = await page.goto(source, { waitUntil: 'domcontentloaded', timeout: 60000 });
       if (response.status() !== 200) throw new Error(`${file}: HTTP ${response.status()}`);
@@ -57,14 +59,15 @@ const { execFileSync } = require('node:child_process');
           row.status = destination.status();
         }
         if (row.status !== 200) throw new Error(`Link failed: ${JSON.stringify(row)}`);
-        const marker = '/blob/main/';
-        if (link.url.startsWith(base + marker)) {
+        const reference = ['main', 'submission-v1'].find(ref => link.url.startsWith(`${base}/blob/${ref}/`));
+        if (reference) {
+          const marker = `/blob/${reference}/`;
           const relative = decodeURIComponent(link.url.slice((base + marker).length));
           const local = path.resolve(root, relative);
           if (!local.startsWith(root + path.sep) || !fs.existsSync(local)) throw new Error(`Missing local asset: ${relative}`);
           row.local_bytes = fs.statSync(local).size;
           if (/\.(mp4|pdf)$/.test(relative)) {
-            const media = await context.request.get(`https://raw.githubusercontent.com/tusharg007/mymanah-journal-intelligence/main/${relative}`, {
+            const media = await context.request.get(`https://raw.githubusercontent.com/tusharg007/mymanah-journal-intelligence/${reference}/${relative}`, {
               headers: { Range: 'bytes=0-31' }, timeout: 60000 });
             const bytes = await media.body();
             row.media_status = media.status();
