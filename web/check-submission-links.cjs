@@ -11,10 +11,15 @@ const { execFileSync } = require('node:child_process');
   const context = await browser.newContext({ viewport: { width: 1440, height: 960 } });
   const page = await context.newPage();
   const output = path.join(root, 'reports', 'submission-link-check.json');
-  const report = { context: 'Fresh anonymous non-persistent Edge context; no imported cookies or credentials',
+  let report = { context: 'Fresh anonymous non-persistent Edge context; no imported cookies or credentials',
     checked_at: new Date().toISOString(), checked_commit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     repository: base, documents: [], links: [] };
   try {
+    if (process.argv.includes('--resume') && fs.existsSync(output)) {
+      const prior = JSON.parse(fs.readFileSync(output, 'utf8'));
+      if (prior.checked_commit !== report.checked_commit) throw new Error('Resume only against the same committed submission');
+      report = { ...prior, resumed_at: new Date().toISOString(), resume_context: report.context };
+    }
     const repository = await page.goto(base, { waitUntil: 'domcontentloaded', timeout: 60000 });
     if (repository.status() !== 200) throw new Error(`Public repository: HTTP ${repository.status()}`);
     report.repository_status = repository.status();
@@ -25,16 +30,28 @@ const { execFileSync } = require('node:child_process');
       const article = page.locator('article.markdown-body');
       await article.waitFor({ timeout: 30000 });
       const links = await article.locator('a[href]').evaluateAll(elements => elements.map(a => ({ text: a.textContent, url: a.href })));
-      report.documents.push({ file, source, status: response.status(), link_count: links.length });
+      if (!report.documents.some(row => row.file === file)) report.documents.push({ file, source, status: response.status(), link_count: links.length });
       // GitHub inserts heading-permalink anchors; only the actual Markdown links are submission targets.
       for (const link of links.filter(link => !link.url.includes('#'))) {
-        await page.goto(source, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        if (report.links.some(row => row.document === file && row.url === link.url && row.status === 200)) continue;
         const anchor = page.locator('article.markdown-body a').filter({ hasText: link.text }).first();
         await anchor.waitFor({ timeout: 30000 });
-        await Promise.all([page.waitForURL(link.url, { timeout: 60000 }), anchor.click()]);
-        await page.waitForLoadState('domcontentloaded');
-        const destination = await context.request.get(page.url(), { timeout: 60000 });
-        const row = { document: file, text: link.text, url: link.url, final_url: page.url(), status: destination.status() };
+        const popup = context.waitForEvent('page', { timeout: 60000 });
+        await anchor.click({ modifiers: ['Control'] });
+        const target = await popup;
+        await target.waitForLoadState('domcontentloaded');
+        const previous = report.links.find(row => row.url === target.url() && row.status === 200);
+        let destination = previous ? null : await context.request.get(target.url(), { timeout: 60000, maxRetries: 2 });
+        const row = { document: file, text: link.text, url: link.url, final_url: target.url(), status: previous ? 200 : destination.status() };
+        if (previous) row.status_verified_on_prior_click = true;
+        if (row.status === 429) {
+          const retryAfter = Number(destination.headers()['retry-after']) || 60;
+          row.initial_status = 429;
+          row.retry_wait_seconds = Math.min(180, Math.max(60, retryAfter));
+          await new Promise(resolve => setTimeout(resolve, row.retry_wait_seconds * 1000));
+          destination = await context.request.get(target.url(), { timeout: 60000, maxRetries: 2 });
+          row.status = destination.status();
+        }
         if (row.status !== 200) throw new Error(`Link failed: ${JSON.stringify(row)}`);
         const marker = '/blob/main/';
         if (link.url.startsWith(base + marker)) {
@@ -59,6 +76,8 @@ const { execFileSync } = require('node:child_process');
         report.links.push(row);
         fs.writeFileSync(output, JSON.stringify(report, null, 2));
         console.log(JSON.stringify(row));
+        await target.close();
+        await new Promise(resolve => setTimeout(resolve, 5000));
       }
     }
     report.success = true;

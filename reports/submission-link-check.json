@@ -1,0 +1,276 @@
+{
+  "context": "Fresh anonymous non-persistent Edge context; no imported cookies or credentials",
+  "checked_at": "2026-10-08T22:43:13.805Z",
+  "checked_commit": "3b9f2e9e1f574c403f7b5664120ed042b10eb3c5",
+  "repository": "https://github.com/tusharg007/mymanah-journal-intelligence",
+  "documents": [
+    {
+      "file": "SUBMISSION.md",
+      "source": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/SUBMISSION.md",
+      "status": 200,
+      "link_count": 18
+    },
+    {
+      "file": "WALKTHROUGH.md",
+      "source": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/WALKTHROUGH.md",
+      "status": 200,
+      "link_count": 16
+    }
+  ],
+  "links": [
+    {
+      "document": "SUBMISSION.md",
+      "text": "https://github.com/tusharg007/mymanah-journal-intelligence",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence",
+      "status": 200
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "2:04 overview",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-short.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-short.mp4",
+      "status": 200,
+      "local_bytes": 2903556,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 2903556,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "8:16 desktop walkthrough",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-desktop.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-desktop.mp4",
+      "status": 200,
+      "local_bytes": 9734378,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 9734378,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "4:33 mobile walkthrough",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-mobile.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-mobile.mp4",
+      "status": 200,
+      "local_bytes": 3021576,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 3021576,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "Compiled inputs and actual results",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/VIDEO_TEST_RESULTS.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/VIDEO_TEST_RESULTS.md",
+      "status": 200,
+      "local_bytes": 34638
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "checks.yml",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/.github/workflows/checks.yml",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/.github/workflows/checks.yml",
+      "status": 200,
+      "local_bytes": 1029
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "verified policy-4 push run",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37850522620",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37850522620",
+      "status": 200
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "self-test report",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/REVIEWER_TEST_PACK.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/REVIEWER_TEST_PACK.md",
+      "status": 200,
+      "local_bytes": 8402
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "policy-4 journal regression",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY4_REGRESSION.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY4_REGRESSION.md",
+      "status": 200,
+      "local_bytes": 38580
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "original unseen report",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/UNSEEN_REVIEW_10.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/UNSEEN_REVIEW_10.md",
+      "status": 200,
+      "initial_status": 429,
+      "retry_wait_seconds": 60,
+      "local_bytes": 16840
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "pre-change signal diagnostic",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/policy4-hopelessness-diagnostic.json",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/policy4-hopelessness-diagnostic.json",
+      "status": 200,
+      "local_bytes": 3165
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "policy-5 seen regression",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY5_REGRESSION.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY5_REGRESSION.md",
+      "status": 200,
+      "local_bytes": 51987
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "current targeted PDF regression",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/POLICY4_CONDITION_REGRESSION.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/POLICY4_CONDITION_REGRESSION.md",
+      "status": 200,
+      "local_bytes": 8005
+    },
+    {
+      "document": "SUBMISSION.md",
+      "text": "full real-model CPU Docker integration",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37673144901",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/actions/runs/37673144901",
+      "status": 200
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "02:04 short walkthrough",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-short.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-short.mp4",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 2903556,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 2903556,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "08:16 desktop",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-desktop.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-desktop.mp4",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 9734378,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 9734378,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "04:33 mobile",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-mobile.mp4",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-mobile.mp4",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 3021576,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 3021576,
+      "media_signature_matches": true,
+      "below_100_mib": true
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "policy-5 seen regression",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY5_REGRESSION.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY5_REGRESSION.md",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 51987
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "short-cut report",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-short.json",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-short.json",
+      "status": 200,
+      "local_bytes": 478
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "source PDF",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-source.pdf",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/walkthrough-source.pdf",
+      "status": 200,
+      "initial_status": 429,
+      "retry_wait_seconds": 60,
+      "local_bytes": 3854,
+      "media_status": 206,
+      "media_content_type": "application/octet-stream",
+      "remote_total_bytes": 3854,
+      "media_signature_matches": true
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "compiled video results",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/VIDEO_TEST_RESULTS.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/docs/VIDEO_TEST_RESULTS.md",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 34638
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "policy-4 development results",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY4_REGRESSION.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/JOURNAL_POLICY4_REGRESSION.md",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 38580
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "ten original unseen results",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/UNSEEN_REVIEW_10.md",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/UNSEEN_REVIEW_10.md",
+      "status": 200,
+      "status_verified_on_prior_click": true,
+      "local_bytes": 16840
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "raw recording report",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-recording.json",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-recording.json",
+      "status": 200,
+      "local_bytes": 52811
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "policy-3",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-policy3-recording.json",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-policy3-recording.json",
+      "status": 200,
+      "local_bytes": 38119
+    },
+    {
+      "document": "WALKTHROUGH.md",
+      "text": "policy-2",
+      "url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-policy2-recording.json",
+      "final_url": "https://github.com/tusharg007/mymanah-journal-intelligence/blob/main/reports/walkthrough-policy2-recording.json",
+      "status": 200,
+      "local_bytes": 37871
+    }
+  ],
+  "repository_status": 200,
+  "resumed_at": "2026-10-08T22:49:08.373Z",
+  "resume_context": "Fresh anonymous non-persistent Edge context; no imported cookies or credentials",
+  "success": true
+}
