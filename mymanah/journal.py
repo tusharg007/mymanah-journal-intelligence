@@ -20,11 +20,11 @@ class JournalService:
     def __init__(self, models):
         self.models = models
 
-    def classify(self, text: str) -> dict:
+    def classify(self, text: str, deadline: float | None = None) -> dict:
         pieces = windows(text, self.models.nli_tokenizer)
         hypotheses = list(EMOTIONS.values()) + CRISIS + DISTRESS
         pairs = [(piece.text, hypothesis) for piece in pieces for hypothesis in hypotheses]
-        scores = self.models.support(pairs)
+        scores = self.models.support(pairs, deadline=deadline)
         emotion = [0.0] * 7
         crisis = [0.0] * 4
         distress = [0.0] * 3
@@ -36,11 +36,11 @@ class JournalService:
                 emotion[i] += probability * piece.weight / total
             crisis = [max(a, b) for a, b in zip(crisis, group[7:11], strict=True)]
             distress = [max(a, b) for a, b in zip(distress, group[11:14], strict=True)]
-        sentiment = self.models.sentiment_scores(text)
+        sentiment = self.models.sentiment_scores(text, deadline=deadline)
         return {"sentiment": sentiment, "emotion": dict(zip(EMOTIONS, emotion, strict=True)),
                 "risk": crisis_priority(text, crisis, distress), "distress": max(distress)}
 
-    def verify_summary(self, source: str, draft: SummaryDraft) -> None:
+    def verify_summary(self, source: str, draft: SummaryDraft, deadline: float | None = None) -> None:
         pairs = []
         for sentence in draft.sentences:
             if sentence_count(sentence.text) != 1:
@@ -51,18 +51,22 @@ class JournalService:
             if not numeric_supported(sentence.text, quote):
                 raise ServiceError("SUMMARY_UNSUPPORTED", "Summary numbers lack source support")
             pairs.append((evidence_context(source, quote, self.models.nli_tokenizer), sentence.text))
-        if any(score < 0.65 for score in self.models.support(pairs)):
+        if any(score < 0.65 for score in self.models.support(pairs, deadline=deadline)):
             raise ServiceError("SUMMARY_UNSUPPORTED", "Summary failed factual support verification")
 
-    async def analyze(self, text: str, deadline: float | None = None) -> JournalResponse:
+    def validate(self, text: str) -> int:
         self.models.require()
         english_only(text)
         count = self.models.token_count(text)
         if count > 2000:
             raise ServiceError("TEXT_TOKEN_LIMIT", "Journal exceeds 2000 generation tokens", 413)
+        return count
+
+    async def analyze(self, text: str, deadline: float | None = None) -> JournalResponse:
+        count = self.validate(text)
         deadline = deadline or time.monotonic() + (30 if count <= 256 else 60)
         # Classification starts before generation and retains its reservation on failures.
-        classification = asyncio.create_task(asyncio.to_thread(self.classify, text))
+        classification = asyncio.create_task(asyncio.to_thread(self.classify, text, deadline))
         prompt = json.dumps({"journal": text}, ensure_ascii=False)
         draft = None
         last_error = None
@@ -71,7 +75,7 @@ class JournalService:
                 try:
                     draft = await self.models.generate(SUMMARY_SYSTEM, prompt, SummaryDraft, deadline=deadline)
                     result = await asyncio.shield(classification)
-                    await asyncio.to_thread(self.verify_summary, text, draft)
+                    await asyncio.to_thread(self.verify_summary, text, draft, deadline)
                     break
                 except ServiceError as exc:
                     last_error = exc

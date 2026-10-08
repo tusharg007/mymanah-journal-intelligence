@@ -7,7 +7,7 @@ import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RECORDINGS = ROOT / "artifacts" / "walkthrough-v2"
+RECORDINGS = ROOT / "artifacts" / "walkthrough-v3"
 
 
 def stamp(seconds: float) -> str:

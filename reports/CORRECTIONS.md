@@ -31,3 +31,20 @@ The 4B candidate subsequently loaded all 37 layers on the GPU with a 256 MiB fit
 reserve. Both candidates retain their measured failures; the original allocation failure
 is not removed from the comparison history. Security-updated classifier packages changed
 CPU timing, so the candidate timing runs are not a controlled isolated speed comparison.
+
+## Reviewer Pack: Deadline Recovery
+
+The external 76-case reviewer pack exposed a long journal continuing CPU work after
+its HTTP timeout, with expired queued requests then starting unnecessary inference.
+Admission now expires waiting requests at their original deadline. Journal language
+and token preflight occurs before admission; classifier work checks the deadline
+between batches and caps each NLI batch at 1024 padded tokens (maximum eight rows).
+An active Torch forward pass is not forcibly interrupted. Model weights, prompts,
+screening thresholds, mood formula and approved architecture were not changed.
+
+Five focused regression tests bring the Windows deterministic suite to 70 passing
+tests. The real long entry still times out at 60 seconds; the following unsupported
+language request returns 422 immediately and a short journal succeeds in 18.422
+seconds. This corrects recovery, not long-entry latency. Initial failed runs remain
+in the reviewer reports. The external pack also reveals semantic disagreements and
+controlled model errors; see `REVIEWER_TEST_PACK.md`, not an all-pass claim.

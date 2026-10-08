@@ -2,7 +2,7 @@
 
 Repository: https://github.com/tusharg007/mymanah-journal-intelligence
 
-Actual application recordings: [Desktop walkthrough, 2:38](walkthrough-desktop.mp4) and [Mobile walkthrough, 2:18](walkthrough-mobile.mp4). These show the completed journal analysis, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and the final unsupported-question response. Results are held visibly for reading, with captions below the app and full inference waiting time retained. [Timestamps and source PDF](WALKTHROUGH.md) accompany the recordings. No public deployment is claimed.
+Actual application recordings: [Desktop walkthrough](walkthrough-desktop.mp4) and [Mobile walkthrough](walkthrough-mobile.mp4). The expanded recordings use diverse inputs from the reviewer's test pack, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and a completed unsupported-question response. Results are held visibly for reading, with embedded captions below the app and full inference waiting time retained. Observed journal disagreements are labeled, not hidden. [Timestamps and source PDF](WALKTHROUGH.md) accompany the recordings. No public deployment is claimed.
 
 ## Approach
 
@@ -14,7 +14,8 @@ Loopback review is credential-free by default. API keys are opt-in, remote bindi
 
 ## Evidence
 
-- Windows deterministic suite: 65 passing tests; the prior 63-test suite also passed on Linux, with final Linux checks run on each push. Native and Linux CPU Docker real-model contract/PDF suites: two passing tests each.
+- Windows deterministic suite: 70 passing tests, with Linux checks run on each push. Native and Linux CPU Docker real-model contract/PDF suites previously passed two tests each; that Docker run predates the timeout-recovery correction.
+- External reviewer pack: all 76 cases exercised. Journals: 7 full automated matches, 10 label/mood disagreements and 3 service errors. Other cases: 45 passes, 9 mismatches and 2 expectation conflicts. [Complete results and limitations](../reports/REVIEWER_TEST_PACK.md) preserve failures and actual responses.
 - Generator comparison: 4B validated 49/50 development journals and returned 30/30 document-question responses; 1.5B validated 41/50 journals and returned 21/30 question responses. Failures are retained.
 - Frozen 100-case English evaluation: 96 validated responses; label agreement including service errors is 95/100 sentiment, 93/100 emotion and 81/100 screening priority. Successful-request p50/p95 is 11.71/18.39 seconds on the tested laptop.
 - Fine-tuned sentiment baseline: RoBERTa 99/100 matching annotations, versus NLI sentiment 97/100. Counts, macro metrics, confusion matrices and uncertainty are published.
@@ -27,6 +28,11 @@ Loopback review is credential-free by default. API keys are opt-in, remote bindi
 English journals and text-based English PDFs are the supported release. Hindi/Hinglish is an unimplemented optional extension; ambiguous Latin-script language detection is imperfect. Scanned/encrypted/corrupt or unusable PDFs fail explicitly; there is no OCR or reliable table-layout interpretation. Questions are standalone and use one authorized document, without external facts or chat memory.
 
 Screening labels are an assignment policy, not clinical risk prediction. MEDIUM recall is weak (13/28 in the held-out fixtures); two correctly classified HIGH examples do not establish safety. Emotion can be wrong even at high classification scores. Confidence and mood are uncalibrated heuristics, not validated probabilities or clinical scales. Some valid summaries are conservatively rejected, and NLI verification is fallible.
+
+The external pack additionally exposed a prolonged-distress HIGH-to-MEDIUM miss,
+omitted conditions in three policy answers, controlled support-verification errors,
+and a long journal that still reaches its 60-second deadline. Deadline recovery was
+corrected and tested, but these semantic and latency limitations remain unresolved.
 
 Evaluation cases have provisional engineering annotations and simple synthetic language, not independent clinician/human validation. No zero-bug, zero-hallucination, clinical-readiness or horizontal-scalability guarantee is made. The implementation uses one application process with embedded storage and bounded local inference, not a distributed service.
 

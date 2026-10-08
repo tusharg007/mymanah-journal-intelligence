@@ -1,0 +1,186 @@
+{
+  "source_sha256": "b5332df6778e948d2330261fbe4dd67693a23722fb5c4a2fa995a569bb2a3995",
+  "cases": [
+    {
+      "id": "J1",
+      "input": "I haven’t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+      "expected": {
+        "#": "J1 ★",
+        "Input": "I haven’t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+        "Sentiment": "negative",
+        "Emotion": "stress",
+        "Mood": "1–4",
+        "Risk": "HIGH",
+        "Notes": "The assignment’s own example. The README says the policy treats prolonged distress plus giving-up language as HIGH. confidence must be a number from 0 to 1 (uncalibrated).",
+        "id": "J1",
+        "hard": true,
+        "borderline": false
+      },
+      "attempts": [
+        {
+          "status_code": 503,
+          "seconds": 27.422,
+          "body": {
+            "error": {
+              "code": "GENERATION_FAILED",
+              "message": "Local generation failed or returned invalid structured output",
+              "requestId": "1926a4985b6a416891dfa19d6fb975f4"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    },
+    {
+      "id": "J2",
+      "input": "I finished my project today and feel pleased with my progress.",
+      "expected": {
+        "#": "J2",
+        "Input": "I finished my project today and feel pleased with my progress.",
+        "Sentiment": "positive",
+        "Emotion": "happy",
+        "Mood": "7–10",
+        "Risk": "LOW",
+        "Notes": "The README lists a positive completion entry misread as neutral emotion. If emotion is neutral, log it as a known miss; sentiment must still be positive.",
+        "id": "J2",
+        "hard": false,
+        "borderline": false
+      },
+      "attempts": [
+        {
+          "status_code": 503,
+          "seconds": 21.516,
+          "body": {
+            "error": {
+              "code": "GENERATION_FAILED",
+              "message": "Local generation failed or returned invalid structured output",
+              "requestId": "f66f1f21b48d4616aa7a037cb6d8e7cd"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    },
+    {
+      "id": "J3",
+      "input": "Today was an ordinary day. I went to work, had lunch with a colleague, and came home around six.",
+      "expected": {
+        "#": "J3",
+        "Input": "Today was an ordinary day. I went to work, had lunch with a colleague, and came home around six.",
+        "Sentiment": "neutral",
+        "Emotion": "neutral",
+        "Mood": "5–7",
+        "Risk": "LOW",
+        "Notes": "Baseline neutral entry.",
+        "id": "J3",
+        "hard": false,
+        "borderline": false
+      },
+      "attempts": [
+        {
+          "status_code": 503,
+          "seconds": 27.266,
+          "body": {
+            "error": {
+              "code": "GENERATION_FAILED",
+              "message": "Local generation failed or returned invalid structured output",
+              "requestId": "51011035ff3e4706b8d663b12e52e28b"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    },
+    {
+      "id": "J4",
+      "input": "My manager criticized my work in front of the whole team and I am furious. I can’t believe how disrespectful he was.",
+      "expected": {
+        "#": "J4",
+        "Input": "My manager criticized my work in front of the whole team and I am furious. I can’t believe how disrespectful he was.",
+        "Sentiment": "negative",
+        "Emotion": "anger",
+        "Mood": "2–4",
+        "Risk": "LOW",
+        "Notes": "Anger without risk language must not escalate.",
+        "id": "J4",
+        "hard": false,
+        "borderline": false
+      },
+      "attempts": [
+        {
+          "status_code": 503,
+          "seconds": 27.234,
+          "body": {
+            "error": {
+              "code": "GENERATION_FAILED",
+              "message": "Local generation failed or returned invalid structured output",
+              "requestId": "c892c68db97a4e81bb9661a12f28a5ad"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    },
+    {
+      "id": "J5",
+      "input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+      "expected": {
+        "#": "J5 ◇",
+        "Input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+        "Sentiment": "negative",
+        "Emotion": "anxiety",
+        "Mood": "2–4",
+        "Risk": "LOW or MEDIUM",
+        "Notes": "Anxiety versus stress is the hardest label boundary; accept either if the summary is faithful.",
+        "id": "J5",
+        "hard": false,
+        "borderline": true
+      },
+      "attempts": [
+        {
+          "status_code": 503,
+          "seconds": 24.906,
+          "body": {
+            "error": {
+              "code": "GENERATION_FAILED",
+              "message": "Local generation failed or returned invalid structured output",
+              "requestId": "32772b7a2acd46939b5471d49848c97c"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    },
+    {
+      "id": "J6",
+      "input": "I have five deadlines this week and no time to breathe. I feel completely overwhelmed by the workload.",
+      "expected": {
+        "#": "J6 ◇",
+        "Input": "I have five deadlines this week and no time to breathe. I feel completely overwhelmed by the workload.",
+        "Sentiment": "negative",
+        "Emotion": "stress",
+        "Mood": "2–4",
+        "Risk": "LOW or MEDIUM",
+        "Notes": "Work overload should read as stress.",
+        "id": "J6",
+        "hard": false,
+        "borderline": true
+      },
+      "attempts": [
+        {
+          "status_code": 504,
+          "seconds": 30.032,
+          "body": {
+            "error": {
+              "code": "INFERENCE_TIMEOUT",
+              "message": "The request exceeded its inference deadline",
+              "requestId": "52f8dc6ceafe4c6093f092e90ca166af"
+            }
+          }
+        }
+      ],
+      "outcome": "SERVICE_ERROR"
+    }
+  ],
+  "scope": "Real local API; reviewer expectations preserved; summary faithfulness requires reading the outputs."
+}

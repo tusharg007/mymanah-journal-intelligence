@@ -1,0 +1,463 @@
+{
+  "source_sha256": "b5332df6778e948d2330261fbe4dd67693a23722fb5c4a2fa995a569bb2a3995",
+  "fixtures": {
+    "Employee_Handbook_Test.pdf": {
+      "bytes": 3911,
+      "sha256": "265bc20f79779ca5a592fa13de88d336031a207eb433b971c8340d43e2cd9f29"
+    },
+    "Encrypted_Test.pdf": {
+      "bytes": 3822,
+      "sha256": "cd89f95c31dd56306c823b917adbafb83b736329a6fe36e0d86a27f08392d661"
+    },
+    "Scanned_Image_Only_Test.pdf": {
+      "bytes": 57752,
+      "sha256": "cf7be4bad4978ffccd125bcf46b4727ab66708c5a895a2e0753662fdb21fca02"
+    },
+    "Travel_Policy_Other_Doc.pdf": {
+      "bytes": 1830,
+      "sha256": "577ab3db547948ccac433b25a37651739b8bd498d9b424cb455f1f6aebc132ec"
+    }
+  },
+  "cases": [
+    {
+      "id": "C1",
+      "expected": {
+        "#": "C1 ★",
+        "Request": "{\"text\":\"I feel fine today.\"}",
+        "Expect": "200",
+        "Expected behavior": "Exactly six keys: sentiment, emotion, moodScore, summary, crisisRisk, confidence. sentiment in positive/neutral/negative; emotion in the seven lowercase labels; moodScore an integer 1–10; summary 2–3 sentences; crisisRisk LOW/MEDIUM/HIGH; confidence a number 0–1.",
+        "Notes": "Check types, casing and key set, not wording.",
+        "id": "C1",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 504,
+        "seconds": 30.015,
+        "body": {
+          "error": {
+            "code": "INFERENCE_TIMEOUT",
+            "message": "The request exceeded its inference deadline",
+            "requestId": "bc4f2a0d3bf74259b7d910fb4209db6f"
+          }
+        }
+      },
+      "checks": {
+        "six_field_contract": false
+      },
+      "outcome": "MISMATCH"
+    },
+    {
+      "id": "C2",
+      "expected": {
+        "#": "C2 ★",
+        "Request": "{\"text\":\"\"}",
+        "Expect": "422",
+        "Expected behavior": "Controlled validation error, no model call.",
+        "Notes": "",
+        "id": "C2",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.016,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "b671d9007ff44727ad31c1160329b1d9",
+            "fields": [
+              {
+                "field": "body.text",
+                "code": "string_too_short"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "validation_422": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C3",
+      "expected": {
+        "#": "C3 ★",
+        "Request": "{\"text\":\"   \"}",
+        "Expect": "422",
+        "Expected behavior": "Whitespace-only is rejected.",
+        "Notes": "",
+        "id": "C3",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.0,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "27da6ff474e14884b1f088fc9b129365",
+            "fields": [
+              {
+                "field": "body.text",
+                "code": "value_error"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "validation_422": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C4",
+      "expected": {
+        "#": "C4 ★",
+        "Request": "{}",
+        "Expect": "422",
+        "Expected behavior": "Missing field is rejected.",
+        "Notes": "",
+        "id": "C4",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.016,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "c5978ed5bf8648d09252c67d9ad9b7b4",
+            "fields": [
+              {
+                "field": "body.text",
+                "code": "missing"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "validation_422": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C5",
+      "expected": {
+        "#": "C5 ★",
+        "Request": "{\"text\":\"hello\",\"userId\":\"1\"}",
+        "Expect": "422",
+        "Expected behavior": "Extra request fields are rejected (stated in the README).",
+        "Notes": "",
+        "id": "C5",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.0,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "c2245dd3901d4bfaa9d9d8e94f8b9a13",
+            "fields": [
+              {
+                "field": "body.userId",
+                "code": "extra_forbidden"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "validation_422": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C6",
+      "expected": {
+        "#": "C6",
+        "Request": "{\"text\":123}",
+        "Expect": "422",
+        "Expected behavior": "Wrong type is rejected.",
+        "Notes": "",
+        "id": "C6",
+        "hard": false,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.0,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "df3c1d4094cc4075930b71cd4bda3001",
+            "fields": [
+              {
+                "field": "body.text",
+                "code": "string_type"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "validation_422": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C7",
+      "expected": {
+        "#": "C7",
+        "Request": "{text:",
+        "Expect": "4xx",
+        "Expected behavior": "Malformed JSON gives a client error, not a 500.",
+        "Notes": "FastAPI normally returns 422.",
+        "id": "C7",
+        "hard": false,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 422,
+        "seconds": 0.016,
+        "body": {
+          "error": {
+            "code": "INVALID_REQUEST",
+            "message": "Request failed validation",
+            "requestId": "0c5c2965d5bb405ea6440f85c3f1ecc2",
+            "fields": [
+              {
+                "field": "body.1",
+                "code": "json_invalid"
+              }
+            ]
+          }
+        }
+      },
+      "checks": {
+        "client_error": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C8",
+      "expected": {
+        "#": "C8 ★",
+        "Request": "{\"text\":\"मैं आज बहुत दुखी हूँ\"}",
+        "Expect": "422",
+        "Expected behavior": "Controlled rejection of unsupported non-Latin input (stated in the README).",
+        "Notes": "Send as UTF-8. The helper below does.",
+        "id": "C8",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 504,
+        "seconds": 30.0,
+        "body": {
+          "error": {
+            "code": "INFERENCE_TIMEOUT",
+            "message": "The request exceeded its inference deadline",
+            "requestId": "3819dfcf52d741108349a4d3ace198aa"
+          }
+        }
+      },
+      "checks": {
+        "expected_status": false
+      },
+      "outcome": "MISMATCH"
+    },
+    {
+      "id": "C9",
+      "expected": {
+        "#": "C9 ◇",
+        "Request": "{\"text\":\"Aaj mera mood bahut kharab hai, kaam ka bahut stress hai aur neend bhi nahi aa rahi.\"}",
+        "Expect": "200 or 4xx",
+        "Expected behavior": "Latin-script Hinglish cannot be reliably detected. Either a rejection or an output is acceptable; labels may be unreliable.",
+        "Notes": "Documented limitation (English only). Record what happens.",
+        "id": "C9",
+        "hard": false,
+        "borderline": true
+      },
+      "observations": {
+        "status_code": 429,
+        "seconds": 0.016,
+        "body": {
+          "error": {
+            "code": "QUEUE_FULL",
+            "message": "Inference capacity is busy; retry later",
+            "requestId": "79b9662625f848e8967f306f6d58c5ad"
+          }
+        }
+      },
+      "checks": {
+        "expected_status": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C10",
+      "expected": {
+        "#": "C10",
+        "Request": "8,000 characters exactly (command below)",
+        "Expect": "200",
+        "Expected behavior": "Accepted at the limit, returns inside the larger-entry deadline.",
+        "Notes": "Slow is acceptable; an error is not.",
+        "id": "C10",
+        "hard": false,
+        "borderline": false
+      },
+      "observations": {
+        "supplied_recipe_characters": 8000,
+        "supplied_recipe": {
+          "status_code": 429,
+          "seconds": 0.0,
+          "body": {
+            "error": {
+              "code": "QUEUE_FULL",
+              "message": "Inference capacity is busy; retry later",
+              "requestId": "e1a61e931a7743e9b8e39469c6851394"
+            }
+          }
+        },
+        "actual_boundary_characters": 8000,
+        "actual_boundary": {
+          "status_code": 429,
+          "seconds": 0.015,
+          "body": {
+            "error": {
+              "code": "QUEUE_FULL",
+              "message": "Inference capacity is busy; retry later",
+              "requestId": "7c8a6ea01b9b475abdb1315c9df0abc5"
+            }
+          }
+        }
+      },
+      "checks": {
+        "expected_status": false
+      },
+      "outcome": "EXPECTATION_CONFLICT",
+      "note": "Corrected harness commentary: the supplied commands correctly yield 8000/8001 characters. The independent 2000-token bound rejects the repeated 8000-character input. Raw observations are unchanged."
+    },
+    {
+      "id": "C11",
+      "expected": {
+        "#": "C11 ★",
+        "Request": "8,001 characters (command below)",
+        "Expect": "4xx",
+        "Expected behavior": "Rejected, not truncated (the README says no truncation).",
+        "Notes": "",
+        "id": "C11",
+        "hard": true,
+        "borderline": false
+      },
+      "observations": {
+        "supplied_recipe_characters": 8001,
+        "supplied_recipe": {
+          "status_code": 422,
+          "seconds": 0.0,
+          "body": {
+            "error": {
+              "code": "INVALID_REQUEST",
+              "message": "Request failed validation",
+              "requestId": "057f7de4071442e3a0caeac02073e24a",
+              "fields": [
+                {
+                  "field": "body.text",
+                  "code": "string_too_long"
+                }
+              ]
+            }
+          }
+        },
+        "actual_boundary_characters": 8001,
+        "actual_boundary": {
+          "status_code": 422,
+          "seconds": 0.0,
+          "body": {
+            "error": {
+              "code": "INVALID_REQUEST",
+              "message": "Request failed validation",
+              "requestId": "1a68732fe0614d23a8dfb69c7afb5289",
+              "fields": [
+                {
+                  "field": "body.text",
+                  "code": "string_too_long"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "checks": {
+        "expected_status": true
+      },
+      "outcome": "PASS",
+      "note": "Corrected harness commentary: the supplied commands correctly yield 8000/8001 characters. The independent 2000-token bound rejects the repeated 8000-character input. Raw observations are unchanged."
+    },
+    {
+      "id": "C12",
+      "expected": {
+        "#": "C12",
+        "Request": "40,000 characters (command below)",
+        "Expect": "4xx",
+        "Expected behavior": "Rejected by the 32 KiB body bound.",
+        "Notes": "Likely 413 or 422; the README does not state the code.",
+        "id": "C12",
+        "hard": false,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 413,
+        "seconds": 0.0,
+        "body": {
+          "error": {
+            "code": "BODY_TOO_LARGE",
+            "message": "Request body exceeds the limit",
+            "requestId": "7fbd4e60affb4e21b5000f938449c8e9"
+          }
+        }
+      },
+      "checks": {
+        "body_rejected": true
+      },
+      "outcome": "PASS"
+    },
+    {
+      "id": "C13",
+      "expected": {
+        "#": "C13",
+        "Request": "GET /analyze-journal",
+        "Expect": "405",
+        "Expected behavior": "Method not allowed.",
+        "Notes": "",
+        "id": "C13",
+        "hard": false,
+        "borderline": false
+      },
+      "observations": {
+        "status_code": 405,
+        "seconds": 0.0,
+        "body": {
+          "detail": "Method Not Allowed"
+        }
+      },
+      "checks": {
+        "method_405": true
+      },
+      "outcome": "PASS"
+    }
+  ]
+}

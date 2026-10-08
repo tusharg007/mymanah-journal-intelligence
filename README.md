@@ -127,9 +127,15 @@ On this 16 GB RAM / RTX 3050 Laptop 4 GB machine, reducing Ollama's fitting rese
 
 `confidence=min(selected sentiment score, selected emotion score)` is an uncalibrated classification heuristic, **not** a probability all response fields are correct. Mood uses the versioned formula in `mymanah/policy.py`, with approximate distress adjustment, not a clinical scale. LOW/MEDIUM/HIGH are assignment screening priorities, not clinical risk prediction. The broad sample-compatible HIGH policy includes prolonged distress, impairment and giving-up language. No automatic clinical escalation or notification occurs.
 
-Starting hard deadlines: short journal 30 seconds, larger journal 60, question 45, synchronous upload 60. The warm short-entry **target** is 10-15 seconds, including verification; actual measurements are required. Each ordinary window initially costs 14 NLI pairs, plus summary verification, not a single classification operation.
+Starting hard deadlines: short journal 30 seconds, larger journal 60, question 45, synchronous upload 60. Queue time counts toward the deadline; expired waiters do not start inference. Classifier deadlines are checked between length-bounded batches, not by interrupting an active Torch forward pass. The warm short-entry **target** is 10-15 seconds, including verification; actual measurements are required. Each ordinary window initially costs 14 NLI pairs, plus summary verification, not a single classification operation.
 
 ## Verification and Evaluation
+
+The additional [76-case reviewer pack report](reports/REVIEWER_TEST_PACK.md) retains
+real responses, semantic disagreements and service errors. It is not an all-pass
+result: notably prolonged distress was classified MEDIUM instead of expected HIGH,
+some policy conditions were omitted from answers, and a long journal timed out.
+The expanded videos show diverse reviewer-authored inputs and label disagreements.
 
 ```powershell
 .venv\Scripts\python.exe -m ruff check mymanah scripts tests evals
@@ -216,7 +222,7 @@ For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --b
 
 ## Verification Status
 
-- 65 deterministic tests pass on Windows; the prior 63-test suite also passed on Linux. Two additional actual-model live tests pass both natively and in Linux CPU Docker. Ruff and frontend production build pass; the final Linux checks run on each push.
+- 70 deterministic tests pass on Windows. Two additional actual-model live tests previously passed both natively and in Linux CPU Docker; that Docker run predates the deadline/batching correction. Ruff and frontend production build pass; Linux deterministic checks run on each push.
 - Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Layout checks at widths 320, 390, 1440 and 1920 pixels report no page/source overflow or JavaScript errors (`reports/responsive-layout.json`). Actual recordings preserve inference waiting time.
 - Offline smoke passed with non-loopback Python sockets blocked. This is an API-process guard, not an OS firewall or instrumentation of Ollama/PDF subprocesses.
 - Quiesced backup/restore passed with preserved PDF bytes, generation and vectors, a real restored-index question, 401 for unauthenticated keyed access and 404 for another principal's document/source access.

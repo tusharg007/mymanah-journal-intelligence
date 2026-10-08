@@ -5,59 +5,349 @@
       "width": 1440,
       "height": 960
     },
-    "journalSeconds": 27.384,
-    "journal": {
-      "sentiment": "positive",
-      "emotion": "happy",
-      "moodScore": 10,
-      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
-      "crisisRisk": "LOW",
-      "confidence": 0.9906
-    },
+    "journals": [
+      {
+        "id": "J2",
+        "title": "Positive achievement",
+        "input": "I finished my project today and feel pleased with my progress.",
+        "expected": {
+          "#": "J2",
+          "Input": "I finished my project today and feel pleased with my progress.",
+          "Sentiment": "positive",
+          "Emotion": "happy",
+          "Mood": "7\u201310",
+          "Risk": "LOW",
+          "Notes": "The README lists a positive completion entry misread as neutral emotion. If emotion is neutral, log it as a known miss; sentiment must still be positive.",
+          "id": "J2",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 13.026,
+        "actual": {
+          "sentiment": "positive",
+          "emotion": "neutral",
+          "moodScore": 10,
+          "summary": "The person feels pleased with their project progress. The completion of the project is acknowledged as a positive outcome. The emotional response to the project is one of satisfaction.",
+          "crisisRisk": "LOW",
+          "confidence": 0.8851
+        }
+      },
+      {
+        "id": "J3",
+        "title": "An ordinary day",
+        "input": "Today was an ordinary day. I went to work, had lunch with a colleague, and came home around six.",
+        "expected": {
+          "#": "J3",
+          "Input": "Today was an ordinary day. I went to work, had lunch with a colleague, and came home around six.",
+          "Sentiment": "neutral",
+          "Emotion": "neutral",
+          "Mood": "5\u20137",
+          "Risk": "LOW",
+          "Notes": "Baseline neutral entry.",
+          "id": "J3",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 17.82,
+        "actual": {
+          "sentiment": "neutral",
+          "emotion": "neutral",
+          "moodScore": 6,
+          "summary": "Today was an ordinary day. I went to work, had lunch with a colleague, and came home around six.",
+          "crisisRisk": "LOW",
+          "confidence": 0.7422
+        }
+      },
+      {
+        "id": "J4",
+        "title": "Anger after criticism",
+        "input": "My manager criticized my work in front of the whole team and I am furious. I can\u2019t believe how disrespectful he was.",
+        "expected": {
+          "#": "J4",
+          "Input": "My manager criticized my work in front of the whole team and I am furious. I can\u2019t believe how disrespectful he was.",
+          "Sentiment": "negative",
+          "Emotion": "anger",
+          "Mood": "2\u20134",
+          "Risk": "LOW",
+          "Notes": "Anger without risk language must not escalate.",
+          "id": "J4",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 18.886,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "anger",
+          "moodScore": 1,
+          "summary": "The manager criticized the user's work in front of the team, causing anger. The user feels the criticism was disrespectful and public. The user expresses strong emotional reaction to the public criticism.",
+          "crisisRisk": "LOW",
+          "confidence": 0.9364
+        }
+      },
+      {
+        "id": "J5",
+        "title": "Interview anxiety",
+        "input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+        "expected": {
+          "#": "J5 \u25c7",
+          "Input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+          "Sentiment": "negative",
+          "Emotion": "anxiety",
+          "Mood": "2\u20134",
+          "Risk": "LOW or MEDIUM",
+          "Notes": "Anxiety versus stress is the hardest label boundary; accept either if the summary is faithful.",
+          "id": "J5",
+          "hard": false,
+          "borderline": true
+        },
+        "statusCode": 200,
+        "journalSeconds": 16.311,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "anxiety",
+          "moodScore": 1,
+          "summary": "The person is anxious about their interview tomorrow. The person feels physical symptoms of stress due to overthinking.",
+          "crisisRisk": "MEDIUM",
+          "confidence": 0.8931
+        }
+      },
+      {
+        "id": "J6",
+        "title": "Workload stress",
+        "input": "I have five deadlines this week and no time to breathe. I feel completely overwhelmed by the workload.",
+        "expected": {
+          "#": "J6 \u25c7",
+          "Input": "I have five deadlines this week and no time to breathe. I feel completely overwhelmed by the workload.",
+          "Sentiment": "negative",
+          "Emotion": "stress",
+          "Mood": "2\u20134",
+          "Risk": "LOW or MEDIUM",
+          "Notes": "Work overload should read as stress.",
+          "id": "J6",
+          "hard": false,
+          "borderline": true
+        },
+        "statusCode": 200,
+        "journalSeconds": 15.657,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "stress",
+          "moodScore": 1,
+          "summary": "The person feels completely overwhelmed by the workload. The person has five deadlines this week and no time to breathe.",
+          "crisisRisk": "MEDIUM",
+          "confidence": 0.8283
+        }
+      },
+      {
+        "id": "J7",
+        "title": "Grief",
+        "input": "I miss my grandmother so much today. I cried for most of the evening looking at her old photos.",
+        "expected": {
+          "#": "J7",
+          "Input": "I miss my grandmother so much today. I cried for most of the evening looking at her old photos.",
+          "Sentiment": "negative",
+          "Emotion": "sad",
+          "Mood": "2\u20134",
+          "Risk": "LOW",
+          "Notes": "Grief without risk language.",
+          "id": "J7",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 15.666,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "sad",
+          "moodScore": 3,
+          "summary": "The person misses their grandmother deeply today. The person cried for most of the evening while looking at her old photos.",
+          "crisisRisk": "LOW",
+          "confidence": 0.6963
+        }
+      },
+      {
+        "id": "J8",
+        "title": "Fear after a threat",
+        "input": "Someone followed me home last night and I\u2019m terrified. I keep checking the locks and I am afraid to go out.",
+        "expected": {
+          "#": "J8 \u25c7",
+          "Input": "Someone followed me home last night and I\u2019m terrified. I keep checking the locks and I am afraid to go out.",
+          "Sentiment": "negative",
+          "Emotion": "fear",
+          "Mood": "1\u20134",
+          "Risk": "LOW or MEDIUM",
+          "Notes": "The README says fear is not relabelled as anxiety, so fear is the expected label.",
+          "id": "J8",
+          "hard": false,
+          "borderline": true
+        },
+        "statusCode": 200,
+        "journalSeconds": 17.817,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "fear",
+          "moodScore": 1,
+          "summary": "The person felt terrified after someone followed them home last night. They continue to check the locks out of fear. The individual expresses ongoing anxiety about going outside.",
+          "crisisRisk": "LOW",
+          "confidence": 0.8846
+        }
+      },
+      {
+        "id": "J12",
+        "title": "Negation: not sad",
+        "input": "I am not sad at all today. Honestly I feel great and everything is going well.",
+        "expected": {
+          "#": "J12",
+          "Input": "I am not sad at all today. Honestly I feel great and everything is going well.",
+          "Sentiment": "positive",
+          "Emotion": "happy",
+          "Mood": "8\u201310",
+          "Risk": "LOW",
+          "Notes": "Negation trap: the word \u201csad\u201d must not drive the emotion.",
+          "id": "J12",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 14.387,
+        "actual": {
+          "sentiment": "positive",
+          "emotion": "neutral",
+          "moodScore": 10,
+          "summary": "The person does not feel sad today. The person feels great and believes everything is going well.",
+          "crisisRisk": "LOW",
+          "confidence": 0.9736
+        }
+      },
+      {
+        "id": "J13",
+        "title": "Mixed excitement and worry",
+        "input": "I got the promotion and I\u2019m thrilled, but I\u2019m also nervous about the extra responsibility.",
+        "expected": {
+          "#": "J13 \u25c7",
+          "Input": "I got the promotion and I\u2019m thrilled, but I\u2019m also nervous about the extra responsibility.",
+          "Sentiment": "positive (neutral ok)",
+          "Emotion": "happy (anxiety ok)",
+          "Mood": "5\u20138",
+          "Risk": "LOW",
+          "Notes": "Mixed feelings: the summary should mention both the promotion and the nervousness.",
+          "id": "J13",
+          "hard": false,
+          "borderline": true
+        },
+        "statusCode": 200,
+        "journalSeconds": 15.226,
+        "actual": {
+          "sentiment": "positive",
+          "emotion": "anxiety",
+          "moodScore": 9,
+          "summary": "The person received a promotion and feels thrilled about it. The person is also nervous about the increased responsibility.",
+          "crisisRisk": "LOW",
+          "confidence": 0.8637
+        }
+      },
+      {
+        "id": "J1",
+        "title": "Prolonged distress",
+        "input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+        "expected": {
+          "#": "J1 \u2605",
+          "Input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+          "Sentiment": "negative",
+          "Emotion": "stress",
+          "Mood": "1\u20134",
+          "Risk": "HIGH",
+          "Notes": "The assignment\u2019s own example. The README says the policy treats prolonged distress plus giving-up language as HIGH. confidence must be a number from 0 to 1 (uncalibrated).",
+          "id": "J1",
+          "hard": true,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 16.963,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "stress",
+          "moodScore": 1,
+          "summary": "The person has not been sleeping properly for the last few weeks. The person feels stressed about work and sometimes feels like giving up.",
+          "crisisRisk": "MEDIUM",
+          "confidence": 0.8388
+        }
+      },
+      {
+        "id": "J9",
+        "title": "Explicit risk language",
+        "input": "I don\u2019t want to be alive anymore. I have been thinking about ending my life and I can\u2019t see any way out.",
+        "expected": {
+          "#": "J9 \u2605",
+          "Input": "I don\u2019t want to be alive anymore. I have been thinking about ending my life and I can\u2019t see any way out.",
+          "Sentiment": "negative",
+          "Emotion": "any",
+          "Mood": "1\u20132",
+          "Risk": "HIGH",
+          "Notes": "Hard requirement: HIGH. The emotion label may vary. The summary must stay factual and must not minimize what the writer said.",
+          "id": "J9",
+          "hard": true,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 17.563,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "sad",
+          "moodScore": 1,
+          "summary": "The person expresses a desire to stop living. They have been actively considering ending their life.",
+          "crisisRisk": "HIGH",
+          "confidence": 0.9333
+        }
+      }
+    ],
     "upload": {
       "document": {
-        "id": "da5e82115bd74758b84b6cff5da5449c",
-        "filename": "cedar-studio-handbook.pdf",
+        "id": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
+        "filename": "Employee_Handbook_Test.pdf",
         "state": "READY",
-        "pages": 2,
-        "chunks": 2,
-        "created": 1791453271.9566507,
+        "pages": 3,
+        "chunks": 3,
+        "created": 1791473448.3475556,
         "error": null
       },
       "status": "READY"
     },
-    "documentId": "da5e82115bd74758b84b6cff5da5449c",
+    "documentId": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
     "responses": [
       {
-        "question": "How many annual leave days do Cedar studio employees receive?",
-        "seconds": 8.772,
+        "question": "What is the annual leave allowance?",
+        "seconds": 6.53,
         "result": {
           "status": "ANSWERED",
-          "answer": "Cedar studio employees receive 23 days of annual leave. [1]",
+          "answer": "The annual leave allowance is 24 days per calendar year. [1]",
           "citations": [
             {
-              "document_id": "da5e82115bd74758b84b6cff5da5449c",
-              "filename": "cedar-studio-handbook.pdf",
-              "page": 1,
-              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_0",
-              "quote": "Cedar studio employees receive 23 days of annual leave. Leave requests require\napproval from the studio manager. Contractors receive no annual leave."
+              "document_id": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 2,
+              "chunk_id": "cee1c7eb814a4c78ad649dc5e1246ebe_1",
+              "quote": "Full-time employees receive 24 days of paid annual leave per calendar\nyear."
             }
           ]
         }
       },
       {
-        "question": "What is the equipment reimbursement limit?",
-        "seconds": 8.072,
+        "question": "What is the notice period during probation?",
+        "seconds": 6.19,
         "result": {
           "status": "ANSWERED",
-          "answer": "The equipment reimbursement limit is 420 pounds per year. [1]",
+          "answer": "The notice period during probation is 15 days. [1]",
           "citations": [
             {
-              "document_id": "da5e82115bd74758b84b6cff5da5449c",
-              "filename": "cedar-studio-handbook.pdf",
-              "page": 2,
-              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_1",
-              "quote": "Equipment reimbursement is capped at 420 pounds per year. Receipts must be\nsubmitted within 21 days."
+              "document_id": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 3,
+              "chunk_id": "cee1c7eb814a4c78ad649dc5e1246ebe_2",
+              "quote": "Notice period: The notice period is 60 days after confirmation and 15 days during\nprobation."
             }
           ]
         }
@@ -70,120 +360,291 @@
     },
     "chapters": [
       {
-        "start": 0,
+        "start": 0.001,
         "title": "Start",
-        "caption": "MyManah | Real local-model walkthrough\nJournal analysis and evidence-grounded PDF questions"
+        "caption": "MyManah | Diverse reviewer test cases\nActual local inference; disagreements are labeled."
       },
       {
-        "start": 4.293,
-        "title": "Journal request",
-        "caption": "Enter a journal, then run the local models.\nThe recording retains the full processing time."
+        "start": 4.25,
+        "title": "J2 - Positive achievement",
+        "caption": "J2 | Positive achievement\nReviewer-authored input; full processing wait retained."
       },
       {
-        "start": 39.024,
-        "title": "Completed journal analysis",
-        "caption": "Completed analysis: mood, sentiment, emotion,\nclassification score, screening priority and summary."
+        "start": 22.873,
+        "title": "J2 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nEmotion neutral; pack expects happy."
       },
       {
-        "start": 55.148,
+        "start": 36.943,
+        "title": "J3 - An ordinary day",
+        "caption": "J3 | An ordinary day\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 61.967,
+        "title": "J3 - completed analysis",
+        "caption": "Returned: neutral / neutral / LOW.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 76.039,
+        "title": "J4 - Anger after criticism",
+        "caption": "J4 | Anger after criticism\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 103.047,
+        "title": "J4 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nMood 1; pack range 2-4."
+      },
+      {
+        "start": 117.122,
+        "title": "J5 - Interview anxiety",
+        "caption": "J5 | Interview anxiety\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 141.78,
+        "title": "J5 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nMood 1; pack range 2-4."
+      },
+      {
+        "start": 155.836,
+        "title": "J6 - Workload stress",
+        "caption": "J6 | Workload stress\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 178.889,
+        "title": "J6 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nMood 1; pack range 2-4."
+      },
+      {
+        "start": 192.96,
+        "title": "J7 - Grief",
+        "caption": "J7 | Grief\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 215.715,
+        "title": "J7 - completed analysis",
+        "caption": "Returned: negative / sad / LOW.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 229.773,
+        "title": "J8 - Fear after a threat",
+        "caption": "J8 | Fear after a threat\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 255.297,
+        "title": "J8 - completed analysis",
+        "caption": "Returned: negative / fear / LOW.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 269.361,
+        "title": "J12 - Negation: not sad",
+        "caption": "J12 | Negation: not sad\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 290.099,
+        "title": "J12 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nEmotion neutral; pack expects happy."
+      },
+      {
+        "start": 304.164,
+        "title": "J13 - Mixed excitement and worry",
+        "caption": "J13 | Mixed excitement and worry\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 326.288,
+        "title": "J13 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nMood 9; pack range 5-8."
+      },
+      {
+        "start": 340.345,
+        "title": "J1 - Prolonged distress",
+        "caption": "J1 | Prolonged distress\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 365.645,
+        "title": "J1 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nRisk MEDIUM; pack expects HIGH."
+      },
+      {
+        "start": 379.707,
+        "title": "J9 - Explicit risk language",
+        "caption": "J9 | Explicit risk language\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 404.841,
+        "title": "J9 - completed analysis",
+        "caption": "Returned: negative / sad / HIGH.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 418.907,
         "title": "Document upload",
-        "caption": "Upload a two-page policy PDF.\nWait for READY before asking a question."
+        "caption": "Upload the reviewer's three-page handbook.\nWait for READY before asking a question."
       },
       {
-        "start": 60.982,
+        "start": 423.66,
         "title": "PDF ready",
         "caption": "READY confirms extraction and indexing completed.\nQuestions can now use this document."
       },
       {
-        "start": 66.106,
-        "title": "Ask: How many annual leave days do Cedar studio employees receive?",
+        "start": 429.578,
+        "title": "Uploaded handbook - page 1",
+        "caption": "The supplied handbook has three pages.\nInspect the original document before asking."
+      },
+      {
+        "start": 436.666,
+        "title": "Ask: What is the annual leave allowance?",
         "caption": "A real request runs against the selected PDF."
       },
       {
-        "start": 80.506,
-        "title": "Completed answer - page 1",
-        "caption": "Read the answer and expanded source quote.\nCitation points to page 1 of the uploaded PDF."
-      },
-      {
-        "start": 93.456,
-        "title": "Original PDF - page 1",
-        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
-      },
-      {
-        "start": 101.582,
-        "title": "Ask: What is the equipment reimbursement limit?",
-        "caption": "A real request runs against the selected PDF."
-      },
-      {
-        "start": 114.501,
+        "start": 447.534,
         "title": "Completed answer - page 2",
         "caption": "Read the answer and expanded source quote.\nCitation points to page 2 of the uploaded PDF."
       },
       {
-        "start": 127.436,
+        "start": 460.426,
         "title": "Original PDF - page 2",
         "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
       },
       {
-        "start": 135.511,
+        "start": 468.508,
+        "title": "Ask: What is the notice period during probation?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 479.458,
+        "title": "Completed answer - page 3",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 3 of the uploaded PDF."
+      },
+      {
+        "start": 492.354,
+        "title": "Original PDF - page 3",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 500.434,
         "title": "Question outside the document",
         "caption": "Ask for information the PDF does not contain."
       },
       {
-        "start": 142.96,
+        "start": 506.555,
         "title": "Completed unsupported-question result",
         "caption": "INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations."
       }
     ],
     "evidence": [
       {
-        "title": "Completed journal analysis",
-        "visibleFrom": 39.03,
-        "inspectVideoAt": 47.03,
-        "holdSeconds": 16
+        "title": "J2 - completed analysis",
+        "visibleFrom": 22.874,
+        "inspectVideoAt": 29.874,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J3 - completed analysis",
+        "visibleFrom": 61.967,
+        "inspectVideoAt": 68.967,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J4 - completed analysis",
+        "visibleFrom": 103.047,
+        "inspectVideoAt": 110.047,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J5 - completed analysis",
+        "visibleFrom": 141.78,
+        "inspectVideoAt": 148.78,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J6 - completed analysis",
+        "visibleFrom": 178.889,
+        "inspectVideoAt": 185.889,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J7 - completed analysis",
+        "visibleFrom": 215.715,
+        "inspectVideoAt": 222.715,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J8 - completed analysis",
+        "visibleFrom": 255.298,
+        "inspectVideoAt": 262.298,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J12 - completed analysis",
+        "visibleFrom": 290.099,
+        "inspectVideoAt": 297.099,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J13 - completed analysis",
+        "visibleFrom": 326.288,
+        "inspectVideoAt": 333.288,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J1 - completed analysis",
+        "visibleFrom": 365.645,
+        "inspectVideoAt": 372.645,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J9 - completed analysis",
+        "visibleFrom": 404.841,
+        "inspectVideoAt": 411.841,
+        "holdSeconds": 14
       },
       {
         "title": "PDF ready",
-        "visibleFrom": 60.982,
-        "inspectVideoAt": 63.482,
+        "visibleFrom": 423.66,
+        "inspectVideoAt": 426.16,
         "holdSeconds": 5
       },
       {
-        "title": "Completed answer - page 1",
-        "visibleFrom": 80.506,
-        "inspectVideoAt": 86.506,
-        "holdSeconds": 12
-      },
-      {
-        "title": "Original PDF - page 1",
-        "visibleFrom": 93.456,
-        "inspectVideoAt": 97.456,
-        "holdSeconds": 8
+        "title": "Uploaded handbook - page 1",
+        "visibleFrom": 429.578,
+        "inspectVideoAt": 433.078,
+        "holdSeconds": 7
       },
       {
         "title": "Completed answer - page 2",
-        "visibleFrom": 114.501,
-        "inspectVideoAt": 120.501,
+        "visibleFrom": 447.534,
+        "inspectVideoAt": 453.534,
         "holdSeconds": 12
       },
       {
         "title": "Original PDF - page 2",
-        "visibleFrom": 127.436,
-        "inspectVideoAt": 131.436,
+        "visibleFrom": 460.426,
+        "inspectVideoAt": 464.426,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed answer - page 3",
+        "visibleFrom": 479.458,
+        "inspectVideoAt": 485.458,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 3",
+        "visibleFrom": 492.354,
+        "inspectVideoAt": 496.354,
         "holdSeconds": 8
       },
       {
         "title": "Completed unsupported-question result",
-        "visibleFrom": 142.96,
-        "inspectVideoAt": 150.96,
+        "visibleFrom": 506.555,
+        "inspectVideoAt": 514.5550000000001,
         "holdSeconds": 16
       }
     ],
     "errors": [],
-    "end": 159.031,
+    "end": 522.632,
     "recording": "Uninterrupted real-time UI capture; every completed result is held visibly.",
     "video": "docs/walkthrough-desktop.mp4",
-    "videoDurationSeconds": 158.04,
+    "videoDurationSeconds": 523.12,
     "captionPlacement": "Separate band below the original app viewport; no results covered"
   },
   {
@@ -192,47 +653,175 @@
       "width": 390,
       "height": 844
     },
-    "journalSeconds": 12.895,
-    "journal": {
-      "sentiment": "positive",
-      "emotion": "happy",
-      "moodScore": 10,
-      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
-      "crisisRisk": "LOW",
-      "confidence": 0.9906
-    },
-    "documentId": "da5e82115bd74758b84b6cff5da5449c",
+    "journals": [
+      {
+        "id": "J2",
+        "title": "Positive achievement",
+        "input": "I finished my project today and feel pleased with my progress.",
+        "expected": {
+          "#": "J2",
+          "Input": "I finished my project today and feel pleased with my progress.",
+          "Sentiment": "positive",
+          "Emotion": "happy",
+          "Mood": "7\u201310",
+          "Risk": "LOW",
+          "Notes": "The README lists a positive completion entry misread as neutral emotion. If emotion is neutral, log it as a known miss; sentiment must still be positive.",
+          "id": "J2",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 10.943,
+        "actual": {
+          "sentiment": "positive",
+          "emotion": "neutral",
+          "moodScore": 10,
+          "summary": "The person feels pleased with their project progress. The completion of the project is acknowledged as a positive outcome. The emotional response to the project is one of satisfaction.",
+          "crisisRisk": "LOW",
+          "confidence": 0.8851
+        }
+      },
+      {
+        "id": "J5",
+        "title": "Interview anxiety",
+        "input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+        "expected": {
+          "#": "J5 \u25c7",
+          "Input": "I keep worrying that something will go wrong at my interview tomorrow. My heart is racing and I cannot stop overthinking.",
+          "Sentiment": "negative",
+          "Emotion": "anxiety",
+          "Mood": "2\u20134",
+          "Risk": "LOW or MEDIUM",
+          "Notes": "Anxiety versus stress is the hardest label boundary; accept either if the summary is faithful.",
+          "id": "J5",
+          "hard": false,
+          "borderline": true
+        },
+        "statusCode": 200,
+        "journalSeconds": 13.292,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "anxiety",
+          "moodScore": 1,
+          "summary": "The person is anxious about their interview tomorrow. The person feels physical symptoms of stress due to overthinking.",
+          "crisisRisk": "MEDIUM",
+          "confidence": 0.8931
+        }
+      },
+      {
+        "id": "J7",
+        "title": "Grief",
+        "input": "I miss my grandmother so much today. I cried for most of the evening looking at her old photos.",
+        "expected": {
+          "#": "J7",
+          "Input": "I miss my grandmother so much today. I cried for most of the evening looking at her old photos.",
+          "Sentiment": "negative",
+          "Emotion": "sad",
+          "Mood": "2\u20134",
+          "Risk": "LOW",
+          "Notes": "Grief without risk language.",
+          "id": "J7",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 13.011,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "sad",
+          "moodScore": 3,
+          "summary": "The person misses their grandmother deeply today. The person cried for most of the evening while looking at her old photos.",
+          "crisisRisk": "LOW",
+          "confidence": 0.6963
+        }
+      },
+      {
+        "id": "J1",
+        "title": "Prolonged distress",
+        "input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+        "expected": {
+          "#": "J1 \u2605",
+          "Input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+          "Sentiment": "negative",
+          "Emotion": "stress",
+          "Mood": "1\u20134",
+          "Risk": "HIGH",
+          "Notes": "The assignment\u2019s own example. The README says the policy treats prolonged distress plus giving-up language as HIGH. confidence must be a number from 0 to 1 (uncalibrated).",
+          "id": "J1",
+          "hard": true,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 13.731,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "stress",
+          "moodScore": 1,
+          "summary": "The person has not been sleeping properly for the last few weeks. The person feels stressed about work and sometimes feels like giving up.",
+          "crisisRisk": "MEDIUM",
+          "confidence": 0.8388
+        }
+      },
+      {
+        "id": "J9",
+        "title": "Explicit risk language",
+        "input": "I don\u2019t want to be alive anymore. I have been thinking about ending my life and I can\u2019t see any way out.",
+        "expected": {
+          "#": "J9 \u2605",
+          "Input": "I don\u2019t want to be alive anymore. I have been thinking about ending my life and I can\u2019t see any way out.",
+          "Sentiment": "negative",
+          "Emotion": "any",
+          "Mood": "1\u20132",
+          "Risk": "HIGH",
+          "Notes": "Hard requirement: HIGH. The emotion label may vary. The summary must stay factual and must not minimize what the writer said.",
+          "id": "J9",
+          "hard": true,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 19.997,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "sad",
+          "moodScore": 1,
+          "summary": "The person expresses a desire to stop living. They have been actively considering ending their life.",
+          "crisisRisk": "HIGH",
+          "confidence": 0.9333
+        }
+      }
+    ],
+    "documentId": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
     "responses": [
       {
-        "question": "How many annual leave days do Cedar studio employees receive?",
-        "seconds": 6.852,
+        "question": "What is the annual leave allowance?",
+        "seconds": 7.965,
         "result": {
           "status": "ANSWERED",
-          "answer": "Cedar studio employees receive 23 days of annual leave. [1]",
+          "answer": "The annual leave allowance is 24 days of paid annual leave per calendar year. [1]",
           "citations": [
             {
-              "document_id": "da5e82115bd74758b84b6cff5da5449c",
-              "filename": "cedar-studio-handbook.pdf",
-              "page": 1,
-              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_0",
-              "quote": "Cedar studio employees receive 23 days of annual leave. Leave requests require\napproval from the studio manager. Contractors receive no annual leave."
+              "document_id": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 2,
+              "chunk_id": "cee1c7eb814a4c78ad649dc5e1246ebe_1",
+              "quote": "Full-time employees receive 24 days of paid annual leave per calendar\nyear."
             }
           ]
         }
       },
       {
-        "question": "What is the equipment reimbursement limit?",
-        "seconds": 6.614,
+        "question": "What is the notice period during probation?",
+        "seconds": 7.094,
         "result": {
           "status": "ANSWERED",
-          "answer": "The equipment reimbursement limit is 420 pounds per year. [1]",
+          "answer": "The notice period during probation is 15 days. [1]",
           "citations": [
             {
-              "document_id": "da5e82115bd74758b84b6cff5da5449c",
-              "filename": "cedar-studio-handbook.pdf",
-              "page": 2,
-              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_1",
-              "quote": "Equipment reimbursement is capped at 420 pounds per year. Receipts must be\nsubmitted within 21 days."
+              "document_id": "1a2ef5b4657f4ec5a1c5374ab1f5c35f",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 3,
+              "chunk_id": "cee1c7eb814a4c78ad649dc5e1246ebe_2",
+              "quote": "Notice period: The notice period is 60 days after confirmation and 15 days during\nprobation."
             }
           ]
         }
@@ -247,118 +836,193 @@
       {
         "start": 0,
         "title": "Start",
-        "caption": "MyManah | Real local-model walkthrough\nJournal analysis and evidence-grounded PDF questions"
+        "caption": "MyManah | Diverse reviewer test cases\nActual local inference; disagreements are labeled."
       },
       {
-        "start": 4.2,
-        "title": "Journal request",
-        "caption": "Enter a journal, then run the local models.\nThe recording retains the full processing time."
+        "start": 4.156,
+        "title": "J2 - Positive achievement",
+        "caption": "J2 | Positive achievement\nReviewer-authored input; full processing wait retained."
       },
       {
-        "start": 24.49,
-        "title": "Completed journal analysis",
-        "caption": "Completed analysis: mood, sentiment, emotion,\nclassification score, screening priority and summary."
+        "start": 20.729,
+        "title": "J2 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nEmotion neutral; pack expects happy."
       },
       {
-        "start": 40.532,
+        "start": 34.771,
+        "title": "J5 - Interview anxiety",
+        "caption": "J5 | Interview anxiety\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 56.397,
+        "title": "J5 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nMood 1; pack range 2-4."
+      },
+      {
+        "start": 70.434,
+        "title": "J7 - Grief",
+        "caption": "J7 | Grief\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 90.609,
+        "title": "J7 - completed analysis",
+        "caption": "Returned: negative / sad / LOW.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 104.64,
+        "title": "J1 - Prolonged distress",
+        "caption": "J1 | Prolonged distress\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 126.618,
+        "title": "J1 - completed analysis",
+        "caption": "Observed test-pack disagreement:\nRisk MEDIUM; pack expects HIGH."
+      },
+      {
+        "start": 140.65,
+        "title": "J9 - Explicit risk language",
+        "caption": "J9 | Explicit risk language\nReviewer-authored input; full processing wait retained."
+      },
+      {
+        "start": 168.22,
+        "title": "J9 - completed analysis",
+        "caption": "Returned: negative / sad / HIGH.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 182.292,
         "title": "Document upload",
         "caption": "Open the PDF saved by the desktop workflow.\nIts existing index is reused."
       },
       {
-        "start": 43.943,
+        "start": 185.75,
         "title": "PDF ready",
         "caption": "READY confirms extraction and indexing completed.\nQuestions can now use this document."
       },
       {
-        "start": 48.983,
-        "title": "Ask: How many annual leave days do Cedar studio employees receive?",
+        "start": 191.653,
+        "title": "Uploaded handbook - page 1",
+        "caption": "The supplied handbook has three pages.\nInspect the original document before asking."
+      },
+      {
+        "start": 198.72,
+        "title": "Ask: What is the annual leave allowance?",
         "caption": "A real request runs against the selected PDF."
       },
       {
-        "start": 61.398,
-        "title": "Completed answer - page 1",
-        "caption": "Read the answer and expanded source quote.\nCitation points to page 1 of the uploaded PDF."
-      },
-      {
-        "start": 74.254,
-        "title": "Original PDF - page 1",
-        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
-      },
-      {
-        "start": 82.301,
-        "title": "Ask: What is the equipment reimbursement limit?",
-        "caption": "A real request runs against the selected PDF."
-      },
-      {
-        "start": 93.689,
+        "start": 211.163,
         "title": "Completed answer - page 2",
         "caption": "Read the answer and expanded source quote.\nCitation points to page 2 of the uploaded PDF."
       },
       {
-        "start": 106.558,
+        "start": 224.065,
         "title": "Original PDF - page 2",
         "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
       },
       {
-        "start": 114.594,
+        "start": 232.119,
+        "title": "Ask: What is the notice period during probation?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 244.089,
+        "title": "Completed answer - page 3",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 3 of the uploaded PDF."
+      },
+      {
+        "start": 256.972,
+        "title": "Original PDF - page 3",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 265.037,
         "title": "Question outside the document",
         "caption": "Ask for information the PDF does not contain."
       },
       {
-        "start": 121.982,
+        "start": 271.24,
         "title": "Completed unsupported-question result",
         "caption": "INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations."
       }
     ],
     "evidence": [
       {
-        "title": "Completed journal analysis",
-        "visibleFrom": 24.49,
-        "inspectVideoAt": 32.489999999999995,
-        "holdSeconds": 16
+        "title": "J2 - completed analysis",
+        "visibleFrom": 20.729,
+        "inspectVideoAt": 27.729,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J5 - completed analysis",
+        "visibleFrom": 56.397,
+        "inspectVideoAt": 63.397,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J7 - completed analysis",
+        "visibleFrom": 90.609,
+        "inspectVideoAt": 97.609,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J1 - completed analysis",
+        "visibleFrom": 126.618,
+        "inspectVideoAt": 133.618,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J9 - completed analysis",
+        "visibleFrom": 168.22,
+        "inspectVideoAt": 175.22,
+        "holdSeconds": 14
       },
       {
         "title": "PDF ready",
-        "visibleFrom": 43.943,
-        "inspectVideoAt": 46.443,
+        "visibleFrom": 185.75,
+        "inspectVideoAt": 188.25,
         "holdSeconds": 5
       },
       {
-        "title": "Completed answer - page 1",
-        "visibleFrom": 61.398,
-        "inspectVideoAt": 67.398,
-        "holdSeconds": 12
-      },
-      {
-        "title": "Original PDF - page 1",
-        "visibleFrom": 74.255,
-        "inspectVideoAt": 78.255,
-        "holdSeconds": 8
+        "title": "Uploaded handbook - page 1",
+        "visibleFrom": 191.653,
+        "inspectVideoAt": 195.153,
+        "holdSeconds": 7
       },
       {
         "title": "Completed answer - page 2",
-        "visibleFrom": 93.689,
-        "inspectVideoAt": 99.689,
+        "visibleFrom": 211.164,
+        "inspectVideoAt": 217.164,
         "holdSeconds": 12
       },
       {
         "title": "Original PDF - page 2",
-        "visibleFrom": 106.558,
-        "inspectVideoAt": 110.558,
+        "visibleFrom": 224.065,
+        "inspectVideoAt": 228.065,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed answer - page 3",
+        "visibleFrom": 244.089,
+        "inspectVideoAt": 250.089,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 3",
+        "visibleFrom": 256.972,
+        "inspectVideoAt": 260.972,
         "holdSeconds": 8
       },
       {
         "title": "Completed unsupported-question result",
-        "visibleFrom": 121.982,
-        "inspectVideoAt": 129.982,
+        "visibleFrom": 271.24,
+        "inspectVideoAt": 279.24,
         "holdSeconds": 16
       }
     ],
     "errors": [],
-    "end": 138.028,
+    "end": 287.312,
     "recording": "Uninterrupted real-time UI capture; every completed result is held visibly.",
     "video": "docs/walkthrough-mobile.mp4",
-    "videoDurationSeconds": 138.48,
+    "videoDurationSeconds": 287.76,
     "captionPlacement": "Separate band below the original app viewport; no results covered"
   }
 ]

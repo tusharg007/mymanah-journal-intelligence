@@ -124,7 +124,7 @@ def create_app(settings: Settings | None = None, model_factory=Models, document_
         admission.rate(owner, "interactive", 10)
 
         async def work():
-            async with admission.enter():
+            async with admission.enter(deadline=deadline):
                 return await action()
 
         task = asyncio.create_task(work())
@@ -170,8 +170,7 @@ def create_app(settings: Settings | None = None, model_factory=Models, document_
 
     @app.post("/analyze-journal", response_model=JournalResponse)
     async def analyze(body: JournalRequest, request: Request, owner: str = Depends(principal)):
-        request.app.state.models.require()
-        length = request.app.state.models.token_count(body.text)
+        length = request.app.state.journal.validate(body.text)
         budget = 30 if length <= 256 else 60
         deadline = request.state.started + budget
         return await interactive(request, owner, lambda: request.app.state.journal.analyze(body.text, deadline), deadline)

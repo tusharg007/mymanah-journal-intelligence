@@ -119,8 +119,14 @@ class Models:
     def token_count(self, text: str) -> int:
         return len(self.gen_tokenizer.encode(text, add_special_tokens=False))
 
-    def sentiment_scores(self, text: str) -> dict[str, float]:
+    @staticmethod
+    def check_deadline(deadline: float | None) -> None:
+        if deadline is not None and time.monotonic() >= deadline:
+            raise ServiceError("INFERENCE_TIMEOUT", "Inference deadline exhausted", 504)
+
+    def sentiment_scores(self, text: str, deadline: float | None = None) -> dict[str, float]:
         with self.cpu_lock, self.torch.inference_mode():
+            self.check_deadline(deadline)
             pieces = windows(text, self.sent_tokenizer)
             inputs = self.sent_tokenizer([p.text for p in pieces], padding=True, truncation=False, return_tensors="pt")
             if inputs["input_ids"].shape[1] > 512:
@@ -130,17 +136,24 @@ class Models:
             return {label: float(sum(probs[j, i] * p.weight for j, p in enumerate(pieces)) / total)
                     for i, label in self.sent_labels.items()}
 
-    def support(self, pairs: list[tuple[str, str]]) -> list[float]:
+    def support(self, pairs: list[tuple[str, str]], deadline: float | None = None) -> list[float]:
         results = []
         with self.cpu_lock, self.torch.inference_mode():
-            for start in range(0, len(pairs), 8):
+            start = 0
+            while start < len(pairs):
+                self.check_deadline(deadline)
                 batch = pairs[start:start + 8]
                 inputs = self.nli_tokenizer([p for p, _ in batch], [h for _, h in batch], padding=True,
                                             truncation=False, return_tensors="pt")
                 if inputs["input_ids"].shape[1] > 512:
                     raise ServiceError("TOKEN_LIMIT", "Evidence pair exceeds NLI capacity", 413)
+                # Bound long-window attention memory while retaining eight-row short batches.
+                batch_size = max(1, min(len(batch), 1024 // inputs["input_ids"].shape[1]))
+                if batch_size < len(batch):
+                    inputs = {key: value[:batch_size] for key, value in inputs.items()}
                 logits = self.nli(**inputs).logits
                 results.extend(logits.softmax(-1)[:, self.entailment].cpu().tolist())
+                start += batch_size
         return results
 
     def embed(self, texts: list[str], query: bool = False) -> list[list[float]]:

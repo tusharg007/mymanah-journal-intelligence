@@ -6,21 +6,37 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'artifacts', 'walkthrough-v2');
+const output = path.join(root, 'artifacts', 'walkthrough-v3');
 const origin = process.env.APP_URL || 'http://127.0.0.1:8000';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
-const journalText = "Today I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.";
-const questions = [
-  { text: 'How many annual leave days do Cedar studio employees receive?', number: '23', page: 1 },
-  { text: 'What is the equipment reimbursement limit?', number: '420', page: 2 },
+const pack = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'reviewer-test-pack.json'), 'utf8'));
+const scenarios = [
+  ['J2', 'Positive achievement'], ['J3', 'An ordinary day'], ['J4', 'Anger after criticism'],
+  ['J5', 'Interview anxiety'], ['J6', 'Workload stress'], ['J7', 'Grief'], ['J8', 'Fear after a threat'],
+  ['J12', 'Negation: not sad'], ['J13', 'Mixed excitement and worry'],
+  ['J1', 'Prolonged distress'], ['J9', 'Explicit risk language'],
 ];
+const questions = [
+  { text: 'What is the annual leave allowance?', number: '24', page: 2 },
+  { text: 'What is the notice period during probation?', number: '15', page: 3 },
+];
+
+function resultCaption(result, expected) {
+  const mismatch = [];
+  if (!expected.Risk.includes(result.crisisRisk)) mismatch.push(`Risk ${result.crisisRisk}; pack expects ${expected.Risk}.`);
+  if (!expected.Emotion.includes('any') && !expected.Emotion.includes(result.emotion)) mismatch.push(`Emotion ${result.emotion}; pack expects ${expected.Emotion}.`);
+  const [low, high] = expected.Mood.match(/\d+/g).map(Number);
+  if (result.moodScore < low || result.moodScore > high) mismatch.push(`Mood ${result.moodScore}; pack range ${low}-${high}.`);
+  return mismatch.length ? `Observed test-pack disagreement:\n${mismatch[0]}`
+    : `Returned: ${result.sentiment} / ${result.emotion} / ${result.crisisRisk}.\nRead the complete analysis and summary.`;
+}
 
 (async () => {
   fs.mkdirSync(output, { recursive: true });
-  const pdf = path.join(output, 'cedar-studio-handbook.pdf');
+  const pdf = path.join(output, 'Employee_Handbook_Test.pdf');
   const python = process.platform === 'win32' ? '.venv/Scripts/python.exe' : '.venv/bin/python';
   const fixture = spawnSync(path.join(root, python), ['-c',
-    'from pathlib import Path; from tests.pdf_helpers import make_pdf; from pypdf import PdfWriter; from io import BytesIO; from datetime import datetime, timezone; import sys; target=Path(sys.argv[1]); make_pdf(target, ["Cedar studio employees receive 23 days of annual leave. Leave requests require approval from the studio manager. Contractors receive no annual leave.", "Equipment reimbursement is capped at 420 pounds per year. Receipts must be submitted within 21 days."]); writer=PdfWriter(clone_from=BytesIO(target.read_bytes())); writer.add_metadata({"/CreationDate": datetime.now(timezone.utc).isoformat()}); writer.write(str(target))', pdf],
+    'from pathlib import Path; from pypdf import PdfWriter; from io import BytesIO; from datetime import datetime, timezone; import sys; source=Path("evals/fixtures/reviewer/Employee_Handbook_Test.pdf"); writer=PdfWriter(clone_from=BytesIO(source.read_bytes())); writer.add_metadata({"/CreationDate": datetime.now(timezone.utc).isoformat()}); writer.write(sys.argv[1])', pdf],
   { cwd: root, encoding: 'utf8' });
   assert.equal(fixture.status, 0, fixture.stderr);
 
@@ -38,6 +54,7 @@ const questions = [
       const evidence = [];
       const errors = [];
       const responses = [];
+      const journals = [];
       const seconds = () => Number(((Date.now() - started) / 1000).toFixed(3));
       const chapter = (title, caption) => {
         chapters.push({ start: seconds(), title, caption });
@@ -92,26 +109,35 @@ const questions = [
       }
 
       try {
-        chapter('Start', 'MyManah | Real local-model walkthrough\nJournal analysis and evidence-grounded PDF questions');
+        chapter('Start', 'MyManah | Diverse reviewer test cases\nActual local inference; disagreements are labeled.');
         await page.goto(origin, { waitUntil: 'networkidle' });
         await page.getByText('Models ready', { exact: true }).waitFor();
         await pause(3500);
-        chapter('Journal request', 'Enter a journal, then run the local models.\nThe recording retains the full processing time.');
-        await type(page.getByLabel('Journal entry'), journalText);
-        const responsePromise = page.waitForResponse(r => r.url().endsWith('/analyze-journal') && r.request().method() === 'POST');
-        const requestStarted = Date.now();
-        await page.getByRole('button', { name: 'Analyze', exact: true }).click();
-        const response = await responsePromise;
-        assert.equal(response.status(), 200, await response.text());
-        const journal = await response.json();
-        const journalSeconds = (Date.now() - requestStarted) / 1000;
-        assert.deepEqual(Object.keys(journal).sort(), ['confidence', 'crisisRisk', 'emotion', 'moodScore', 'sentiment', 'summary']);
-        await page.getByText(journal.summary, { exact: true }).waitFor();
-        await frame('.journal-results', 'Completed journal analysis',
-          'Completed analysis: mood, sentiment, emotion,\nclassification score, screening priority and summary.', 16000);
+        const selected = name === 'desktop' ? scenarios : scenarios.filter(([id]) => ['J2', 'J5', 'J7', 'J1', 'J9'].includes(id));
+        for (const [id, title] of selected) {
+          const expected = pack.cases.find(row => row.id === id);
+          chapter(`${id} - ${title}`, `${id} | ${title}\nReviewer-authored input; full processing wait retained.`);
+          await type(page.getByLabel('Journal entry'), expected.Input);
+          const responsePromise = page.waitForResponse(r => r.url().endsWith('/analyze-journal') && r.request().method() === 'POST');
+          const requestStarted = Date.now();
+          await page.getByRole('button', { name: 'Analyze', exact: true }).click();
+          const response = await responsePromise;
+          const journal = await response.json();
+          const journalSeconds = (Date.now() - requestStarted) / 1000;
+          journals.push({ id, title, input: expected.Input, expected, statusCode: response.status(), journalSeconds, actual: journal });
+          if (response.status() === 200) {
+            assert.deepEqual(Object.keys(journal).sort(), ['confidence', 'crisisRisk', 'emotion', 'moodScore', 'sentiment', 'summary']);
+            await page.locator('.journal-results').getByText(journal.summary, { exact: true }).waitFor();
+            await frame('.journal-results', `${id} - completed analysis`, resultCaption(journal, expected), 14000);
+          } else {
+            assert.equal(journal.error?.code, 'SUMMARY_UNSUPPORTED', JSON.stringify(journal));
+            await frame('.error', `${id} - controlled summary rejection`,
+              'This input did not produce an analysis.\nThe factual-support check rejected the summary.', 14000);
+          }
+        }
 
         chapter('Document upload', name === 'desktop'
-          ? 'Upload a two-page policy PDF.\nWait for READY before asking a question.'
+          ? 'Upload the reviewer\'s three-page handbook.\nWait for READY before asking a question.'
           : 'Open the PDF saved by the desktop workflow.\nIts existing index is reused.');
         await page.getByRole('button', { name: 'Documents', exact: true }).click();
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -132,11 +158,13 @@ const questions = [
         await frame('.document-question > .section-label', 'PDF ready',
           'READY confirms extraction and indexing completed.\nQuestions can now use this document.', 5000);
         await page.locator('canvas[data-rendered=true]').waitFor();
+        await frame('.pdf-preview', 'Uploaded handbook - page 1',
+          'The supplied handbook has three pages.\nInspect the original document before asking.', 7000);
         await ask(questions[0]);
         await ask(questions[1]);
 
         chapter('Question outside the document', 'Ask for information the PDF does not contain.');
-        const unknownText = "What was Cedar studio's revenue in 2018?";
+        const unknownText = 'What is the stock option vesting schedule?';
         await type(page.getByLabel('Question', { exact: true }), unknownText);
         const unsupportedPromise = page.waitForResponse(r => r.url().endsWith('/questions') && r.request().method() === 'POST');
         await page.getByRole('button', { name: 'Ask document', exact: true }).click();
@@ -152,7 +180,7 @@ const questions = [
         assert.equal(await page.locator('.error').count(), 0);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
         assert.deepEqual(errors, []);
-        reports.push({ name, viewport: { width, height }, journalSeconds, journal, upload,
+        reports.push({ name, viewport: { width, height }, journals, upload,
           documentId: uploadedId, responses, unsupported, chapters, evidence,
           errors, end: seconds(), recording: 'Uninterrupted real-time UI capture; every completed result is held visibly.' });
       } finally {

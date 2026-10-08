@@ -1,5 +1,6 @@
 import asyncio
 import hashlib
+import time
 
 import pytest
 from pydantic import ValidationError
@@ -204,3 +205,32 @@ def test_rate_limit():
         gate.rate("alice", "upload", 2)
     assert exc.value.status == 429
     gate.rate("bob", "upload", 2)
+
+
+def test_expired_waiter_releases_queue_without_starting_work():
+    async def exercise():
+        gate = Admission()
+        active, finish = asyncio.Event(), asyncio.Event()
+        started = []
+
+        async def blocker():
+            async with gate.enter():
+                active.set()
+                await finish.wait()
+
+        async def expired():
+            async with gate.enter(deadline=time.monotonic() + .02):
+                started.append("expired")
+
+        task = asyncio.create_task(blocker())
+        await active.wait()
+        with pytest.raises(ServiceError) as failure:
+            await expired()
+        assert failure.value.status == 504
+        assert gate.count == 1 and started == []
+        finish.set()
+        await task
+        async with gate.enter(deadline=time.monotonic() + 1):
+            started.append("fresh")
+        assert started == ["fresh"] and gate.count == 0
+    asyncio.run(exercise())

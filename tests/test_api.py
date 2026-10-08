@@ -94,3 +94,22 @@ def test_health_is_non_sensitive_and_open(tmp_path):
         response = app.get("/health/ready")
         assert response.status_code == 503
         assert response.json()["authEnabled"] is True
+
+
+def test_language_and_token_limits_reject_before_full_inference_queue(tmp_path):
+    class ReadyModels(UnavailableModels):
+        def require(self):
+            pass
+
+        def token_count(self, text):
+            return len(text)
+
+    app = create_app(Settings(data_dir=tmp_path), model_factory=ReadyModels, document_factory=NoDocuments)
+    with TestClient(app, base_url="http://127.0.0.1") as browser:
+        app.state.admission.count = app.state.admission.limit
+        unsupported = browser.post("/analyze-journal", json={"text": "\u092e\u0948\u0902 \u0906\u091c \u0926\u0941\u0916\u0940 \u0939\u0942\u0901"})
+        assert unsupported.status_code == 422
+        assert unsupported.json()["error"]["code"] == "UNSUPPORTED_LANGUAGE"
+        too_long = browser.post("/analyze-journal", json={"text": "x" * 2001})
+        assert too_long.status_code == 413
+        assert too_long.json()["error"]["code"] == "TEXT_TOKEN_LIMIT"

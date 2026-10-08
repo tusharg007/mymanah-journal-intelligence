@@ -25,13 +25,21 @@ class Admission:
         history.append(now)
 
     @asynccontextmanager
-    async def enter(self):
+    async def enter(self, deadline: float | None = None):
         if self.count >= self.limit:
             raise ServiceError("QUEUE_FULL", "Inference capacity is busy; retry later", 429)
         self.count += 1
         try:
-            await self.slots.acquire()
+            if deadline is None:
+                await self.slots.acquire()
+            else:
+                try:
+                    await asyncio.wait_for(self.slots.acquire(), max(0, deadline - time.monotonic()))
+                except TimeoutError as exc:
+                    raise ServiceError("INFERENCE_TIMEOUT", "Request expired while waiting for inference", 504) from exc
             try:
+                if deadline is not None and time.monotonic() >= deadline:
+                    raise ServiceError("INFERENCE_TIMEOUT", "Request expired while waiting for inference", 504)
                 yield
             finally:
                 self.slots.release()

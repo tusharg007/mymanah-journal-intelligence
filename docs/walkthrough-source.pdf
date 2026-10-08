@@ -2,88 +2,160 @@
 %‚„œ”
 1 0 obj
 <<
-/Producer (pypdf)
+/PageMode /UseNone
+/Pages 2 0 R
+/Type /Catalog
 >>
 endobj
 2 0 obj
 <<
+/Count 3
+/Kids [ 3 0 R 9 0 R 11 0 R ]
 /Type /Pages
-/Count 2
-/Kids [ 4 0 R 6 0 R ]
 >>
 endobj
 3 0 obj
 <<
-/Type /Catalog
-/Pages 2 0 R
+/Contents 4 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Parent 2 0 R
+/Resources <<
+/Font 5 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
 >>
 endobj
 4 0 obj
 <<
-/Type /Page
-/Resources <<
-/Font <<
-/F1 <<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 589
 >>
->>
->>
-/MediaBox [ 0.0 0.0 612 792 ]
-/Parent 2 0 R
-/Contents 5 0 R
->>
+stream
+Gat=gd;PL.&B<W!=+$(^PVPoG6M@pg<?JeH>ESVqbRqL<9oU%6J%l)S7'31OW[o=:kI^We]+9ISQPdK;#/6o.F>"a\U]n[l=<`13>rm>(M3j^t"RDliP%9bq"p`""i3kGe'ut?b=ECGI+rO!Ad825$"!OCl_eG/,GO'Y0CQmdUAhEH9VQtOm4@kZKf'Y^ErIa_eDI0.obYMQKJYLo"5g]^V$PAD;)hI-#[2t&$k;u0^X@$l*=-N0!mPq#EJM_4>:7LX%k:Ap/3YK(3`Q<84ZYI`RJD\rF\2>=Dk?:?snV_/JBae5JMW="Y>"r:JggZKn*kOU]DBiGIrhXg!ok&b5T>M5s1*piSph'?]IQ4i]RWf/3g6[o*L2M_s<1Ql41.Q@$>bi+(lN7i6E=]Kl;)?D2$o^dXmEmcn>QeYSd?$^k[$r0WVg7"%Bq5,P.hp:[n0Md\eqO[9o3*'C-$KrM[9gTari9U1Q)uO(=XQ_OS^\G7+Eoqa.]XE9l^AU1]>9Tm9?m%U8V)oXS=SkHG?)eeU<EJ8pKHZK;.rC[8l=>0Z"]4,4G8IhDp"K;%gL:d6+!0=pQc&js81+rAH~>
+endstream
 endobj
 5 0 obj
 <<
-/Length 197
+/F1 6 0 R
+/F2 7 0 R
+/F3 8 0 R
 >>
-stream
-BT /F1 11 Tf 14 TL 50 730 Td (Cedar studio employees receive 23 days of annual leave. Leave requests require) Tj T* (approval from the studio manager. Contractors receive no annual leave.) Tj T* ET
-endstream
 endobj
 6 0 obj
 <<
-/Type /Page
-/Resources <<
-/Font <<
-/F1 <<
-/Type /Font
-/Subtype /Type1
 /BaseFont /Helvetica
->>
->>
->>
-/MediaBox [ 0.0 0.0 612 792 ]
-/Parent 2 0 R
-/Contents 7 0 R
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 7 0 obj
 <<
-/Length 148
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+8 0 obj
+<<
+/BaseFont /Helvetica-Oblique
+/Encoding /WinAnsiEncoding
+/Name /F3
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+9 0 obj
+<<
+/Contents 10 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Parent 2 0 R
+/Resources <<
+/Font 5 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+>>
+endobj
+10 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 529
 >>
 stream
-BT /F1 11 Tf 14 TL 50 730 Td (Equipment reimbursement is capped at 420 pounds per year. Receipts must be) Tj T* (submitted within 21 days.) Tj T* ET
+Gat=fd8&^U&4PLR(&+tk7(5qG2!#/X4Fsl?%3OLhe(0H;KS`XKhsVheJHFRuaAN`*F6B.*)MPF9eU:.%>c%4@X.UZ4/#_]GMY%B;l/69K?7Y1Fk#4-0P!pQ%Go1`9]H2l0p$G/79</=JBj4#'gLqF`E(>4Ipf0:hRNG*#,!B]NI`j`.),F"r6u(m/^o@Ks4-rV/C[L%`V[M;2cCG30'.>M>d1B;c11UP5RNg3TKjoa6gC3qL&g]8kG2tI(HdZ=iRRbE.j7m^Us5C]CbftF<-,./^M,7T7g=I'N43Cee=HY?m>Ih(H.`-qukp;u+'E/Dc?%o_gdk1HULD,Agc";$e?7ilas2USKIHEJ\P#gV\UoV5@bINNGQcLV^OuWqjYUfMY"C(OT0KmsPAM1Y'U7/k3^*6L2emdND0.ZUJNm9XhSDLF%QXek[&pkRdITC+5G3Q_GY8GSRO)It[LZ7?Mnbel4&&'iHjkFX8Re?L+n"088[:\fYjSE]1#+7kq66YYoQ<\76qoFW15Ek^dR/~>
 endstream
 endobj
+11 0 obj
+<<
+/Contents 12 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Parent 2 0 R
+/Resources <<
+/Font 5 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+>>
+endobj
+12 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 510
+>>
+stream
+Gat=fc#28i&;9M$ME.OsW1s3fpt3Fe$3Wg;kQPX6'f.^s6E]V=mCSNk+ULsM#RKY0jmLDQ,DBB_)S`Z`^/k%">sT4(>,Xlu5]qj!21(dkkEkKIl\3L(o!Xbm.HFt^50Tg(:#i%sb,>BA*(C[^0^*,?@;Ed.pQceoU1b4ICU!aVa<aHN:d(QL4DapAkOmDRrpJ?(S_"4")@9I)g7Qd]2&kuq-lUuZYbMkF<'lh2./kB'KK&AX>KgNhj$Q-P]`fJ`NFn?r7I/3n2pSpgm$d_"l@$kT,C\h/e2/VX7"K]1"d?1579)!I[S.:@GHH_q9JY8$QKN;;71hQeT5^u,=199:IYi3"Db"XiCYL/TSrgOs29aS.AGBOPk0F$:pg>hI)`-8J9d[*+7@J=&@FFLPO4Hf%m#_G:82*^QHLE0(+1lkNoDC)kEkVH+fi)P#n.T_ZVZZgX&BSZ1WP&an,V`BkiI23n_B"KFkQG+A)*![\mS?%GIMn%\nQ%P[rrA+l!a#~>
+endstream
+endobj
+13 0 obj
+<<
+/Author (Test Fixture)
+/CreationDate (2026\05510\05508T15\07223\07246\056177048\05300\07200)
+/Creator (\050unspecified\051)
+/Keywords ()
+/ModDate (D\07220261008095300\05300\04700\047)
+/Producer (ReportLab PDF Library \055 \050opensource\051)
+/Subject (\050unspecified\051)
+/Title (Northwind Labs Employee Handbook \050Test Fixture\051)
+/Trapped /False
+>>
+endobj
 xref
-0 8
+0 14
 0000000000 65535 f 
 0000000015 00000 n 
-0000000054 00000 n 
-0000000119 00000 n 
-0000000168 00000 n 
-0000000349 00000 n 
-0000000597 00000 n 
-0000000778 00000 n 
+0000000083 00000 n 
+0000000155 00000 n 
+0000000354 00000 n 
+0000001034 00000 n 
+0000001085 00000 n 
+0000001192 00000 n 
+0000001304 00000 n 
+0000001419 00000 n 
+0000001619 00000 n 
+0000002240 00000 n 
+0000002441 00000 n 
+0000003043 00000 n 
 trailer
 <<
-/Size 8
-/Root 3 0 R
-/Info 1 0 R
+/Size 14
+/Root 1 0 R
+/Info 13 0 R
+/ID [ <bebc73a7c24d40f65abd1462ff94e0b2> <bebc73a7c24d40f65abd1462ff94e0b2> ]
 >>
 startxref
-977
+3417
 %%EOF

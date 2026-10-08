@@ -1,0 +1,39 @@
+[
+  {
+    "case": "J20_after_timeout_fix",
+    "status_code": 504,
+    "seconds": 60.016,
+    "body": {
+      "error": {
+        "code": "INFERENCE_TIMEOUT",
+        "message": "The request exceeded its inference deadline",
+        "requestId": "429d18661f0843edad7f7b85bddbe356"
+      }
+    }
+  },
+  {
+    "case": "unsupported_language_immediately_after_long_entry",
+    "status_code": 422,
+    "seconds": 0.015,
+    "body": {
+      "error": {
+        "code": "UNSUPPORTED_LANGUAGE",
+        "message": "The current release supports English text",
+        "requestId": "d3d97deb14da4c46bb91431e06b4ca93"
+      }
+    }
+  },
+  {
+    "case": "short_entry_immediately_after_long_entry",
+    "status_code": 200,
+    "seconds": 18.422,
+    "body": {
+      "sentiment": "neutral",
+      "emotion": "neutral",
+      "moodScore": 6,
+      "summary": "Today was an ordinary day with no significant events. The day included a routine work commute and return home. There were no notable feelings or reflections expressed.",
+      "crisisRisk": "LOW",
+      "confidence": 0.6835
+    }
+  }
+]
