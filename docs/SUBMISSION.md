@@ -2,7 +2,7 @@
 
 Repository: https://github.com/tusharg007/mymanah-journal-intelligence
 
-Actual application recordings: [Desktop walkthrough](walkthrough-desktop.mp4) and [Mobile walkthrough](walkthrough-mobile.mp4). The expanded recordings use diverse inputs from the reviewer's test pack, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and a completed unsupported-question response. Results are held visibly for reading, with embedded captions below the app and full inference waiting time retained. Observed journal disagreements are labeled, not hidden. [Timestamps and source PDF](WALKTHROUGH.md) accompany the recordings. No public deployment is claimed.
+Actual application recordings: [Desktop walkthrough](walkthrough-desktop.mp4) and [Mobile walkthrough](walkthrough-mobile.mp4). The expanded recordings use diverse inputs from the reviewer's test pack, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and a completed unsupported-question response. Results are held visibly for reading, with embedded captions below the app and full inference waiting time retained. Observed journal disagreements are labeled, not hidden. [Compiled inputs and actual results](VIDEO_TEST_RESULTS.md), timestamps and source PDF are documented alongside the recordings. No public deployment is claimed.
 
 ## Approach
 

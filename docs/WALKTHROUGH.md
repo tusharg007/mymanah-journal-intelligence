@@ -34,7 +34,7 @@ Captions label observed test-pack disagreements, including neutral emotion for a
 
 The document portion uploads the supplied three-page handbook, waits for READY, asks about 24 days of annual leave (page 2) and 15 days' notice during probation (page 3), opens each source page, and asks an unsupported stock-option question. Mobile reuses the saved index. The [source PDF](walkthrough-source.pdf) preserves the supplied page content; only creation metadata is refreshed to require a new 201/READY upload.
 
-The [recording report](../reports/walkthrough-recording.json) retains actual responses, request times, viewport sizes, chapter times and visible-result checkpoints. Both recordings were checked by decoding frames from the final MP4s, including the last frame. These show the completed results and their captions.
+The [compiled video test results](VIDEO_TEST_RESULTS.md) list every journal input and result from both recordings and all document questions, answers and citations. The [recording report](../reports/walkthrough-recording.json) retains raw responses, request times, viewport sizes, chapter times and visible-result checkpoints. Both recordings were checked by decoding frames from the final MP4s, including the last frame.
 
 ## Reproduce
 
