@@ -1,0 +1,364 @@
+[
+  {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "journalSeconds": 27.384,
+    "journal": {
+      "sentiment": "positive",
+      "emotion": "happy",
+      "moodScore": 10,
+      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
+      "crisisRisk": "LOW",
+      "confidence": 0.9906
+    },
+    "upload": {
+      "document": {
+        "id": "da5e82115bd74758b84b6cff5da5449c",
+        "filename": "cedar-studio-handbook.pdf",
+        "state": "READY",
+        "pages": 2,
+        "chunks": 2,
+        "created": 1791453271.9566507,
+        "error": null
+      },
+      "status": "READY"
+    },
+    "documentId": "da5e82115bd74758b84b6cff5da5449c",
+    "responses": [
+      {
+        "question": "How many annual leave days do Cedar studio employees receive?",
+        "seconds": 8.772,
+        "result": {
+          "status": "ANSWERED",
+          "answer": "Cedar studio employees receive 23 days of annual leave. [1]",
+          "citations": [
+            {
+              "document_id": "da5e82115bd74758b84b6cff5da5449c",
+              "filename": "cedar-studio-handbook.pdf",
+              "page": 1,
+              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_0",
+              "quote": "Cedar studio employees receive 23 days of annual leave. Leave requests require\napproval from the studio manager. Contractors receive no annual leave."
+            }
+          ]
+        }
+      },
+      {
+        "question": "What is the equipment reimbursement limit?",
+        "seconds": 8.072,
+        "result": {
+          "status": "ANSWERED",
+          "answer": "The equipment reimbursement limit is 420 pounds per year. [1]",
+          "citations": [
+            {
+              "document_id": "da5e82115bd74758b84b6cff5da5449c",
+              "filename": "cedar-studio-handbook.pdf",
+              "page": 2,
+              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_1",
+              "quote": "Equipment reimbursement is capped at 420 pounds per year. Receipts must be\nsubmitted within 21 days."
+            }
+          ]
+        }
+      }
+    ],
+    "unsupported": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+      "citations": []
+    },
+    "chapters": [
+      {
+        "start": 0,
+        "title": "Start",
+        "caption": "MyManah | Real local-model walkthrough\nJournal analysis and evidence-grounded PDF questions"
+      },
+      {
+        "start": 4.293,
+        "title": "Journal request",
+        "caption": "Enter a journal, then run the local models.\nThe recording retains the full processing time."
+      },
+      {
+        "start": 39.024,
+        "title": "Completed journal analysis",
+        "caption": "Completed analysis: mood, sentiment, emotion,\nclassification score, screening priority and summary."
+      },
+      {
+        "start": 55.148,
+        "title": "Document upload",
+        "caption": "Upload a two-page policy PDF.\nWait for READY before asking a question."
+      },
+      {
+        "start": 60.982,
+        "title": "PDF ready",
+        "caption": "READY confirms extraction and indexing completed.\nQuestions can now use this document."
+      },
+      {
+        "start": 66.106,
+        "title": "Ask: How many annual leave days do Cedar studio employees receive?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 80.506,
+        "title": "Completed answer - page 1",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 1 of the uploaded PDF."
+      },
+      {
+        "start": 93.456,
+        "title": "Original PDF - page 1",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 101.582,
+        "title": "Ask: What is the equipment reimbursement limit?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 114.501,
+        "title": "Completed answer - page 2",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 2 of the uploaded PDF."
+      },
+      {
+        "start": 127.436,
+        "title": "Original PDF - page 2",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 135.511,
+        "title": "Question outside the document",
+        "caption": "Ask for information the PDF does not contain."
+      },
+      {
+        "start": 142.96,
+        "title": "Completed unsupported-question result",
+        "caption": "INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations."
+      }
+    ],
+    "evidence": [
+      {
+        "title": "Completed journal analysis",
+        "visibleFrom": 39.03,
+        "inspectVideoAt": 47.03,
+        "holdSeconds": 16
+      },
+      {
+        "title": "PDF ready",
+        "visibleFrom": 60.982,
+        "inspectVideoAt": 63.482,
+        "holdSeconds": 5
+      },
+      {
+        "title": "Completed answer - page 1",
+        "visibleFrom": 80.506,
+        "inspectVideoAt": 86.506,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 1",
+        "visibleFrom": 93.456,
+        "inspectVideoAt": 97.456,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed answer - page 2",
+        "visibleFrom": 114.501,
+        "inspectVideoAt": 120.501,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 2",
+        "visibleFrom": 127.436,
+        "inspectVideoAt": 131.436,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed unsupported-question result",
+        "visibleFrom": 142.96,
+        "inspectVideoAt": 150.96,
+        "holdSeconds": 16
+      }
+    ],
+    "errors": [],
+    "end": 159.031,
+    "recording": "Uninterrupted real-time UI capture; every completed result is held visibly.",
+    "video": "docs/walkthrough-desktop.mp4",
+    "videoDurationSeconds": 158.04,
+    "captionPlacement": "Separate band below the original app viewport; no results covered"
+  },
+  {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "journalSeconds": 12.895,
+    "journal": {
+      "sentiment": "positive",
+      "emotion": "happy",
+      "moodScore": 10,
+      "summary": "I celebrated my friend's promotion with her. I felt joyful and grateful for our time together.",
+      "crisisRisk": "LOW",
+      "confidence": 0.9906
+    },
+    "documentId": "da5e82115bd74758b84b6cff5da5449c",
+    "responses": [
+      {
+        "question": "How many annual leave days do Cedar studio employees receive?",
+        "seconds": 6.852,
+        "result": {
+          "status": "ANSWERED",
+          "answer": "Cedar studio employees receive 23 days of annual leave. [1]",
+          "citations": [
+            {
+              "document_id": "da5e82115bd74758b84b6cff5da5449c",
+              "filename": "cedar-studio-handbook.pdf",
+              "page": 1,
+              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_0",
+              "quote": "Cedar studio employees receive 23 days of annual leave. Leave requests require\napproval from the studio manager. Contractors receive no annual leave."
+            }
+          ]
+        }
+      },
+      {
+        "question": "What is the equipment reimbursement limit?",
+        "seconds": 6.614,
+        "result": {
+          "status": "ANSWERED",
+          "answer": "The equipment reimbursement limit is 420 pounds per year. [1]",
+          "citations": [
+            {
+              "document_id": "da5e82115bd74758b84b6cff5da5449c",
+              "filename": "cedar-studio-handbook.pdf",
+              "page": 2,
+              "chunk_id": "340c54c30fea40d2808d9bed3114dc54_1",
+              "quote": "Equipment reimbursement is capped at 420 pounds per year. Receipts must be\nsubmitted within 21 days."
+            }
+          ]
+        }
+      }
+    ],
+    "unsupported": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+      "citations": []
+    },
+    "chapters": [
+      {
+        "start": 0,
+        "title": "Start",
+        "caption": "MyManah | Real local-model walkthrough\nJournal analysis and evidence-grounded PDF questions"
+      },
+      {
+        "start": 4.2,
+        "title": "Journal request",
+        "caption": "Enter a journal, then run the local models.\nThe recording retains the full processing time."
+      },
+      {
+        "start": 24.49,
+        "title": "Completed journal analysis",
+        "caption": "Completed analysis: mood, sentiment, emotion,\nclassification score, screening priority and summary."
+      },
+      {
+        "start": 40.532,
+        "title": "Document upload",
+        "caption": "Open the PDF saved by the desktop workflow.\nIts existing index is reused."
+      },
+      {
+        "start": 43.943,
+        "title": "PDF ready",
+        "caption": "READY confirms extraction and indexing completed.\nQuestions can now use this document."
+      },
+      {
+        "start": 48.983,
+        "title": "Ask: How many annual leave days do Cedar studio employees receive?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 61.398,
+        "title": "Completed answer - page 1",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 1 of the uploaded PDF."
+      },
+      {
+        "start": 74.254,
+        "title": "Original PDF - page 1",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 82.301,
+        "title": "Ask: What is the equipment reimbursement limit?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 93.689,
+        "title": "Completed answer - page 2",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 2 of the uploaded PDF."
+      },
+      {
+        "start": 106.558,
+        "title": "Original PDF - page 2",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 114.594,
+        "title": "Question outside the document",
+        "caption": "Ask for information the PDF does not contain."
+      },
+      {
+        "start": 121.982,
+        "title": "Completed unsupported-question result",
+        "caption": "INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations."
+      }
+    ],
+    "evidence": [
+      {
+        "title": "Completed journal analysis",
+        "visibleFrom": 24.49,
+        "inspectVideoAt": 32.489999999999995,
+        "holdSeconds": 16
+      },
+      {
+        "title": "PDF ready",
+        "visibleFrom": 43.943,
+        "inspectVideoAt": 46.443,
+        "holdSeconds": 5
+      },
+      {
+        "title": "Completed answer - page 1",
+        "visibleFrom": 61.398,
+        "inspectVideoAt": 67.398,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 1",
+        "visibleFrom": 74.255,
+        "inspectVideoAt": 78.255,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed answer - page 2",
+        "visibleFrom": 93.689,
+        "inspectVideoAt": 99.689,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 2",
+        "visibleFrom": 106.558,
+        "inspectVideoAt": 110.558,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed unsupported-question result",
+        "visibleFrom": 121.982,
+        "inspectVideoAt": 129.982,
+        "holdSeconds": 16
+      }
+    ],
+    "errors": [],
+    "end": 138.028,
+    "recording": "Uninterrupted real-time UI capture; every completed result is held visibly.",
+    "video": "docs/walkthrough-mobile.mp4",
+    "videoDurationSeconds": 138.48,
+    "captionPlacement": "Separate band below the original app viewport; no results covered"
+  }
+]

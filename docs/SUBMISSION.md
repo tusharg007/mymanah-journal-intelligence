@@ -2,7 +2,7 @@
 
 Repository: https://github.com/tusharg007/mymanah-journal-intelligence
 
-Actual application recordings: [Desktop walkthrough](walkthrough-desktop.mp4) and [Mobile walkthrough](walkthrough-mobile.mp4). These show real local model requests, journal analysis, synchronous PDF readiness, immediate grounded questions, source citations/rendering and an unsupported question. They are screen recordings, not canned-output previews; inference waiting time is retained. No public deployment is claimed.
+Actual application recordings: [Desktop walkthrough, 2:38](walkthrough-desktop.mp4) and [Mobile walkthrough, 2:18](walkthrough-mobile.mp4). These show the completed journal analysis, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and the final unsupported-question response. Results are held visibly for reading, with captions below the app and full inference waiting time retained. [Timestamps and source PDF](WALKTHROUGH.md) accompany the recordings. No public deployment is claimed.
 
 ## Approach
 

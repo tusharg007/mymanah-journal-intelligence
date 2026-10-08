@@ -144,7 +144,7 @@ Starting hard deadlines: short journal 30 seconds, larger journal 60, question 4
 
 Unit/API/failure tests may use explicitly test-only injected adapters; production has no fake inference mode. PDF transaction tests use real pypdf/SQLite/Chroma. Live tests use actual downloaded classifiers/embeddings/generation and upload a new PDF immediately before asking questions. Benchmark reports include case counts, failures, confusion matrices and rough p50/p95. Development results are not held-out performance claims. Small curated evaluations do not establish clinical or deployment validity.
 
-Stop the API before running model benchmarks or the offline check on a memory-constrained laptop; otherwise two classifier registries consume RAM and distort timings. Leave local Ollama running. To repeat browser verification, install Playwright in the tooling environment, then run `node web/live-qa.cjs` against the running API; set `RECORD_VIDEO=1` to record the actual workflows.
+Stop the API before running model benchmarks or the offline check on a memory-constrained laptop; otherwise two classifier registries consume RAM and distort timings. Leave local Ollama running. To repeat browser verification, install Playwright in the tooling environment, then run `node web/live-qa.cjs` against the running API. For the complete captioned presentation with visible-result reading time, use `node web/record-walkthrough.cjs` followed by `python scripts/render_walkthrough.py`; see [the walkthrough and timestamps](docs/WALKTHROUGH.md).
 
 ### Measured Development Results
 
