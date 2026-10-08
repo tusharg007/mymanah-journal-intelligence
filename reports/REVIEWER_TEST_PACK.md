@@ -1,20 +1,24 @@
-# External Reviewer Test Pack
+# AI-Assisted Self-Test Pack
 
-These are real local-model observations against the supplied 76-case pack, not
-mocked responses or a claim of production/clinical readiness. Expected labels are
+These are real local-model observations against an **AI-assisted self-test pack
+with predicted expectations** supplied by the candidate. It is a development aid,
+not an external reviewer evaluation or independently validated ground truth.
+The observations are not mocked responses or a claim of clinical readiness. Predicted labels are
 preserved in `evals/reviewer-test-pack.json`; the four non-identifying PDF fixtures
 are in `evals/fixtures/reviewer/`. Original attachment hashes are retained. The
 original DOCX and ZIP are excluded from publication.
 
-## Journals
+## Historical Journals (Before Policy 3)
 
-All 20 inputs were exercised. The completed run returned 17 valid six-field
-responses: 7 matched every automated check and 10 disagreed with at least one
-expected label or mood range. Three cases produced service errors. These are
-counts on this small authored set, not statistical release gates.
+All 20 inputs were exercised before policy version 3. The run returned 17 valid
+six-field responses and three service errors. Of those 17 responses, 13 agreed
+with predicted sentiment, emotion and risk; four disagreed. The original automated
+checker also counted provisional mood ranges, yielding 7 all-field matches and
+10 disagreements. That is not a fair count of substantive label failures: mood
+ranges were guesses and are a separate calibration concern, not ground truth.
 
-- J1 returned MEDIUM rather than the pack's required HIGH for prolonged distress.
-  This is a substantive screening-policy miss and is visible in the recording.
+- J1 returned MEDIUM rather than the assignment example's HIGH. This is a
+  substantive screening-policy miss in the original observations.
 - J2 and J12 returned neutral emotion where happy was expected. J4-J6, J13-J14,
   J18-J19 disagreed with expected mood ranges (J14 also with emotion).
 - J15 and J16 each returned SUMMARY_UNSUPPORTED twice, including the one identical
@@ -28,7 +32,7 @@ counts on this small authored set, not statistical release gates.
 `reviewer-journals.json` retains complete responses and attempts. The initial
 Ollama loading failures are retained separately rather than silently discarded.
 
-## HTTP, Documents and Grounding
+## Historical HTTP, Documents and Grounding
 
 The 56 non-journal cases include real restarts, fresh uploads, separate principals,
 deletion and concurrent HTTP requests. `reviewer-protocol.json` retains expectations,
@@ -55,19 +59,50 @@ disagreed. The travel-policy positive-answer check I1 failed separately.
   Actual results were two 200s, two immediate QUEUE_FULL 429s and one 504 at 30.031
   seconds. The queue bound worked; the pack's three-success expectation was not met.
 
-## Recovery Correction
+## Initial Recovery Correction
 
 The long journal initially kept the CPU busy after its response timed out and
 expired queued requests could start more work. A narrow deadline/batching fix was
 made without changing model weights, policy thresholds, prompts or architecture.
-Five regression tests bring the deterministic Windows suite to 70 passing tests.
+At that stage, five regression tests brought the deterministic Windows suite to 70 passing tests.
 
-The post-fix real check still returns 504 for J20 at 60.016 seconds. The next
+That initial post-fix real check still returned 504 for J20 at 60.016 seconds. The next
 unsupported-language request returns 422 in 0.015 seconds and the following short
 journal succeeds in 18.422 seconds. See `reviewer-timeout-recovery.json` and
 `CORRECTIONS.md`. Initial queue failures remain in a separate report.
 
-The full journal run preceded that correction; the protocol rerun and expanded
-walkthrough follow it. The frozen earlier evaluation was not relabeled or replaced.
-The walkthrough is illustrative evidence, not a substitute for these retained
+The original full journal run preceded that correction; the original protocol rerun
+and policy-2 walkthrough followed it. The frozen earlier evaluation was not relabeled or replaced.
+The original walkthrough was illustrative evidence, not a substitute for these retained
 failures or a claim that all 76 cases pass.
+
+## Policy 3 Follow-Up
+
+The current correction uses a narrow current-personal-giving-up/hopelessness plus
+supported-distress HIGH rule, a strong-positive/neutral-emotion consistency rule,
+gentler mood mapping, constrained exact-source summary quotes and explicit float32
+CPU NLI. Long entries retain full-entry sentiment and safety scoring, with emotion
+scored from verified summary excerpts. This can miss emotions absent from those
+excerpts and is explicitly not full-entry emotion coverage.
+
+Separate [journal regression results](JOURNAL_POLICY3_REGRESSION.md) include every
+original journal, J1 and three development paraphrases, plus a natural long entry.
+[Policy-condition results](POLICY_CONDITION_REGRESSION.md) check the omitted
+cap/expiry/approval conditions and four other prior RAG disagreements. These are
+post-change regression checks, not a replacement for the original 76-case run.
+The frozen held-out set and old measurements remain unchanged and are labeled
+as measured before policy version 3. Updated videos are indexed in
+[`docs/WALKTHROUGH.md`](../docs/WALKTHROUGH.md).
+
+The final journal regression returned 20/20 valid pack responses, 19 predicted-label
+agreements and one emotion disagreement (J14: sad). J1/dev51-dev54 returned HIGH,
+while J5/J6/J7/J14 did not. J2/J12 returned happy; J15/J16/J20 succeeded. J20 and
+the separate natural 512-word journal each took 13.406 seconds. J17's literal risk
+sentence is repeated; a two-sentence output does not guarantee a good summary.
+Low happy confidence for J12 is retained rather than cosmetically increased.
+
+The targeted document follow-up received fresh 201/READY in 0.906 seconds.
+R2/R8/R18 include all predicted qualifying facts with exact quotes on the correct
+pages; R19 and R17 pass. R12 and R14 still return `ANSWER_UNSUPPORTED` rather than
+the predicted partial/abstention status. Those errors remain unresolved. This is
+five matching targeted cases and two service errors, not a new 76-case pass count.

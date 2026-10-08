@@ -2,7 +2,7 @@
 
 Repository: https://github.com/tusharg007/mymanah-journal-intelligence
 
-Actual application recordings: [Desktop walkthrough](walkthrough-desktop.mp4) and [Mobile walkthrough](walkthrough-mobile.mp4). The expanded recordings use diverse inputs from the reviewer's test pack, synchronous PDF readiness, two grounded answers with expanded citations and original source pages, and a completed unsupported-question response. Results are held visibly for reading, with embedded captions below the app and full inference waiting time retained. Observed journal disagreements are labeled, not hidden. [Compiled inputs and actual results](VIDEO_TEST_RESULTS.md), timestamps and source PDF are documented alongside the recordings. No public deployment is claimed.
+Actual application recordings: [2:02 overview](walkthrough-short.mp4), [6:08 desktop walkthrough](walkthrough-desktop.mp4) and [3:42 mobile walkthrough](walkthrough-mobile.mp4), opening with corrected J1 (HIGH). The recordings use diverse inputs from an AI-assisted self-test pack with predicted expectations, supplied by the candidate. Results are held visibly for reading with permanently embedded captions. [Compiled inputs and actual results](VIDEO_TEST_RESULTS.md), timestamps and source PDF accompany the recordings.
 
 ## Approach
 
@@ -14,10 +14,10 @@ Loopback review is credential-free by default. API keys are opt-in, remote bindi
 
 ## Evidence
 
-- Windows deterministic suite: 70 passing tests, with Linux checks run on each push. Native and Linux CPU Docker real-model contract/PDF suites previously passed two tests each; that Docker run predates the timeout-recovery correction.
-- External reviewer pack: all 76 cases exercised. Journals: 7 full automated matches, 10 label/mood disagreements and 3 service errors. Other cases: 45 passes, 9 mismatches and 2 expectation conflicts. [Complete results and limitations](../reports/REVIEWER_TEST_PACK.md) preserve failures and actual responses.
-- Generator comparison: 4B validated 49/50 development journals and returned 30/30 document-question responses; 1.5B validated 41/50 journals and returned 21/30 question responses. Failures are retained.
-- Frozen 100-case English evaluation: 96 validated responses; label agreement including service errors is 95/100 sentiment, 93/100 emotion and 81/100 screening priority. Successful-request p50/p95 is 11.71/18.39 seconds on the tested laptop.
+- Windows deterministic suite: 96 passing tests, with Linux checks run on each push. Both current native real-model contract/fresh-PDF tests pass. The prior Linux CPU Docker real-model suite also passed two tests; that Docker run predates policy version 3.
+- AI-assisted self-test pack with predicted expectations: all 76 cases were exercised before policy version 3. The original 20 journals produced 17 responses and three service errors. After correction, all 20 produced valid responses: 19 agreed with predicted sentiment/emotion/risk; J14 retained an emotion disagreement. J1 and its three development paraphrases returned HIGH; J5/J6/J7/J14 did not. J2/J12 returned happy and J15/J16 succeeded. J20 and a natural 512-word journal each returned in 13.406 seconds in the final regression. Mood guesses are separate from label comparisons. These are development observations, not independent ground truth. [Complete results](../reports/REVIEWER_TEST_PACK.md) preserve original and post-change evidence.
+- Generator comparison, before policy version 3: 4B validated 49/50 development journals and returned 30/30 document-question responses; 1.5B validated 41/50 journals and returned 21/30 question responses. Failures are retained.
+- Frozen 100-case English evaluation, measured before policy version 3: 96 validated responses; label agreement including service errors was 95/100 sentiment, 93/100 emotion and 81/100 screening priority. Successful-request p50/p95 was 11.71/18.39 seconds on the tested laptop. These numbers do not measure the current corrections.
 - Fine-tuned sentiment baseline: RoBERTa 99/100 matching annotations, versus NLI sentiment 97/100. Counts, macro metrics, confusion matrices and uncertainty are published.
 - New ten-page PDF: synchronous READY in 0.865 seconds. Expected-page retrieval hit 27/27 answerable/partial cases. Automated end-to-end matches were 27/30; one is a matcher false negative and two are conservative full abstentions instead of partial answers.
 - Desktop/mobile real workflows, nonblank PDF canvas, source-page navigation, four-width responsive checks, offline API-process smoke and restored-index/keyed-isolation rehearsal passed.
@@ -29,10 +29,19 @@ English journals and text-based English PDFs are the supported release. Hindi/Hi
 
 Screening labels are an assignment policy, not clinical risk prediction. MEDIUM recall is weak (13/28 in the held-out fixtures); two correctly classified HIGH examples do not establish safety. Emotion can be wrong even at high classification scores. Confidence and mood are uncalibrated heuristics, not validated probabilities or clinical scales. Some valid summaries are conservatively rejected, and NLI verification is fallible.
 
-The external pack additionally exposed a prolonged-distress HIGH-to-MEDIUM miss,
-omitted conditions in three policy answers, controlled support-verification errors,
-and a long journal that still reaches its 60-second deadline. Deadline recovery was
-corrected and tested, but these semantic and latency limitations remain unresolved.
+The original prolonged-distress miss, positive/neutral inconsistency and three
+journal service errors were corrected on the development self-test inputs. This
+does not establish generalization: figurative J14 still returns sad rather than
+the predicted neutral/anger, and the one-fact injection case J17 repeats its literal
+risk statement to meet the two-sentence contract. Long-entry emotion is derived
+from verified summary excerpts and can miss feelings elsewhere in the entry.
+Qualifying conditions and residual document-answer disagreements are reported
+separately in the targeted policy-condition regression.
+
+R2/R8/R18 now include cap/expiry/approval conditions in the answer text with exact
+citations. R19 and R17 also pass the targeted checks. R12's mixed sick-leave/stock-option
+question and R14's unsupported paternity question still return `ANSWER_UNSUPPORTED`,
+not the expected partial answer or abstention. These controlled errors are unresolved.
 
 Evaluation cases have provisional engineering annotations and simple synthetic language, not independent clinician/human validation. No zero-bug, zero-hallucination, clinical-readiness or horizontal-scalability guarantee is made. The implementation uses one application process with embedded storage and bounded local inference, not a distributed service.
 

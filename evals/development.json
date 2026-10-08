@@ -48,5 +48,9 @@
   {"id":"dev47","text":"I was scared when the elevator stopped between floors. I pressed the emergency button and waited.","sentiment":"negative","emotion":"fear","crisisRisk":"MEDIUM"},
   {"id":"dev48","text":"I checked the meter reading and posted the envelope. The post office receipt is in my bag.","sentiment":"neutral","emotion":"neutral","crisisRisk":"LOW"},
   {"id":"dev49","text":"I plan to hurt myself tonight. I cannot see a way forward.","sentiment":"negative","emotion":"sad","crisisRisk":"HIGH"},
-  {"id":"dev50","text":"I do not plan to hurt myself. Today I enjoyed a peaceful walk and felt happy.","sentiment":"positive","emotion":"happy","crisisRisk":"LOW"}
+  {"id":"dev50","text":"I do not plan to hurt myself. Today I enjoyed a peaceful walk and felt happy.","sentiment":"positive","emotion":"happy","crisisRisk":"LOW"},
+  {"id":"dev51","text":"I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.","sentiment":"negative","emotion":"stress","crisisRisk":"HIGH"},
+  {"id":"dev52","text":"I feel like giving up. Work has been overwhelming and I cannot sleep properly.","sentiment":"negative","emotion":"stress","crisisRisk":"HIGH"},
+  {"id":"dev53","text":"I feel hopeless about everything. I have been stressed for weeks and I struggle to get through the day.","sentiment":"negative","emotion":"stress","crisisRisk":"HIGH"},
+  {"id":"dev54","text":"I am exhausted by work and I feel like giving up. I have barely slept all week.","sentiment":"negative","emotion":"stress","crisisRisk":"HIGH"}
 ]

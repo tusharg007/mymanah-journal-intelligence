@@ -140,7 +140,9 @@ def create_app(settings: Settings | None = None, model_factory=Models, document_
             return await asyncio.wait_for(asyncio.shield(task), max(0.001, deadline - time.monotonic()))
         except TimeoutError as exc:
             # Shielding keeps capacity occupied until actual model execution stops.
-            raise ServiceError("INFERENCE_TIMEOUT", "The request exceeded its inference deadline", 504) from exc
+            message = ("Journal analysis exceeded its processing deadline; shorten the entry or retry when inference is idle"
+                       if request.url.path == "/analyze-journal" else "The request exceeded its inference deadline")
+            raise ServiceError("INFERENCE_TIMEOUT", message, 504) from exc
 
     @app.get("/health/live")
     async def live():

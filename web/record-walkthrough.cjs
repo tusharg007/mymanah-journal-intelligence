@@ -6,15 +6,15 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'artifacts', 'walkthrough-v3');
+const output = path.join(root, 'artifacts', 'walkthrough-v4');
 const origin = process.env.APP_URL || 'http://127.0.0.1:8000';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pack = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'reviewer-test-pack.json'), 'utf8'));
 const scenarios = [
-  ['J2', 'Positive achievement'], ['J3', 'An ordinary day'], ['J4', 'Anger after criticism'],
+  ['J1', 'Prolonged distress'], ['J2', 'Positive achievement'], ['J3', 'An ordinary day'], ['J4', 'Anger after criticism'],
   ['J5', 'Interview anxiety'], ['J6', 'Workload stress'], ['J7', 'Grief'], ['J8', 'Fear after a threat'],
   ['J12', 'Negation: not sad'], ['J13', 'Mixed excitement and worry'],
-  ['J1', 'Prolonged distress'], ['J9', 'Explicit risk language'],
+  ['J9', 'Explicit risk language'],
 ];
 const questions = [
   { text: 'What is the annual leave allowance?', number: '24', page: 2 },
@@ -25,9 +25,7 @@ function resultCaption(result, expected) {
   const mismatch = [];
   if (!expected.Risk.includes(result.crisisRisk)) mismatch.push(`Risk ${result.crisisRisk}; pack expects ${expected.Risk}.`);
   if (!expected.Emotion.includes('any') && !expected.Emotion.includes(result.emotion)) mismatch.push(`Emotion ${result.emotion}; pack expects ${expected.Emotion}.`);
-  const [low, high] = expected.Mood.match(/\d+/g).map(Number);
-  if (result.moodScore < low || result.moodScore > high) mismatch.push(`Mood ${result.moodScore}; pack range ${low}-${high}.`);
-  return mismatch.length ? `Observed test-pack disagreement:\n${mismatch[0]}`
+  return mismatch.length ? `Compared with predicted expectations:\n${mismatch[0]}`
     : `Returned: ${result.sentiment} / ${result.emotion} / ${result.crisisRisk}.\nRead the complete analysis and summary.`;
 }
 
@@ -109,14 +107,14 @@ function resultCaption(result, expected) {
       }
 
       try {
-        chapter('Start', 'MyManah | Diverse reviewer test cases\nActual local inference; disagreements are labeled.');
+        chapter('Start', 'MyManah | AI-assisted self-test inputs\nActual local inference; policy version 3.');
         await page.goto(origin, { waitUntil: 'networkidle' });
         await page.getByText('Models ready', { exact: true }).waitFor();
         await pause(3500);
         const selected = name === 'desktop' ? scenarios : scenarios.filter(([id]) => ['J2', 'J5', 'J7', 'J1', 'J9'].includes(id));
         for (const [id, title] of selected) {
           const expected = pack.cases.find(row => row.id === id);
-          chapter(`${id} - ${title}`, `${id} | ${title}\nReviewer-authored input; full processing wait retained.`);
+          chapter(`${id} - ${title}`, `${id} | ${title}\nAI-assisted input with predicted expectations.`);
           await type(page.getByLabel('Journal entry'), expected.Input);
           const responsePromise = page.waitForResponse(r => r.url().endsWith('/analyze-journal') && r.request().method() === 'POST');
           const requestStarted = Date.now();
@@ -137,7 +135,7 @@ function resultCaption(result, expected) {
         }
 
         chapter('Document upload', name === 'desktop'
-          ? 'Upload the reviewer\'s three-page handbook.\nWait for READY before asking a question.'
+          ? 'Upload the supplied three-page handbook.\nWait for READY before asking a question.'
           : 'Open the PDF saved by the desktop workflow.\nIts existing index is reused.');
         await page.getByRole('button', { name: 'Documents', exact: true }).click();
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));

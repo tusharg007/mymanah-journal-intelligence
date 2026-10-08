@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import logging
 import os
 import threading
 import time
@@ -78,7 +79,7 @@ class Models:
         ).eval()
         self.nli_tokenizer = AutoTokenizer.from_pretrained(self.settings.model_dir / "nli", local_files_only=True)
         self.nli = AutoModelForSequenceClassification.from_pretrained(
-            self.settings.model_dir / "nli", local_files_only=True
+            self.settings.model_dir / "nli", local_files_only=True, dtype=torch.float32
         ).eval()
         labels = {int(i): str(v).lower() for i, v in self.nli.config.id2label.items()}
         self.entailment = next(i for i, label in labels.items() if label == "entailment")
@@ -109,6 +110,7 @@ class Models:
             response.raise_for_status()
             self.ready, self.failure = True, ""
         except Exception as exc:
+            logging.getLogger(__name__).exception("Local model initialization failed")
             self.failure = exc.code if isinstance(exc, ServiceError) else type(exc).__name__
             self.ready = False
 
@@ -164,16 +166,20 @@ class Models:
         return encoded.tolist()
 
     async def generate(self, system: str, prompt: str, schema: type[T], tokens: int = 256,
-                       deadline: float | None = None) -> T:
+                       deadline: float | None = None, source_quotes: list[str] | None = None) -> T:
         remaining = min(40.0, deadline - time.monotonic()) if deadline else 40.0
         if remaining <= 0:
             raise ServiceError("INFERENCE_TIMEOUT", "Inference deadline exhausted", 504)
+        output_schema = schema.model_json_schema()
+        constrained_schema = schema.model_json_schema()
+        if source_quotes:
+            constrained_schema["$defs"]["SummarySentence"]["properties"]["quote"]["enum"] = source_quotes
         try:
             async with asyncio.timeout(remaining):
                 response = await self.http.post("/api/generate", json={
                     "model": self.generator["ollama_model"], "system": system,
-                    "prompt": json.dumps({"output_schema": schema.model_json_schema(), "input": json.loads(prompt)}),
-                    "format": schema.model_json_schema(), "stream": False, "keep_alive": "30m",
+                    "prompt": json.dumps({"output_schema": output_schema, "input": json.loads(prompt)}),
+                    "format": constrained_schema, "stream": False, "keep_alive": "30m",
                     "options": {"temperature": 0, "seed": 42, "num_ctx": 4096, "num_predict": tokens},
                 })
             response.raise_for_status()

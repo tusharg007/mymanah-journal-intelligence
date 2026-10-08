@@ -121,38 +121,55 @@ On this 16 GB RAM / RTX 3050 Laptop 4 GB machine, reducing Ollama's fitting rese
 - Journal: validate -> CPU RoBERTa/NLI classification in parallel with Ollama summary -> source/numeric/NLI support checks -> versioned crisis/mood rules -> exact response.
 - PDF: bounded subprocess extraction -> per-page tokenizer chunks -> canonical SQLite chunks -> explicit E5 vectors in a document-generation-specific Chroma collection -> retrieval probe -> READY publication.
 - RAG: scoped dense and BM25+ retrieval -> reciprocal rank fusion -> evidence budget -> structured claims -> quote/numeric/NLI checks -> server-resolved citations. No outside facts or unverified streaming.
+- After claim verification, a cited policy sentence containing approval/carry-over/other explicit qualifying language is preserved in the answer rather than shortened. This retains conditions present in that quote, not conditions elsewhere in the document.
 - One API worker, one active interactive request, two waiting requests and one ingestion lane. Each principal has 10 interactive requests and 2 uploads per minute. Model adapters share a bounded CPU lock; timed-out model work retains admission until it actually completes.
 - Upload timeout/cancellation invalidates its publication token. A duplicate waiter's timeout does not cancel the owner. Restart cleans unpublished indexes and interrupted uploads. Deletion makes a document unavailable before cleanup.
 - Journal contents are transient. PDFs persist until deletion. No raw journal, question, PDF text, prompts, generated answers or keys in application logs. Data/model directories and secrets are excluded from Git.
 
-`confidence=min(selected sentiment score, selected emotion score)` is an uncalibrated classification heuristic, **not** a probability all response fields are correct. Mood uses the versioned formula in `mymanah/policy.py`, with approximate distress adjustment, not a clinical scale. LOW/MEDIUM/HIGH are assignment screening priorities, not clinical risk prediction. The broad sample-compatible HIGH policy includes prolonged distress, impairment and giving-up language. No automatic clinical escalation or notification occurs.
+`confidence=min(selected sentiment score, selected emotion score)` is an uncalibrated classification heuristic, **not** a probability all response fields are correct. Strong positive sentiment resolves a neutral-emotion prediction to happy; confidence retains the selected happy NLI score, so it can be low. Policy version 3 gives HIGH for current personal giving-up or hopelessness language together with a supported distress signal. Mood reserves 1-2 for HIGH entries and uses a gentler mapping for ordinary negative or mixed feelings. LOW/MEDIUM/HIGH are assignment screening priorities, not clinical risk prediction.
 
-Starting hard deadlines: short journal 30 seconds, larger journal 60, question 45, synchronous upload 60. Queue time counts toward the deadline; expired waiters do not start inference. Classifier deadlines are checked between length-bounded batches, not by interrupting an active Torch forward pass. The warm short-entry **target** is 10-15 seconds, including verification; actual measurements are required. Each ordinary window initially costs 14 NLI pairs, plus summary verification, not a single classification operation.
+Starting hard deadlines: short journal 30 seconds, larger journal 60, question 45, synchronous upload 60. Queue time counts toward the deadline; expired waiters do not start inference. Classifier deadlines are checked between length-bounded batches, not by interrupting an active Torch forward pass. The warm short-entry **target** is 10-15 seconds, including verification. Long journals use seven risk/distress pairs per 160-token window; emotion is scored from the exact excerpts supporting the verified summary, while sentiment and risk cover the full entry. CPU NLI explicitly uses float32: retaining the checkpoint's float16 dtype was slow on the tested CPU. A dynamic-int8 experiment was rejected after real support checks failed. Downloaded weights and pins are unchanged. Summary risk statements preserve the selected source quote literally.
 
 ## Verification and Evaluation
 
-The additional [76-case reviewer pack report](reports/REVIEWER_TEST_PACK.md) retains
-real responses, semantic disagreements and service errors. It is not an all-pass
-result: notably prolonged distress was classified MEDIUM instead of expected HIGH,
-some policy conditions were omitted from answers, and a long journal timed out.
-The expanded videos show diverse reviewer-authored inputs and label disagreements.
+The [76-case report](reports/REVIEWER_TEST_PACK.md) covers an AI-assisted self-test
+pack with predicted expectations supplied by the candidate. Its predictions are
+development aids, not ground truth. The original video inputs exposed J1's risk
+miss and neutral emotion for J2/J12; provisional mood ranges are a separate
+calibration concern. Original responses and service errors remain available.
+
+Policy version 3's separate [journal regression](reports/JOURNAL_POLICY3_REGRESSION.md)
+returned valid responses for all 20 pack inputs, with 19 agreeing with predicted
+sentiment/emotion/risk and one emotion disagreement (figurative J14: sad).
+J1 and its three development paraphrases returned HIGH; J5/J6/J7/J14 did not.
+J2/J12 returned happy, J15/J16 succeeded, and J20 returned in 13.406 seconds.
+A separate natural 512-word journal also returned in 13.406 seconds. Short pack
+entries in that run took 1.703-3.828 seconds. These are small warm local observations,
+not production latency percentiles. The unchanged held-out measurements below
+precede this revision. Long-entry emotion can omit feelings outside the selected
+summary excerpts; confidence and mood remain uncalibrated.
 
 ```powershell
 .venv\Scripts\python.exe -m ruff check mymanah scripts tests evals
 .venv\Scripts\python.exe -m pytest -m 'not live' -q
 .venv\Scripts\python.exe -m pytest -m live -q
-.venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --output reports\development-qwen4b.json --rag-output reports\rag-qwen4b.json
-.venv\Scripts\python.exe -m evals.benchmark --generator qwen1b --output reports\development-qwen1b.json --rag-output reports\rag-qwen1b.json
-.venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --cases evals\heldout.json --output reports\heldout-qwen4b.json
-.venv\Scripts\python.exe -m evals.reliability reports\heldout-qwen4b.json reports\heldout-score-reliability.json
+.venv\Scripts\python.exe -m scripts.journal_regression
+.venv\Scripts\python.exe -m scripts.policy_condition_regression
+.venv\Scripts\python.exe -m scripts.export_regression_results
+.venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --output reports\development-policy3-qwen4b.json --rag-output reports\rag-policy3-qwen4b.json
+.venv\Scripts\python.exe -m evals.benchmark --generator qwen1b --output reports\development-policy3-qwen1b.json --rag-output reports\rag-policy3-qwen1b.json
 .venv\Scripts\python.exe -m scripts.offline_check
 ```
 
 Unit/API/failure tests may use explicitly test-only injected adapters; production has no fake inference mode. PDF transaction tests use real pypdf/SQLite/Chroma. Live tests use actual downloaded classifiers/embeddings/generation and upload a new PDF immediately before asking questions. Benchmark reports include case counts, failures, confusion matrices and rough p50/p95. Development results are not held-out performance claims. Small curated evaluations do not establish clinical or deployment validity.
 
+The original held-out report is retained, not overwritten by these commands.
+Any later run against `evals/heldout.json` must use a separate regression filename
+and must not be described as an untouched held-out evaluation of the tuned revision.
+
 Stop the API before running model benchmarks or the offline check on a memory-constrained laptop; otherwise two classifier registries consume RAM and distort timings. Leave local Ollama running. To repeat browser verification, install Playwright in the tooling environment, then run `node web/live-qa.cjs` against the running API. For the complete captioned presentation with visible-result reading time, use `node web/record-walkthrough.cjs` followed by `python scripts/render_walkthrough.py`; see [the walkthrough and timestamps](docs/WALKTHROUGH.md).
 
-### Measured Development Results
+### Measured Development Results (Before Policy Version 3)
 
 | Measure | Qwen 4B (selected) | Qwen 1.5B |
 | --- | --- | --- |
@@ -163,11 +180,11 @@ Stop the API before running model benchmarks or the offline check on a memory-co
 
 These runs were not a controlled speed comparison: dependency versions and available RAM differed. Both used the same synthetic cases and frozen corrected prompts. Rejected outputs are errors, not fabricated successful summaries. The 4B ten-page upload took 0.865 seconds and returned READY before the immediate question. Retrieval included the expected page on all 27 answerable/partial cases. One of the three automated 4B mismatches is a singular/plural matcher false negative ("line manager" versus "Line managers"); two are conservative full abstentions where partial answers were expected. Raw cases are not relabeled to improve scores.
 
-Known journal errors include a positive completion entry classified as neutral emotion, and six of twelve expected MEDIUM cases classified LOW on development data. The three development HIGH examples were correctly classified, which is far too little evidence for clinical reliability. Exact class counts, service errors, confusion matrices and Wilson intervals are in the reports. Summary/claim NLI validation can both reject valid paraphrases and accept mistakes; it is not a proof of factual correctness. See `reports/CORRECTIONS.md`, `reports/SECURITY.md`, and `evals/README.md`.
+Those pre-policy-3 development runs included a positive completion entry classified as neutral emotion, and six of twelve expected MEDIUM cases classified LOW. The three development HIGH examples were correctly classified, which is far too little evidence for clinical reliability. Subsequent corrections use four additional development regressions and the AI-assisted self-test inputs; they do not rewrite these historical counts. Exact class counts, service errors, confusion matrices and Wilson intervals are in the reports. Summary/claim NLI validation can both reject valid paraphrases and accept mistakes; it is not a proof of factual correctness. See `reports/CORRECTIONS.md`, `reports/SECURITY.md`, and `evals/README.md`.
 
-### Frozen Held-Out Results
+### Frozen Held-Out Results (Before Policy Version 3)
 
-The 100 separately authored, provisional English cases produced 96 validated responses and four `SUMMARY_UNSUPPORTED` errors. Service errors count as missed predictions, not successful labels. Successful-request p50/p95: 11.71/18.39 seconds; the 10-15-second target is not met for every entry.
+These measurements precede the giving-up rule, emotion consistency, mood, summary and CPU precision changes in policy version 3. The frozen set and its original results are preserved; the numbers below do not measure the current revision. The 100 separately authored, provisional English cases produced 96 validated responses and four `SUMMARY_UNSUPPORTED` errors. Successful-request p50/p95 was 11.71/18.39 seconds.
 
 | Output | Matching labels / all cases | Wilson 95% interval | Macro-F1 |
 | --- | --- | --- | --- |
@@ -175,7 +192,7 @@ The 100 separately authored, provisional English cases produced 96 validated res
 | Dominant emotion | 93 / 100 | 86.3%-96.6% | 0.949 |
 | Screening priority | 81 / 100 | 72.2%-87.5% | 0.836 |
 
-The fine-tuned RoBERTa baseline matched 99/100 sentiment annotations (macro-F1 0.976), versus NLI sentiment's 97/100 (macro-F1 0.951). Sentiment counts: 72 negative, 14 neutral, 14 positive. Emotions: 14 each except 16 sad. Screening: 70 LOW, 28 MEDIUM, 2 HIGH. Only 13/28 MEDIUM examples matched; both HIGH examples matched. Simple synthetic language and only two HIGH examples prevent real-world or clinical generalization. Labels were authored before observing outputs, are not independently human/clinician validated, and were not revised after the run. No post-holdout semantic tuning was performed.
+The fine-tuned RoBERTa baseline matched 99/100 sentiment annotations (macro-F1 0.976), versus NLI sentiment's 97/100 (macro-F1 0.951). Sentiment counts: 72 negative, 14 neutral, 14 positive. Emotions: 14 each except 16 sad. Screening: 70 LOW, 28 MEDIUM, 2 HIGH. Only 13/28 MEDIUM examples matched; both HIGH examples matched. Labels are provisional engineering annotations, not independently validated. Subsequent corrections use development cases and the AI-assisted self-test pack with predicted expectations, rather than the frozen inputs.
 
 `reports/heldout-score-reliability.json` reports selected-score bins, joint sentiment/emotion agreement and Wilson intervals without fitting calibration. The 0.90-0.95 bin contains 23/25 jointly matching labels, so high scores can still be wrong. Four service errors are excluded from the bins but explicitly retained in coverage counts. Per-class probability vectors were not retained; task-wise Brier scores are not invented from this minimum-score heuristic.
 
@@ -222,7 +239,7 @@ For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --b
 
 ## Verification Status
 
-- 70 deterministic tests pass on Windows. Two additional actual-model live tests previously passed both natively and in Linux CPU Docker; that Docker run predates the deadline/batching correction. Ruff and frontend production build pass; Linux deterministic checks run on each push.
+- 96 deterministic tests pass on Windows. Two additional actual-model live tests are run separately. The previous Linux CPU Docker real-model run predates policy version 3; current Linux deterministic checks run on each push. Ruff and frontend production build are checked separately.
 - Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Layout checks at widths 320, 390, 1440 and 1920 pixels report no page/source overflow or JavaScript errors (`reports/responsive-layout.json`). Actual recordings preserve inference waiting time.
 - Offline smoke passed with non-loopback Python sockets blocked. This is an API-process guard, not an OS firewall or instrumentation of Ollama/PDF subprocesses.
 - Quiesced backup/restore passed with preserved PDF bytes, generation and vectors, a real restored-index question, 401 for unauthenticated keyed access and 404 for another principal's document/source access.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import time
 
 from rank_bm25 import BM25Plus
@@ -18,6 +19,12 @@ answerable=false, complete=false, claims=[]. For partial evidence return complet
 is missing without supplying the missing facts. If you supply one or more claims, answerable MUST be true.
 Set complete=true when those claims answer all parts of the question; otherwise set complete=false.
 Include ONLY claims directly needed to answer the user's question, not other facts in the evidence.
+When an answer gives a permission, entitlement or limit, include the qualifying conditions from its
+policy sentence: approval requirements, caps, deadlines and expiry. A permission without its condition
+does not fully answer the question. For carry-over, state both the cap and its use-by date.
+For a permission with approval, carry-over expiry or another qualifying condition, use the COMPLETE
+cited policy sentence as the claim text. Copy that sentence instead of shortening it to a yes/no
+permission or dropping conditions. Keep its exact source quote, with the correct chunk_id.
 Keep claims short and avoid duplicate claims."""
 
 
@@ -105,11 +112,18 @@ class RAG:
             raise ServiceError("DOCUMENT_CHANGED", "Document changed during inference", 409)
         if not draft.answerable:
             return self.abstain()
-        answer = "\n".join(f"{claim.text} [{i}]" for i, claim in enumerate(draft.claims, 1))
+        answer = "\n".join(f"{self.policy_answer_text(claim.text, citation.quote)} [{i}]"
+                           for i, (claim, citation) in enumerate(zip(draft.claims, citations, strict=True), 1))
         if not draft.complete:
             # Model-generated 'missing' prose is not trusted as an additional factual claim.
             answer += "\nThe document does not provide sufficient evidence for every part of this question."
         return AnswerResponse(status="ANSWERED" if draft.complete else "PARTIAL", answer=answer, citations=citations)
+
+    @staticmethod
+    def policy_answer_text(claim: str, verified_quote: str) -> str:
+        if re.search(r"\b(?:approv(?:al|ed)|subject to|provided that|only if|unless|must be used by|carry[- ]over)\b", verified_quote, re.I):
+            return " ".join(verified_quote.split())
+        return claim
 
     @staticmethod
     def abstain() -> AnswerResponse:

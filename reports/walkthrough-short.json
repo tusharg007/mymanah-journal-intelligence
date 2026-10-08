@@ -1,0 +1,20 @@
+{
+  "source": "docs/walkthrough-desktop.mp4",
+  "video": "docs/walkthrough-short.mp4",
+  "duration_seconds": 121.80699999999995,
+  "source_segments": [
+    {
+      "start": 0,
+      "end": 50.586
+    },
+    {
+      "start": 267.009,
+      "end": 315.849
+    },
+    {
+      "start": 344.946,
+      "end": 367.327
+    }
+  ],
+  "description": "Opens with corrected J1; complete scenes retain input entry, processing waits, results and embedded captions at original speed."
+}
