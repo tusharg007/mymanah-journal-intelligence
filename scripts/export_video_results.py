@@ -38,6 +38,30 @@ def journal_outcome(expected: dict, actual: dict) -> list[str]:
     return mismatches
 
 
+def overview_section(run: dict) -> list[str]:
+    lines = ["Measured versions: policy-5 overview; preserved policy-4 desktop/mobile. Historical responses are unchanged.", "",
+             "## Policy-5 Overview", "",
+             "Two seen journal requests (J1/J2), fresh HTTP 201 READY, one ANSWERED PDF question and one uncited abstention. These are repeat development inputs, not new independent cases.",
+             "Source fingerprints match the frozen W1-W8 assessment. [Actual capture metadata](../reports/walkthrough-policy5-overview.json). [Fresh assessment](../reports/UNSEEN_HOPELESSNESS_8.md) retains W2/W3 screening misses. Confidence is uncalibrated and capped at 0.99 for presentation only.", ""]
+    for row in run["journals"]:
+        lines += [f"### Overview {row['id']}", "", "Workflow: `POST /analyze-journal`.", "", "Input:", "```json",
+                  json.dumps({"text": row["input"]}, ensure_ascii=False, indent=2), "```", "",
+                  "Predicted expectations:", "```json", json.dumps({key: row["expected"][key] for key in ("Sentiment", "Emotion", "Mood", "Risk")}, indent=2), "```", "",
+                  f"HTTP {row['statusCode']}, {row['journalSeconds']:.3f} s. Actual full response:", "```json",
+                  json.dumps(row["actual"], ensure_ascii=False, indent=2), "```", ""]
+    lines += ["### Overview Fresh Upload", "", "Workflow: `POST /documents`, fresh handbook PDF. HTTP 201, exact response:",
+              "```json", json.dumps(run["upload"], ensure_ascii=False, indent=2), "```", ""]
+    for row in run["responses"]:
+        lines += ["### Overview Supported Question", "", "Workflow: `POST /documents/{id}/questions`.", "", "Input:", "```json",
+                  json.dumps({"question": row["question"]}, indent=2), "```", "",
+                  f"HTTP 200, {row['seconds']:.3f} s. Full response, including every citation:", "```json",
+                  json.dumps(row["result"], ensure_ascii=False, indent=2), "```", ""]
+    lines += ["### Overview Unsupported Question", "", 'Input: `{"question":"What is the stock option vesting schedule?"}`.',
+              "HTTP 200, full response:", "```json", json.dumps(run["unsupported"], ensure_ascii=False, indent=2), "```", "",
+              "## Preserved Policy-4 Full Recordings", ""]
+    return lines
+
+
 def main() -> None:
     recordings = json.loads(REPORT.read_text(encoding="utf-8"))
     by_name = {run["name"]: run for run in recordings}
@@ -176,6 +200,9 @@ def main() -> None:
         "Regenerate this file with `python scripts/export_video_results.py`.",
         "",
     ]
+    overview = ROOT / "reports/walkthrough-policy5-overview.json"
+    if overview.exists():
+        lines[2:2] = overview_section(json.loads(overview.read_text(encoding="utf8"))[0])
     OUTPUT.write_text("\n".join(lines), encoding="utf-8")
     print(f"Wrote {OUTPUT.relative_to(ROOT)}")
 

@@ -1,6 +1,7 @@
 """Package real-time browser recordings with captions below the untouched app viewport."""
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import textwrap
@@ -19,11 +20,15 @@ def stamp(seconds: float) -> str:
 
 
 def main() -> None:
-    reports = json.loads((RECORDINGS / "recording-report.json").read_text(encoding="utf-8"))
-    assert {row["name"] for row in reports} == {"desktop", "mobile"}, "Both recordings must finish"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--overview", action="store_true")
+    args = parser.parse_args()
+    recordings = ROOT / "artifacts/walkthrough-policy5-overview" if args.overview else RECORDINGS
+    reports = json.loads((recordings / "recording-report.json").read_text(encoding="utf-8"))
+    assert {row["name"] for row in reports} == ({"desktop"} if args.overview else {"desktop", "mobile"}), "Requested recordings must finish"
     for row in reports:
         name = row["name"]
-        source = RECORDINGS / f"{name}.webm"
+        source = recordings / f"{name}.webm"
         probe = json.loads(subprocess.check_output([
             "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "json", str(source)
         ], text=True))
@@ -45,14 +50,14 @@ def main() -> None:
                      for part in textwrap.wrap(line, width=43 if name == "mobile" else 90)]
             caption = r"\N".join(lines)
             ass.append(f"Dialogue: 0,{stamp(chapter['start'])},{stamp(end)},Default,,0,0,0,,{caption}")
-        (RECORDINGS / f"{name}.ass").write_text("\n".join(ass), encoding="utf-8")
-        destination = ROOT / "docs" / f"walkthrough-{name}.mp4"
+        (recordings / f"{name}.ass").write_text("\n".join(ass), encoding="utf-8")
+        destination = ROOT / "docs" / ("walkthrough-short.mp4" if args.overview else f"walkthrough-{name}.mp4")
         subprocess.run([
             "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(source),
             "-vf", f"pad=iw:ih+{band}:0:0:color=0x122b22,ass=filename={name}.ass",
             "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-pix_fmt", "yuv420p",
             "-movflags", "+faststart", "-an", str(destination)
-        ], cwd=RECORDINGS, check=True)
+        ], cwd=recordings, check=True)
         row["video"] = f"docs/{destination.name}"
         row["videoDurationSeconds"] = duration
         row["captionPlacement"] = "Separate band below the original app viewport; no results covered"
@@ -60,13 +65,14 @@ def main() -> None:
         for index, evidence in enumerate(row["evidence"], start=1):
             subprocess.run([
                 "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-ss", str(evidence["inspectVideoAt"]),
-                "-i", str(destination), "-frames:v", "1", str(RECORDINGS / f"{name}-decoded-{index}.png")
+                "-i", str(destination), "-frames:v", "1", str(recordings / f"{name}-decoded-{index}.png")
             ], check=True)
         subprocess.run([
             "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-sseof", "-0.25", "-i", str(destination),
-            "-frames:v", "1", str(RECORDINGS / f"{name}-decoded-final.png")
+            "-frames:v", "1", str(recordings / f"{name}-decoded-final.png")
         ], check=True)
-    (ROOT / "reports" / "walkthrough-recording.json").write_text(json.dumps(reports, indent=2), encoding="utf-8")
+    report_name = "walkthrough-policy5-overview.json" if args.overview else "walkthrough-recording.json"
+    (ROOT / "reports" / report_name).write_text(json.dumps(reports, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

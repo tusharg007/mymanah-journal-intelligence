@@ -1,25 +1,21 @@
 # Recorded Walkthrough
 
-Start with the [02:04 short walkthrough](walkthrough-short.mp4), or watch the [08:16 desktop](walkthrough-desktop.mp4) and [04:33 mobile](walkthrough-mobile.mp4) recordings. All open with J1's HIGH result.
+Start with the [02:05 policy-5 overview](walkthrough-short.mp4). The [08:16 desktop](walkthrough-desktop.mp4) and [04:33 mobile](walkthrough-mobile.mp4) recordings remain policy 4. All open with J1's HIGH result.
 
-These preserved recordings measure policy 4 on the tested GPU laptop, before
-policy 5's 0.99 confidence presentation ceiling and hopelessness threshold correction.
-Their inputs and responses have not been rewritten. The [policy-5 seen regression](../reports/JOURNAL_POLICY5_REGRESSION.md)
-documents the final changes separately; it is not new unseen evidence.
+The overview is a new uninterrupted capture on frozen policy 5 after W1-W8. Its inference fingerprints match the fresh assessment. It is not an edited policy-4 clip or fresh unseen evidence. W2/W3 screening misses remain published in [the fresh report](../reports/UNSEEN_HOPELESSNESS_8.md); there was no further inference tuning.
 
-The videos show real local inference at normal speed, with permanently embedded captions below the untouched app viewport. Journal results are held for 14 seconds, supported answers and expanded quotes for 12 seconds, source pages for 8 seconds, and the final unsupported result for 16 seconds. Mobile scrolls each complete result into view.
+All videos run at normal speed with permanently embedded captions below the untouched viewport. Journals are held for 14 seconds, supported answers/expanded quotes for 12 seconds, source pages for 8 seconds, and final abstention for at least 16 seconds. The overview's final caption discloses W2/W3.
 
-Desktop covers eleven diverse pack scenarios, a one-fact instruction-attack entry (J17), and a complete 512-word development journal. The long entry is pasted visibly rather than typed character by character. Inputs are an AI-assisted self-test pack with predicted expectations plus development data; predictions are not ground truth.
-All 18 recorded journal requests returned HTTP 200. Of five repeated mobile inputs, 5/5 returned identical six-field outputs to desktop; this is observed repeatability rather than a general determinism guarantee.
+The overview shows J1, J2, a fresh HTTP 201 READY upload, annual leave with page-2 evidence and uncited stock-option abstention. It adds two seen journal requests, both valid, not two independent evaluation cases. [Current raw overview](../reports/walkthrough-policy5-overview.json).
 
-The short cut retains complete scenes for J1, J2, fresh PDF upload, annual-leave answer with page-2 evidence, and the final unsupported question. Input entry, processing waits and result-reading time remain at normal speed. Other scenes are in the full videos. Exact segments are in the [short-cut report](../reports/walkthrough-short.json).
+Full desktop/mobile recordings contain 18 valid journal requests across 13 distinct inputs, including J17 and a complete 512-word journal. Five repeated mobile inputs returned 5/5 identical six-field responses; this is observed repeatability, not a general determinism guarantee. Inputs are AI-assisted predicted-expectation fixtures and development data, not clinical ground truth.
 
 ## Result Timestamps
 
-| Completed result | Desktop | Mobile | Short |
+| Completed Result | Desktop (Policy 4) | Mobile (Policy 4) | Overview (Policy 5) |
 | --- | --- | --- | --- |
-| J1: Prolonged distress | 00:16 | 00:15 | 00:16 |
-| J2: Positive achievement | 00:39 | 00:37 | 00:39 |
+| J1: Prolonged distress | 00:16 | 00:15 | 00:15 |
+| J2: Positive achievement | 00:39 | 00:37 | 00:36 |
 | J3: An ordinary day | 01:03 | - | - |
 | J4: Anger after criticism | 01:29 | - | - |
 | J5: Interview anxiety | 01:55 | 01:02 | - |
@@ -31,37 +27,38 @@ The short cut retains complete scenes for J1, J2, fresh PDF upload, annual-leave
 | J9: Explicit risk language | 04:22 | 01:50 | - |
 | J17: One-fact entry with an instruction attack | 04:46 | - | - |
 | long01: A full 512-word journal | 05:31 | - | - |
-| Fresh PDF READY | 05:50 | 02:08 | 00:58 |
-| Annual leave, page-2 quote | 06:14 | 02:31 | 01:22 |
-| Original page 2 | 06:27 | 02:44 | 01:35 |
+| Fresh PDF READY | 05:50 | 02:08 | 00:55 |
+| Annual leave, page-2 quote | 06:14 | 02:31 | 01:18 |
+| Original page 2 | 06:27 | 02:44 | 01:31 |
 | Probation notice, page-3 quote | 06:44 | 03:00 | - |
 | Original page 3 | 06:57 | 03:13 | - |
 | Sick leave plus absent stock options: PARTIAL | 07:14 | 03:31 | - |
 | Absent paternity leave: abstention | 07:40 | 03:57 | - |
-| Stock-option vesting: abstention | 07:59 | 04:16 | 01:48 |
+| Stock-option vesting: abstention | 07:59 | 04:16 | 01:44 |
 
-Times are approximate and are derived from the actual capture report.
+Times are approximate, derived from actual capture checkpoints.
 
 ## Evidence and Limits
 
-Both viewports use the supplied three-page handbook. Desktop requires a fresh HTTP 201 READY upload; mobile reuses that index. The [source PDF](walkthrough-source.pdf) preserves supplied page content with refreshed creation metadata. Answers show annual leave (24 days, page 2), probation notice (15 days, page 3), a verified partial sick-leave answer with the missing stock-option topic named, and uncited paternity/vesting abstentions.
+All recordings use the supplied three-page handbook. Desktop and the new overview each require a fresh HTTP 201 READY upload; mobile reuses the old index. The [source PDF](walkthrough-source.pdf) preserves the page content; fresh uploads have refreshed creation metadata.
 
-Current summaries come from the real Qwen3 4B generator with evidence verification; a verified extractive fallback is available after two failures. One-fact entries receive non-repeating scope text. Confidence uses the selected emotion decision score or winning sentiment confidence for a consistency override. It does not establish risk correctness.
+The overview shows 24 annual-leave days and the 5-day carry-over/31 March condition with page-2 citations. Full recordings additionally show 15-day probation notice, PARTIAL sick leave with absent stock options named, and paternity abstention.
 
-The [compiled video results](VIDEO_TEST_RESULTS.md) contain every input and response. Separate [policy-4 development results](../reports/JOURNAL_POLICY4_REGRESSION.md) include generator metadata and independent long-entry timings. The [ten original unseen results](../reports/UNSEEN_REVIEW_10.md), written with AI assistance, were run once without tuning at that stage: U6/U10 retained screening misses. Those historical cases remain unchanged. Their later policy-5 reruns are explicitly seen development regressions, not re-recorded unseen successes.
+The [compiled recording results](VIDEO_TEST_RESULTS.md) separate full policy-5 overview responses from unchanged policy-4 outputs. The [evidence ledger](EVIDENCE.md) separates historical, seen and fresh assessment stages. Confidence is uncalibrated; policy 5's 0.99 ceiling is presentation only and does not validate screening risk.
 
-The [raw recording report](../reports/walkthrough-recording.json) preserves requests, responses, viewport sizes and checkpoints. MP4 result/final frames were decoded for visual checks, including nonblank source-page canvases. Prior [policy-3](../reports/walkthrough-policy3-recording.json) and [policy-2](../reports/walkthrough-policy2-recording.json) raw recordings remain historical evidence.
+The [original policy-4 overview](https://github.com/tusharg007/mymanah-journal-intelligence/blob/ac6633611d6ad98570a90ad667ad748231b6d222/docs/walkthrough-short.mp4) and [original cut metadata](https://github.com/tusharg007/mymanah-journal-intelligence/blob/ac6633611d6ad98570a90ad667ad748231b6d222/reports/walkthrough-short.json) remain accessible at an immutable commit.
 
-## Reproduce
+The [full policy-4 capture](../reports/walkthrough-recording.json), [policy-3 capture](../reports/walkthrough-policy3-recording.json) and [policy-2 capture](../reports/walkthrough-policy2-recording.json) are preserved historical evidence. Actual result/final MP4 frames were decoded for visual checks; source pages are nonblank and results remain readable.
 
-Start the actual API and local models, make Playwright available to Node, then run:
+## Reproduce the Overview
+
+With the actual API and pinned models ready, Playwright available to Node and FFmpeg/libass/FFprobe installed:
 
 ```powershell
-node web/record-walkthrough.cjs
-.venv\Scripts\python.exe scripts/render_walkthrough.py
-.venv\Scripts\python.exe scripts/render_short_walkthrough.py
-.venv\Scripts\python.exe scripts/export_video_results.py
-.venv\Scripts\python.exe scripts/export_walkthrough_guide.py
+node web/record-walkthrough.cjs --overview
+.venv\Scripts\python.exe scripts\render_walkthrough.py --overview
+.venv\Scripts\python.exe scripts\export_video_results.py
+.venv\Scripts\python.exe scripts\export_walkthrough_guide.py
 ```
 
-The recorder uses an isolated headless Edge session and retains its synthetic upload for mobile reuse. The renderer requires FFmpeg/libass and FFprobe; decoded checkpoints are in `artifacts/walkthrough-v5/`. Avoid concurrent inference jobs during measurement.
+This uses an isolated headless Edge context and does not rewrite the full desktop/mobile recordings. Decoded checkpoints are in artifacts/walkthrough-policy5-overview/. Avoid concurrent inference jobs during measurement.

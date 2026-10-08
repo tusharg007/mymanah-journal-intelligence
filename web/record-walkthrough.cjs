@@ -6,7 +6,8 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'artifacts', 'walkthrough-v5');
+const overview = process.argv.includes('--overview');
+const output = path.join(root, 'artifacts', overview ? 'walkthrough-policy5-overview' : 'walkthrough-v5');
 const origin = process.env.APP_URL || 'http://127.0.0.1:8000';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pack = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'reviewer-test-pack.json'), 'utf8'));
@@ -36,6 +37,18 @@ function resultCaption(result, expected) {
   fs.mkdirSync(output, { recursive: true });
   const pdf = path.join(output, 'Employee_Handbook_Test.pdf');
   const python = process.platform === 'win32' ? '.venv/Scripts/python.exe' : '.venv/bin/python';
+  const snapshot = () => {
+    const result = spawnSync(path.join(root, python), ['-c',
+      'import json; from scripts.unseen_review import fingerprint; from mymanah.policy import POLICY_VERSION; print(json.dumps({"policy_version":POLICY_VERSION,"implementation_sha256":fingerprint()}))'],
+    { cwd: root, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    return JSON.parse(result.stdout);
+  };
+  const frozen = snapshot();
+  if (overview) {
+    const assessment = JSON.parse(fs.readFileSync(path.join(root, 'reports', 'unseen-hopelessness-8.json'), 'utf8'));
+    assert.deepEqual(frozen.implementation_sha256, assessment.implementation_sha256, 'Inference code must remain frozen after W1-W8');
+  }
   const fixture = spawnSync(path.join(root, python), ['-c',
     'from pathlib import Path; from pypdf import PdfWriter; from io import BytesIO; from datetime import datetime, timezone; import sys; source=Path("evals/fixtures/reviewer/Employee_Handbook_Test.pdf"); writer=PdfWriter(clone_from=BytesIO(source.read_bytes())); writer.add_metadata({"/CreationDate": datetime.now(timezone.utc).isoformat()}); writer.write(sys.argv[1])', pdf],
   { cwd: root, encoding: 'utf8' });
@@ -45,7 +58,7 @@ function resultCaption(result, expected) {
   const reports = [];
   let uploadedId;
   try {
-    for (const [name, width, height] of [['desktop', 1440, 960], ['mobile', 390, 844]]) {
+    for (const [name, width, height] of (overview ? [['desktop', 1440, 960]] : [['desktop', 1440, 960], ['mobile', 390, 844]])) {
       const context = await browser.newContext({ viewport: { width, height },
         recordVideo: { dir: output, size: { width, height } } });
       const page = await context.newPage();
@@ -116,11 +129,12 @@ function resultCaption(result, expected) {
       }
 
       try {
-        chapter('Start', 'MyManah | AI-assisted self-test inputs\nActual local inference; policy version 4.');
+        chapter('Start', `MyManah | AI-assisted self-test inputs\nActual local inference; ${frozen.policy_version}.`);
         await page.goto(origin, { waitUntil: 'networkidle' });
         await page.getByText('Models ready', { exact: true }).waitFor();
         await pause(3500);
-        const selected = name === 'desktop' ? scenarios : scenarios.filter(([id]) => ['J2', 'J5', 'J7', 'J1', 'J9'].includes(id));
+        const selected = overview ? scenarios.filter(([id]) => ['J1', 'J2'].includes(id))
+          : name === 'desktop' ? scenarios : scenarios.filter(([id]) => ['J2', 'J5', 'J7', 'J1', 'J9'].includes(id));
         for (const [id, title] of selected) {
           const expected = id === 'long01' ? { Input: fs.readFileSync(path.join(root, 'evals', 'long-journal-development.txt'), 'utf8'),
             Sentiment: 'positive', Emotion: 'happy', Risk: 'LOW', Mood: 'not prescribed' }
@@ -175,9 +189,11 @@ function resultCaption(result, expected) {
         await frame('.pdf-preview', 'Uploaded handbook - page 1',
           'The supplied handbook has three pages.\nInspect the original document before asking.', 7000);
         await ask(questions[0]);
-        await ask(questions[1]);
-        await ask(questions[2]);
-        await ask(questions[3]);
+        if (!overview) {
+          await ask(questions[1]);
+          await ask(questions[2]);
+          await ask(questions[3]);
+        }
 
         chapter('Question outside the document', 'Ask for information the PDF does not contain.');
         const unknownText = 'What is the stock option vesting schedule?';
@@ -191,12 +207,14 @@ function resultCaption(result, expected) {
         assert.deepEqual(unsupported.citations, []);
         await page.locator('.answer-status').filter({ hasText: 'INSUFFICIENT EVIDENCE' }).waitFor();
         await frame('.answer', 'Completed unsupported-question result',
-          'INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations.', 16000);
+          overview ? 'INSUFFICIENT EVIDENCE | No unsupported claim or citations.\nScreening misses W2/W3 remain disclosed in SUBMISSION.md.'
+            : 'INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations.', 16000);
+        if (overview && seconds() < 124.2) await pause((124.2 - seconds()) * 1000);
         assert.equal(await page.locator('.activity').count(), 0);
         assert.equal(await page.locator('.error').count(), 0);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
         assert.deepEqual(errors, []);
-        reports.push({ name, viewport: { width, height }, journals, upload,
+        reports.push({ name, ...frozen, viewport: { width, height }, journals, upload,
           documentId: uploadedId, responses, unsupported, chapters, evidence,
           errors, end: seconds(), recording: 'Uninterrupted real-time UI capture; every completed result is held visibly.' });
       } catch (error) {
@@ -214,5 +232,6 @@ function resultCaption(result, expected) {
   } finally {
     await browser.close();
   }
-  console.log('Both complete recordings saved, including the final rendered result.');
+  assert.deepEqual(snapshot(), frozen, 'Inference code changed during recording');
+  console.log('Complete requested recordings saved, including the final rendered result.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

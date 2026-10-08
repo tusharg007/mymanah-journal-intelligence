@@ -1,4 +1,4 @@
-"""Write walkthrough timestamps from the completed capture rather than hand-copying them."""
+"""Generate a version-aware walkthrough guide from actual recording checkpoints."""
 from __future__ import annotations
 
 import json
@@ -10,33 +10,30 @@ def stamp(seconds):
     return f"{int(seconds // 60):02}:{int(seconds % 60):02}"
 
 
+def time(run, title):
+    return next((item["visibleFrom"] for item in run["evidence"] if item["title"] == title), None)
+
+
 def main():
-    recordings = json.loads((ROOT / "reports/walkthrough-recording.json").read_text(encoding="utf8"))
-    short = json.loads((ROOT / "reports/walkthrough-short.json").read_text(encoding="utf8"))
-    desktop, mobile = recordings
-
-    def time(run, title):
-        return next((item["visibleFrom"] for item in run["evidence"] if item["title"] == title), None)
-
-    def short_time(source):
-        offset = 0
-        for segment in short["source_segments"]:
-            if segment["start"] <= source < segment["end"]:
-                return offset + source - segment["start"]
-            offset += segment["end"] - segment["start"]
-        return None
-
-    durations = [stamp(round(short["duration_seconds"])), stamp(round(desktop["videoDurationSeconds"])), stamp(round(mobile["videoDurationSeconds"]))]
+    desktop, mobile = json.loads((ROOT / "reports/walkthrough-recording.json").read_text(encoding="utf8"))
+    overview = json.loads((ROOT / "reports/walkthrough-policy5-overview.json").read_text(encoding="utf8"))[0]
+    assessment = json.loads((ROOT / "reports/unseen-hopelessness-8.json").read_text(encoding="utf8"))
+    assert overview["policy_version"] == "journal-policy-5"
+    assert overview["implementation_sha256"] == assessment["implementation_sha256"]
+    durations = [stamp(round(run["videoDurationSeconds"])) for run in (overview, desktop, mobile)]
     equal = sum(row["actual"] == next(item["actual"] for item in desktop["journals"] if item["id"] == row["id"])
                 for row in mobile["journals"])
-    lines = ["# Recorded Walkthrough", "",
-             f"Start with the [{durations[0]} short walkthrough](walkthrough-short.mp4), or watch the [{durations[1]} desktop](walkthrough-desktop.mp4) and [{durations[2]} mobile](walkthrough-mobile.mp4) recordings. All open with J1's HIGH result.", "",
-             "The videos show real local inference at normal speed, with permanently embedded captions below the untouched app viewport. Journal results are held for 14 seconds, supported answers and expanded quotes for 12 seconds, source pages for 8 seconds, and the final unsupported result for 16 seconds. Mobile scrolls each complete result into view.", "",
-             "Desktop covers eleven diverse pack scenarios, a one-fact instruction-attack entry (J17), and a complete 512-word development journal. The long entry is pasted visibly rather than typed character by character. Inputs are an AI-assisted self-test pack with predicted expectations plus development data; predictions are not ground truth.",
-             f"All 18 recorded journal requests returned HTTP 200. Of five repeated mobile inputs, {equal}/5 returned identical six-field outputs to desktop; this is observed repeatability rather than a general determinism guarantee.", "",
-             "The short cut retains complete scenes for J1, J2, fresh PDF upload, annual-leave answer with page-2 evidence, and the final unsupported question. Input entry, processing waits and result-reading time remain at normal speed. Other scenes are in the full videos. Exact segments are in the [short-cut report](../reports/walkthrough-short.json).", "",
-             "## Result Timestamps", "",
-             "| Completed result | Desktop | Mobile | Short |", "| --- | --- | --- | --- |"]
+    lines = [
+        "# Recorded Walkthrough", "",
+        f"Start with the [{durations[0]} policy-5 overview](walkthrough-short.mp4). The [{durations[1]} desktop](walkthrough-desktop.mp4) and [{durations[2]} mobile](walkthrough-mobile.mp4) recordings remain policy 4. All open with J1's HIGH result.", "",
+        "The overview is a new uninterrupted capture on frozen policy 5 after W1-W8. Its inference fingerprints match the fresh assessment. It is not an edited policy-4 clip or fresh unseen evidence. W2/W3 screening misses remain published in [the fresh report](../reports/UNSEEN_HOPELESSNESS_8.md); there was no further inference tuning.", "",
+        "All videos run at normal speed with permanently embedded captions below the untouched viewport. Journals are held for 14 seconds, supported answers/expanded quotes for 12 seconds, source pages for 8 seconds, and final abstention for at least 16 seconds. The overview's final caption discloses W2/W3.", "",
+        "The overview shows J1, J2, a fresh HTTP 201 READY upload, annual leave with page-2 evidence and uncited stock-option abstention. It adds two seen journal requests, both valid, not two independent evaluation cases. [Current raw overview](../reports/walkthrough-policy5-overview.json).", "",
+        f"Full desktop/mobile recordings contain 18 valid journal requests across 13 distinct inputs, including J17 and a complete 512-word journal. Five repeated mobile inputs returned {equal}/5 identical six-field responses; this is observed repeatability, not a general determinism guarantee. Inputs are AI-assisted predicted-expectation fixtures and development data, not clinical ground truth.", "",
+        "## Result Timestamps", "",
+        "| Completed Result | Desktop (Policy 4) | Mobile (Policy 4) | Overview (Policy 5) |",
+        "| --- | --- | --- | --- |",
+    ]
     titles = [(row["id"] + " - completed analysis", row["id"] + ": " + row["title"]) for row in desktop["journals"]]
     titles += [("PDF ready", "Fresh PDF READY"), ("Completed answer - page 2", "Annual leave, page-2 quote"),
                ("Original PDF - page 2", "Original page 2"), ("Completed answer - page 3", "Probation notice, page-3 quote"),
@@ -44,20 +41,24 @@ def main():
                ("Completed paternity-leave abstention", "Absent paternity leave: abstention"),
                ("Completed unsupported-question result", "Stock-option vesting: abstention")]
     for title, label in titles:
-        at = time(desktop, title)
-        values = [at, time(mobile, title), short_time(at)]
+        values = [time(run, title) for run in (desktop, mobile, overview)]
         lines.append(f"| {label} | " + " | ".join(stamp(value) if value is not None else "-" for value in values) + " |")
-    lines += ["", "Times are approximate and are derived from the actual capture report.", "",
+    lines += ["", "Times are approximate, derived from actual capture checkpoints.", "",
               "## Evidence and Limits", "",
-              "Both viewports use the supplied three-page handbook. Desktop requires a fresh HTTP 201 READY upload; mobile reuses that index. The [source PDF](walkthrough-source.pdf) preserves supplied page content with refreshed creation metadata. Answers show annual leave (24 days, page 2), probation notice (15 days, page 3), a verified partial sick-leave answer with the missing stock-option topic named, and uncited paternity/vesting abstentions.", "",
-              "Current summaries come from the real Qwen3 4B generator with evidence verification; a verified extractive fallback is available after two failures. One-fact entries receive non-repeating scope text. Confidence uses the selected emotion decision score or winning sentiment confidence for a consistency override. It does not establish risk correctness.", "",
-              "The [compiled video results](VIDEO_TEST_RESULTS.md) contain every input and response. Separate [current development results](../reports/JOURNAL_POLICY4_REGRESSION.md) include generator metadata and independent long-entry timings. The [ten unseen results](../reports/UNSEEN_REVIEW_10.md) were run once without tuning: U6/U10 retained screening misses. Those cases are reported separately and are not re-recorded as development successes.", "",
-              "The [raw recording report](../reports/walkthrough-recording.json) preserves requests, responses, viewport sizes and checkpoints. MP4 result/final frames were decoded for visual checks, including nonblank source-page canvases. Prior [policy-3](../reports/walkthrough-policy3-recording.json) and [policy-2](../reports/walkthrough-policy2-recording.json) raw recordings remain historical evidence.", "",
-              "## Reproduce", "", "Start the actual API and local models, make Playwright available to Node, then run:", "",
-              "```powershell", "node web/record-walkthrough.cjs", ".venv\\Scripts\\python.exe scripts/render_walkthrough.py",
-              ".venv\\Scripts\\python.exe scripts/render_short_walkthrough.py", ".venv\\Scripts\\python.exe scripts/export_video_results.py",
-              ".venv\\Scripts\\python.exe scripts/export_walkthrough_guide.py", "```", "",
-              "The recorder uses an isolated headless Edge session and retains its synthetic upload for mobile reuse. The renderer requires FFmpeg/libass and FFprobe; decoded checkpoints are in `artifacts/walkthrough-v5/`. Avoid concurrent inference jobs during measurement.", ""]
+              "All recordings use the supplied three-page handbook. Desktop and the new overview each require a fresh HTTP 201 READY upload; mobile reuses the old index. The [source PDF](walkthrough-source.pdf) preserves the page content; fresh uploads have refreshed creation metadata.", "",
+              "The overview shows 24 annual-leave days and the 5-day carry-over/31 March condition with page-2 citations. Full recordings additionally show 15-day probation notice, PARTIAL sick leave with absent stock options named, and paternity abstention.", "",
+              "The [compiled recording results](VIDEO_TEST_RESULTS.md) separate full policy-5 overview responses from unchanged policy-4 outputs. The [evidence ledger](EVIDENCE.md) separates historical, seen and fresh assessment stages. Confidence is uncalibrated; policy 5's 0.99 ceiling is presentation only and does not validate screening risk.", "",
+              "The [original policy-4 overview](https://github.com/tusharg007/mymanah-journal-intelligence/blob/ac6633611d6ad98570a90ad667ad748231b6d222/docs/walkthrough-short.mp4) and [original cut metadata](https://github.com/tusharg007/mymanah-journal-intelligence/blob/ac6633611d6ad98570a90ad667ad748231b6d222/reports/walkthrough-short.json) remain accessible at an immutable commit.", "",
+              "The [full policy-4 capture](../reports/walkthrough-recording.json), [policy-3 capture](../reports/walkthrough-policy3-recording.json) and [policy-2 capture](../reports/walkthrough-policy2-recording.json) are preserved historical evidence. Actual result/final MP4 frames were decoded for visual checks; source pages are nonblank and results remain readable.", "",
+              "## Reproduce the Overview", "",
+              "With the actual API and pinned models ready, Playwright available to Node and FFmpeg/libass/FFprobe installed:", ""]
+    fence = chr(96) * 3
+    lines += [fence + "powershell", "node web/record-walkthrough.cjs --overview",
+              r".venv\Scripts\python.exe scripts\render_walkthrough.py --overview",
+              r".venv\Scripts\python.exe scripts\export_video_results.py",
+              r".venv\Scripts\python.exe scripts\export_walkthrough_guide.py",
+              fence, "",
+              "This uses an isolated headless Edge context and does not rewrite the full desktop/mobile recordings. Decoded checkpoints are in artifacts/walkthrough-policy5-overview/. Avoid concurrent inference jobs during measurement.", ""]
     (ROOT / "docs/WALKTHROUGH.md").write_text("\n".join(lines), encoding="utf8")
 
 

@@ -174,8 +174,14 @@ rechecks U6/U10 and the U7-U9 controls after diagnosing all seven safety scores.
 They are now seen development inputs, not fresh generalization evidence.
 The original unseen and frozen held-out reports remain unchanged. All timing
 observations above are from the tested GPU laptop; CPU-only performance can be
-slower, and long journals can exhaust the 60-second deadline. Preserved videos
-record policy 4, before the final confidence cap and risk refinement.
+slower, and long journals can exhaust the 60-second deadline. Full desktop/mobile
+videos preserve policy 4; the re-recorded overview measures frozen policy 5.
+
+The fresh [W1-W8 assessment](reports/UNSEEN_HOPELESSNESS_8.md) was run once with
+no tuning afterward: eight valid responses, six matching supplied expectations.
+W2 returned MEDIUM and W3 LOW instead of HIGH; W4/W5/W7 produced no false HIGH.
+Inference code is frozen, and these screening misses remain disclosed. The
+[evidence ledger](docs/EVIDENCE.md) separates historical, seen and fresh results.
 
 All seven [current targeted document checks](reports/POLICY4_CONDITION_REGRESSION.md)
 matched their predicted status/fact/page checks after a fresh 201 READY upload in

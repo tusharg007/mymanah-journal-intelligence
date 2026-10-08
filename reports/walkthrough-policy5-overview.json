@@ -1,0 +1,244 @@
+[
+  {
+    "name": "desktop",
+    "policy_version": "journal-policy-5",
+    "implementation_sha256": {
+      "mymanah\\__init__.py": "bbc8fc462acd27d0cb92c64418a13cdf96566800a4f760f8dee252663d0f0679",
+      "mymanah\\admission.py": "7d0635c3c961139897e80212e2adc975d18a94296738e383944c8f8a2f574ba6",
+      "mymanah\\api.py": "f83f29580f94abac3a2480b9cfb9f910476705228c7fd9fbe19265eb50325c53",
+      "mymanah\\body_limit.py": "4094dbb0e402415fb727c0323607898b017fe00fcf7d0fd7d33fceccf03813b7",
+      "mymanah\\config.py": "c4e59ec3baa346347aaefd88e6a2a1530222b2195fc920eaac89905684f81889",
+      "mymanah\\documents.py": "c35f6c08d1ae956640dd7aa2e56ed7e891a30bb94ec9fde85626826c77d6167d",
+      "mymanah\\errors.py": "89ed53b670e75b628e4adef5733aa11898388d49b2152edb99aedddb3758a17e",
+      "mymanah\\journal.py": "208b4a7a8ae9614e96ccac5080291111290f8542b9d496b679e446230b1d2c4a",
+      "mymanah\\models.py": "6d9fe0656b4a61bfea1775049ded1c5710afdc37400fbd9c42cf2ac7a15aecd1",
+      "mymanah\\parse_pdf.py": "15080dce0aef6df50015b7dbaa5db62c93e415068e084c3b15bc58f1945e3b6a",
+      "mymanah\\policy.py": "90d97e137ceeedbd67c78f081bec935908e047f90f6d06c2cd660a3d433e45da",
+      "mymanah\\rag.py": "c65563822d39c0d41c1d713a0460241a6e2dba2be8519770c93c5878860e5784",
+      "mymanah\\schemas.py": "199d2b65faadc5bf30b449e7a120f4734cdd0ce049c68d81752e44edec8d4ee4",
+      "mymanah\\storage.py": "2caa3eabc6f4e94c59d0bbc2a3f2d3bfa01143e021c9bab100dc391b9a944d97",
+      "mymanah\\text.py": "3692834be947659176f9fee71f0edde4d362e9c54376e40290fe810ad0c06dd3"
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "journals": [
+      {
+        "id": "J1",
+        "title": "Prolonged distress",
+        "input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+        "expected": {
+          "#": "J1 \u2605",
+          "Input": "I haven\u2019t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up.",
+          "Sentiment": "negative",
+          "Emotion": "stress",
+          "Mood": "1\u20134",
+          "Risk": "HIGH",
+          "Notes": "The assignment\u2019s own example. The README says the policy treats prolonged distress plus giving-up language as HIGH. confidence must be a number from 0 to 1 (uncalibrated).",
+          "id": "J1",
+          "hard": true,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 2.393,
+        "actual": {
+          "sentiment": "negative",
+          "emotion": "stress",
+          "moodScore": 2,
+          "summary": "The writer hasn't been sleeping properly for the last few weeks. The writer feels stressed about work and sometimes feels like giving up.",
+          "crisisRisk": "HIGH",
+          "confidence": 0.839
+        }
+      },
+      {
+        "id": "J2",
+        "title": "Positive achievement",
+        "input": "I finished my project today and feel pleased with my progress.",
+        "expected": {
+          "#": "J2",
+          "Input": "I finished my project today and feel pleased with my progress.",
+          "Sentiment": "positive",
+          "Emotion": "happy",
+          "Mood": "7\u201310",
+          "Risk": "LOW",
+          "Notes": "The README lists a positive completion entry misread as neutral emotion. If emotion is neutral, log it as a known miss; sentiment must still be positive.",
+          "id": "J2",
+          "hard": false,
+          "borderline": false
+        },
+        "statusCode": 200,
+        "journalSeconds": 1.788,
+        "actual": {
+          "sentiment": "positive",
+          "emotion": "happy",
+          "moodScore": 9,
+          "summary": "The writer finished their project today. The writer feels pleased with their progress.",
+          "crisisRisk": "LOW",
+          "confidence": 0.9773
+        }
+      }
+    ],
+    "upload": {
+      "document": {
+        "id": "21e6f6c396234dd8a41c76b1ba93a98e",
+        "filename": "Employee_Handbook_Test.pdf",
+        "state": "READY",
+        "pages": 3,
+        "chunks": 3,
+        "created": 1791501094.6749234,
+        "error": null
+      },
+      "status": "READY"
+    },
+    "documentId": "21e6f6c396234dd8a41c76b1ba93a98e",
+    "responses": [
+      {
+        "question": "What is the annual leave allowance?",
+        "seconds": 5.73,
+        "result": {
+          "status": "ANSWERED",
+          "answer": "The annual leave allowance is 24 days of paid annual leave per calendar year. [1]\nUp to 5 unused days may be carried into the next year and must be used by 31 March. [2]",
+          "citations": [
+            {
+              "document_id": "21e6f6c396234dd8a41c76b1ba93a98e",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 2,
+              "chunk_id": "cd43b11d6bf54102907a37b0c3b74c5f_1",
+              "quote": "Full-time employees receive 24 days of paid annual leave per calendar\nyear."
+            },
+            {
+              "document_id": "21e6f6c396234dd8a41c76b1ba93a98e",
+              "filename": "Employee_Handbook_Test.pdf",
+              "page": 2,
+              "chunk_id": "cd43b11d6bf54102907a37b0c3b74c5f_1",
+              "quote": "Up to 5 unused days may be carried into the next year and must be used by\n31 March."
+            }
+          ]
+        }
+      }
+    ],
+    "unsupported": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+      "citations": []
+    },
+    "chapters": [
+      {
+        "start": 0,
+        "title": "Start",
+        "caption": "MyManah | AI-assisted self-test inputs\nActual local inference; journal-policy-5."
+      },
+      {
+        "start": 4.568,
+        "title": "J1 - Prolonged distress",
+        "caption": "J1 | Prolonged distress\nAI-assisted input with predicted expectations."
+      },
+      {
+        "start": 15.214,
+        "title": "J1 - completed analysis",
+        "caption": "Returned: negative / stress / HIGH.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 29.282,
+        "title": "J2 - Positive achievement",
+        "caption": "J2 | Positive achievement\nAI-assisted input with predicted expectations."
+      },
+      {
+        "start": 36.647,
+        "title": "J2 - completed analysis",
+        "caption": "Returned: positive / happy / LOW.\nRead the complete analysis and summary."
+      },
+      {
+        "start": 50.695,
+        "title": "Document upload",
+        "caption": "Upload the supplied three-page handbook.\nWait for READY before asking a question."
+      },
+      {
+        "start": 55.912,
+        "title": "PDF ready",
+        "caption": "READY confirms extraction and indexing completed.\nQuestions can now use this document."
+      },
+      {
+        "start": 61.826,
+        "title": "Uploaded handbook - page 1",
+        "caption": "The supplied handbook has three pages.\nInspect the original document before asking."
+      },
+      {
+        "start": 68.902,
+        "title": "Ask: What is the annual leave allowance?",
+        "caption": "A real request runs against the selected PDF."
+      },
+      {
+        "start": 78.941,
+        "title": "Completed answer - page 2",
+        "caption": "Read the answer and expanded source quote.\nCitation points to page 2 of the uploaded PDF."
+      },
+      {
+        "start": 91.846,
+        "title": "Original PDF - page 2",
+        "caption": "Compare the answer with the original PDF.\nThe cited page is rendered below."
+      },
+      {
+        "start": 99.924,
+        "title": "Question outside the document",
+        "caption": "Ask for information the PDF does not contain."
+      },
+      {
+        "start": 104.64,
+        "title": "Completed unsupported-question result",
+        "caption": "INSUFFICIENT EVIDENCE | No unsupported claim or citations.\nScreening misses W2/W3 remain disclosed in SUBMISSION.md."
+      }
+    ],
+    "evidence": [
+      {
+        "title": "J1 - completed analysis",
+        "visibleFrom": 15.214,
+        "inspectVideoAt": 22.214,
+        "holdSeconds": 14
+      },
+      {
+        "title": "J2 - completed analysis",
+        "visibleFrom": 36.647,
+        "inspectVideoAt": 43.647,
+        "holdSeconds": 14
+      },
+      {
+        "title": "PDF ready",
+        "visibleFrom": 55.912,
+        "inspectVideoAt": 58.412,
+        "holdSeconds": 5
+      },
+      {
+        "title": "Uploaded handbook - page 1",
+        "visibleFrom": 61.826,
+        "inspectVideoAt": 65.326,
+        "holdSeconds": 7
+      },
+      {
+        "title": "Completed answer - page 2",
+        "visibleFrom": 78.941,
+        "inspectVideoAt": 84.941,
+        "holdSeconds": 12
+      },
+      {
+        "title": "Original PDF - page 2",
+        "visibleFrom": 91.847,
+        "inspectVideoAt": 95.847,
+        "holdSeconds": 8
+      },
+      {
+        "title": "Completed unsupported-question result",
+        "visibleFrom": 104.64,
+        "inspectVideoAt": 112.64,
+        "holdSeconds": 16
+      }
+    ],
+    "errors": [],
+    "end": 124.219,
+    "recording": "Uninterrupted real-time UI capture; every completed result is held visibly.",
+    "video": "docs/walkthrough-short.mp4",
+    "videoDurationSeconds": 124.68,
+    "captionPlacement": "Separate band below the original app viewport; no results covered"
+  }
+]

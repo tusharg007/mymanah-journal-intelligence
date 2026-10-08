@@ -1,9 +1,144 @@
 # Video Test Results
 
-Measured version: policy 4 on the tested GPU laptop. These actual recorded responses
-precede policy 5's 0.99 confidence ceiling and hopelessness correction. They are
-preserved verbatim; [final seen-input regressions](../reports/JOURNAL_POLICY5_REGRESSION.md)
-are separate and do not replace the original unseen assessment.
+Measured versions: policy-5 overview; preserved policy-4 desktop/mobile. Historical responses are unchanged.
+
+## Policy-5 Overview
+
+Two seen journal requests (J1/J2), fresh HTTP 201 READY, one ANSWERED PDF question and one uncited abstention. These are repeat development inputs, not new independent cases.
+Source fingerprints match the frozen W1-W8 assessment. [Actual capture metadata](../reports/walkthrough-policy5-overview.json). [Fresh assessment](../reports/UNSEEN_HOPELESSNESS_8.md) retains W2/W3 screening misses. Confidence is uncalibrated and capped at 0.99 for presentation only.
+
+### Overview J1
+
+Workflow: `POST /analyze-journal`.
+
+Input:
+```json
+{
+  "text": "I haven’t been sleeping properly for the last few weeks. I feel stressed about work and sometimes feel like giving up."
+}
+```
+
+Predicted expectations:
+```json
+{
+  "Sentiment": "negative",
+  "Emotion": "stress",
+  "Mood": "1\u20134",
+  "Risk": "HIGH"
+}
+```
+
+HTTP 200, 2.393 s. Actual full response:
+```json
+{
+  "sentiment": "negative",
+  "emotion": "stress",
+  "moodScore": 2,
+  "summary": "The writer hasn't been sleeping properly for the last few weeks. The writer feels stressed about work and sometimes feels like giving up.",
+  "crisisRisk": "HIGH",
+  "confidence": 0.839
+}
+```
+
+### Overview J2
+
+Workflow: `POST /analyze-journal`.
+
+Input:
+```json
+{
+  "text": "I finished my project today and feel pleased with my progress."
+}
+```
+
+Predicted expectations:
+```json
+{
+  "Sentiment": "positive",
+  "Emotion": "happy",
+  "Mood": "7\u201310",
+  "Risk": "LOW"
+}
+```
+
+HTTP 200, 1.788 s. Actual full response:
+```json
+{
+  "sentiment": "positive",
+  "emotion": "happy",
+  "moodScore": 9,
+  "summary": "The writer finished their project today. The writer feels pleased with their progress.",
+  "crisisRisk": "LOW",
+  "confidence": 0.9773
+}
+```
+
+### Overview Fresh Upload
+
+Workflow: `POST /documents`, fresh handbook PDF. HTTP 201, exact response:
+```json
+{
+  "document": {
+    "id": "21e6f6c396234dd8a41c76b1ba93a98e",
+    "filename": "Employee_Handbook_Test.pdf",
+    "state": "READY",
+    "pages": 3,
+    "chunks": 3,
+    "created": 1791501094.6749234,
+    "error": null
+  },
+  "status": "READY"
+}
+```
+
+### Overview Supported Question
+
+Workflow: `POST /documents/{id}/questions`.
+
+Input:
+```json
+{
+  "question": "What is the annual leave allowance?"
+}
+```
+
+HTTP 200, 5.730 s. Full response, including every citation:
+```json
+{
+  "status": "ANSWERED",
+  "answer": "The annual leave allowance is 24 days of paid annual leave per calendar year. [1]\nUp to 5 unused days may be carried into the next year and must be used by 31 March. [2]",
+  "citations": [
+    {
+      "document_id": "21e6f6c396234dd8a41c76b1ba93a98e",
+      "filename": "Employee_Handbook_Test.pdf",
+      "page": 2,
+      "chunk_id": "cd43b11d6bf54102907a37b0c3b74c5f_1",
+      "quote": "Full-time employees receive 24 days of paid annual leave per calendar\nyear."
+    },
+    {
+      "document_id": "21e6f6c396234dd8a41c76b1ba93a98e",
+      "filename": "Employee_Handbook_Test.pdf",
+      "page": 2,
+      "chunk_id": "cd43b11d6bf54102907a37b0c3b74c5f_1",
+      "quote": "Up to 5 unused days may be carried into the next year and must be used by\n31 March."
+    }
+  ]
+}
+```
+
+### Overview Unsupported Question
+
+Input: `{"question":"What is the stock option vesting schedule?"}`.
+HTTP 200, full response:
+```json
+{
+  "status": "INSUFFICIENT_EVIDENCE",
+  "answer": "The uploaded document does not provide sufficient evidence to answer this question.",
+  "citations": []
+}
+```
+
+## Preserved Policy-4 Full Recordings
 
 This report compiles the actual model and document responses visible in the
 [desktop walkthrough](walkthrough-desktop.mp4) and [mobile walkthrough](walkthrough-mobile.mp4).

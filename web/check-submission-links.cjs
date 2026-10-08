@@ -10,7 +10,11 @@ const { execFileSync } = require('node:child_process');
   // Fresh, non-persistent context: no user profile, credentials or saved browsing data.
   const context = await browser.newContext({ viewport: { width: 1440, height: 960 } });
   const page = await context.newPage();
-  const output = path.join(root, 'reports', 'submission-link-check.json');
+  const outputIndex = process.argv.indexOf('--output');
+  if (outputIndex !== -1 && !process.argv[outputIndex + 1]) throw new Error('--output requires a project-relative path');
+  const output = path.resolve(root, outputIndex === -1 ? 'reports/submission-link-check.json' : process.argv[outputIndex + 1]);
+  if (!output.startsWith(root + path.sep)) throw new Error('Link-check output must stay inside the project');
+  fs.mkdirSync(path.dirname(output), { recursive: true });
   let report = { context: 'Fresh anonymous non-persistent Edge context; no imported cookies or credentials',
     checked_at: new Date().toISOString(), checked_commit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     repository: base, documents: [], links: [] };
