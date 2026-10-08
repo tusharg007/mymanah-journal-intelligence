@@ -11,7 +11,7 @@ from pathlib import Path
 import httpx
 
 from mymanah.config import ROOT
-from mymanah.policy import POLICY_VERSION
+from mymanah.policy import EMOTIONS, POLICY_VERSION
 from mymanah.schemas import JournalResponse
 from mymanah.text import numeric_supported, sentence_count
 from scripts.reviewer_journals import allowed
@@ -20,7 +20,8 @@ from scripts.reviewer_journals import allowed
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--cases", nargs="*")
-    parser.add_argument("--output", default="reports/journal-policy4-regression.json")
+    parser.add_argument("--seen-cases", nargs="*", default=[], help="Previously measured inputs; never an unseen evaluation")
+    parser.add_argument("--output", default="reports/journal-policy5-regression.json")
     args = parser.parse_args()
     pack = json.loads((ROOT / "evals/reviewer-test-pack.json").read_text(encoding="utf8"))
     original = json.loads((ROOT / "reports/reviewer-journals.json").read_text(encoding="utf8"))
@@ -37,8 +38,19 @@ def main():
     if args.cases:
         lookup = {row["id"]: row for row in rows}
         rows = [lookup[key] for key in args.cases]
+    seen = json.loads((ROOT / "evals/unseen-review-10.json").read_text(encoding="utf8"))
+    for key in args.seen_cases:
+        case = next(row for row in seen if row["id"] == key)
+        rows.append({"id": key, "text": case["text"], "expected": {
+            display: "/".join(case["expected"].get(field, vocabulary))
+            for display, field, vocabulary in (
+                ("Sentiment", "sentiment", ["positive", "neutral", "negative"]),
+                ("Emotion", "emotion", list(EMOTIONS)),
+                ("Risk", "crisisRisk", ["LOW", "MEDIUM", "HIGH"]))}})
     report = {"policy_version": POLICY_VERSION, "scope": "Post-change development regression; AI-assisted predicted expectations, not ground truth; mood guesses reported separately", "cases": []}
     output = ROOT / Path(args.output)
+    if output.exists():
+        raise FileExistsError("Use a new report filename; preserve previously measured results")
     with httpx.Client(base_url="http://127.0.0.1:8000", timeout=75, trust_env=False) as client:
         assert client.get("/health/ready").status_code == 200
         for case in rows:

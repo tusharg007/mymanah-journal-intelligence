@@ -1,5 +1,10 @@
 # Video Test Results
 
+Measured version: policy 4 on the tested GPU laptop. These actual recorded responses
+precede policy 5's 0.99 confidence ceiling and hopelessness correction. They are
+preserved verbatim; [final seen-input regressions](../reports/JOURNAL_POLICY5_REGRESSION.md)
+are separate and do not replace the original unseen assessment.
+
 This report compiles the actual model and document responses visible in the
 [desktop walkthrough](walkthrough-desktop.mp4) and [mobile walkthrough](walkthrough-mobile.mp4).
 Inputs come from an AI-assisted self-test pack with predicted expectations supplied

@@ -1,0 +1,45 @@
+{
+  "policy_version": "journal-policy-5",
+  "scope": "Post-change development regression; AI-assisted predicted expectations, not ground truth; mood guesses reported separately",
+  "cases": [
+    {
+      "id": "J12",
+      "text": "I am not sad at all today. Honestly I feel great and everything is going well.",
+      "expected": {
+        "Sentiment": "positive",
+        "Emotion": "happy",
+        "Mood": "8–10",
+        "Risk": "LOW"
+      },
+      "input_sha256": "55e968e382c50c2e11792290b292f62bab087ef585952dc6f07e57643b6eb935",
+      "http_status": 200,
+      "seconds": 3.6861168,
+      "elapsed_ns": 3686116800,
+      "actual": {
+        "sentiment": "positive",
+        "emotion": "happy",
+        "moodScore": 9,
+        "summary": "The writer reports no sadness today. The writer feels great and everything is going well.",
+        "crisisRisk": "LOW",
+        "confidence": 0.9736
+      },
+      "inference_observations": [
+        "2026-10-09 04:07:12,761 INFO mymanah.models Local generation completed schema=SummaryDraft prompt_tokens=586 output_tokens=57 duration_ns=1573417200",
+        "2026-10-09 04:07:14,420 INFO mymanah.models Local generation completed schema=SummaryDraft prompt_tokens=627 output_tokens=59 duration_ns=1232485700",
+        "2026-10-09 04:07:14,817 INFO mymanah.journal Journal summary path=generated attempts=2",
+        "2026-10-09 04:07:14,817 INFO mymanah.journal Journal confidence source=sentiment-consistency"
+      ],
+      "label_checks": {
+        "sentiment": true,
+        "emotion": true,
+        "crisisRisk": true
+      },
+      "summary_checks": {
+        "sentence_count": true,
+        "numbers_supported": true
+      },
+      "outcome": "LABELS_MATCH_PREDICTIONS",
+      "mood_within_predicted_range": true
+    }
+  ]
+}

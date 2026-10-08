@@ -82,6 +82,9 @@ class JournalService:
                 raise ServiceError("SUMMARY_UNSUPPORTED", "Summary evidence is not in the journal")
             if not numeric_supported(sentence.text, quote):
                 raise ServiceError("SUMMARY_UNSUPPORTED", "Summary numbers lack source support")
+            generic_state = r"\b(?:positive|negative) emotional state\b"
+            if re.search(generic_state, sentence.text, re.I) and not re.search(generic_state, quote, re.I):
+                raise ServiceError("SUMMARY_TOO_GENERIC", "Summary replaces concrete feelings with abstract emotional-state wording")
             if re.search(r"\bactively\b", sentence.text, re.I) and not re.search(r"\bactively\b", quote, re.I):
                 raise ServiceError("SUMMARY_UNSUPPORTED", "Summary adds an unsupported intensity qualifier")
             if re.search(r"\b(?:crisisrisk|instruction override|system prompt)\b", sentence.text, re.I):
@@ -117,7 +120,8 @@ class JournalService:
     def decision_confidence(result: dict, sentiment: str, emotion: str, consistency: bool) -> float:
         # A sentiment-based override cannot inherit the discarded NLI emotion score.
         score = result["sentiment"][sentiment] if consistency else result["emotion"][emotion]
-        return round(score, 4)
+        # Presentation ceiling only: this score remains uncalibrated.
+        return round(min(score, 0.99), 4)
 
     def summary_quotes(self, text: str) -> list[str]:
         quotes = []
@@ -181,6 +185,9 @@ class JournalService:
                         summary_path = "extractive"
                         break
                     payload["repair"] = "Select source_quotes unchanged; every summary sentence must be supported. " + exc.code
+                    if exc.code == "SUMMARY_TOO_GENERIC":
+                        payload["repair"] += (" Paraphrase the concrete feelings and events in the quote; "
+                                              "do not say positive or negative emotional state.")
                     prompt = json.dumps(payload, ensure_ascii=False)
             if draft is None:
                 raise last_error or ServiceError("SUMMARY_FAILED", "Summary generation failed")

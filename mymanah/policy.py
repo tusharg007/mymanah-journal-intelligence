@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import re
 
-POLICY_VERSION = "journal-policy-4"
+POLICY_VERSION = "journal-policy-5"
 EMOTIONS = {
     "happy": "The writer feels good, pleased, joyful, grateful or happy about their experience.",
     "sad": "The writer currently feels sad, lonely, sorrowful or low in spirits.",
@@ -73,7 +73,11 @@ def explicit_current_danger(text: str) -> bool:
 def crisis_priority(text: str, signals: list[float], distress: list[float]) -> str:
     if explicit_current_danger(text) or max(signals[:2]) >= 0.80:
         return "HIGH"
-    if (current_giving_up(text) or signals[3] >= 0.65) and max(distress) >= 0.65:
+    hopeless = signals[3] >= 0.65
+    nli_giving_up = hopeless and (
+        distress[0] >= 0.50 or distress[1] >= 0.65 or distress[2] >= 0.65
+    )
+    if nli_giving_up or (current_giving_up(text) and max(distress) >= 0.65):
         return "HIGH"
     if max(signals) >= 0.55 or distress[0] >= 0.65 or (distress[1] >= 0.65 and distress[2] >= 0.65):
         return "MEDIUM"

@@ -126,7 +126,7 @@ On this 16 GB RAM / RTX 3050 Laptop 4 GB machine, reducing Ollama's fitting rese
 - Upload timeout/cancellation invalidates its publication token. A duplicate waiter's timeout does not cancel the owner. Restart cleans unpublished indexes and interrupted uploads. Deletion makes a document unavailable before cleanup.
 - Journal contents are transient. PDFs persist until deletion. No raw journal, question, PDF text, prompts, generated answers or keys in application logs. Data/model directories and secrets are excluded from Git.
 
-`confidence` reports the normalized score of the selected emotion. When winning positive sentiment resolves a neutral-emotion prediction to happy, it reports that sentiment score instead of the discarded happy NLI score. It is an uncalibrated decision score and does not score sentiment, summary and risk jointly. Policy version 4 retains the current-personal-giving-up/hopelessness plus supported-distress HIGH rule. Mood reserves 1-2 for HIGH entries and uses a gentler mapping for ordinary negative or mixed feelings. LOW/MEDIUM/HIGH are assignment screening priorities, not clinical risk prediction.
+`confidence` reports the normalized score of the selected emotion. When winning positive sentiment resolves a neutral-emotion prediction to happy, it reports that sentiment score instead of the discarded happy NLI score. Policy 5 caps either score at 0.99 for presentation; this is not calibration. It does not score sentiment, summary and risk jointly. Supported hopelessness (NLI at least 0.65) plus overwhelm (at least 0.50), persistence or impairment (either at least 0.65) gives HIGH, alongside the existing lexical giving-up plus supported-distress and explicit-danger rules. Mood reserves 1-2 for HIGH entries and uses a gentler mapping for ordinary negative or mixed feelings. LOW/MEDIUM/HIGH are assignment screening priorities, not clinical risk prediction.
 
 Starting hard deadlines: short journal 30 seconds, larger journal 60, question 45, synchronous upload 60. Queue time counts toward the deadline; expired waiters do not start inference. Classifier deadlines are checked between length-bounded batches, not by interrupting an active Torch forward pass. The warm short-entry **target** is 10-15 seconds, including verification. Long journals use seven risk/distress pairs per 160-token window; emotion is scored from the exact excerpts supporting the verified summary, while sentiment and risk cover the full entry. CPU NLI explicitly uses float32: retaining the checkpoint's float16 dtype was slow on the tested CPU. A dynamic-int8 experiment was rejected after real support checks failed. Downloaded weights and pins are unchanged.
 
@@ -151,7 +151,7 @@ not production latency percentiles. The unchanged held-out measurements below
 precede this revision. Long-entry emotion can omit feelings outside the selected
 summary excerpts; confidence and mood remain uncalibrated.
 
-Current policy-4 [development results](reports/JOURNAL_POLICY4_REGRESSION.md)
+Historical policy-4 [development results](reports/JOURNAL_POLICY4_REGRESSION.md)
 returned 20/20 valid pack responses, with 19 agreeing on predicted labels (J14
 remains the emotion disagreement). J2/J12 confidence is 0.9773/0.9736. All 25
 development summaries followed the generated path, with output-token counts
@@ -160,14 +160,22 @@ retained. Short pack entries took 2.033-2.706 seconds, with measured p50/p95 of
 23.807809 seconds and the 512-word entry 20.539648 seconds. The full long-entry
 input and generated summary are published in that report.
 
-The ten unchanged [unseen entries](reports/UNSEEN_REVIEW_10.md) were run once
-without retries or subsequent tuning: 10 valid responses, eight matching every
+The ten AI-assisted [original unseen entries](reports/UNSEEN_REVIEW_10.md) were run once
+without retries or tuning at that stage, before the requested policy-5 follow-up: 10 valid responses, eight matching every
 specified label. U6 returned anger/MEDIUM instead of sad/HIGH; U10 returned MEDIUM
 instead of HIGH while excluding its injected instruction. U7/U8/U9 returned
 LOW/LOW/MEDIUM. Warm short-entry p50/p95 was 1.829/2.241 seconds (10 samples).
 These are small local observations, not production latency guarantees or
 independent clinical validation. High emotion scores can accompany incorrect
 labels and do not validate the risk policy.
+
+The [policy-5 seen regression](reports/JOURNAL_POLICY5_REGRESSION.md) separately
+rechecks U6/U10 and the U7-U9 controls after diagnosing all seven safety scores.
+They are now seen development inputs, not fresh generalization evidence.
+The original unseen and frozen held-out reports remain unchanged. All timing
+observations above are from the tested GPU laptop; CPU-only performance can be
+slower, and long journals can exhaust the 60-second deadline. Preserved videos
+record policy 4, before the final confidence cap and risk refinement.
 
 All seven [current targeted document checks](reports/POLICY4_CONDITION_REGRESSION.md)
 matched their predicted status/fact/page checks after a fresh 201 READY upload in
@@ -180,11 +188,9 @@ remain limitations.
 .venv\Scripts\python.exe -m ruff check mymanah scripts tests evals
 .venv\Scripts\python.exe -m pytest -m 'not live' -q
 .venv\Scripts\python.exe -m pytest -m live -q
-.venv\Scripts\python.exe -m scripts.journal_regression --output reports/journal-policy4-regression.json
-.venv\Scripts\python.exe -m scripts.policy_condition_regression --output reports/policy4-condition-regression.json
-.venv\Scripts\python.exe -m scripts.export_policy4_results
-.venv\Scripts\python.exe -m evals.benchmark --generator qwen4b --output reports/development-policy4-qwen4b.json --rag-output reports/rag-policy4-qwen4b.json
-.venv\Scripts\python.exe -m evals.benchmark --generator qwen1b --output reports/development-policy4-qwen1b.json --rag-output reports/rag-policy4-qwen1b.json
+.venv\Scripts\python.exe -m scripts.journal_regression --seen-cases U6 U7 U8 U9 U10 --output reports/local-journal-recheck.json
+.venv\Scripts\python.exe -m scripts.policy_condition_regression --output reports/local-document-recheck.json
+.venv\Scripts\python.exe -m scripts.export_policy5_results
 .venv\Scripts\python.exe -m scripts.offline_check
 ```
 
@@ -266,7 +272,7 @@ For NVIDIA Linux, use `docker compose -f compose.yaml -f compose.gpu.yaml up --b
 
 ## Verification Status
 
-- 109 deterministic tests pass on Windows. Two additional actual-model live tests pass separately. The previous Linux CPU Docker real-model run predates policy version 3; current Linux deterministic checks run on each push. Ruff and frontend production build are checked separately.
+- 129 deterministic tests pass on Windows after policy 5 and the summary quality check. Two additional actual-model live tests are measured separately. The previous Linux CPU Docker real-model run predates policy version 3; Linux deterministic checks run on each push via `.github/workflows/checks.yml`. Ruff and frontend production build are checked separately.
 - Desktop/mobile workflows passed with real journal analysis, PDF READY upload, immediate answer, inspected citations, nonblank PDF.js canvas, page navigation and unsupported-question abstention. Layout checks at widths 320, 390, 1440 and 1920 pixels report no page/source overflow or JavaScript errors (`reports/responsive-layout.json`). Actual recordings preserve inference waiting time.
 - Offline smoke passed with non-loopback Python sockets blocked. This is an API-process guard, not an OS firewall or instrumentation of Ollama/PDF subprocesses.
 - Quiesced backup/restore passed with preserved PDF bytes, generation and vectors, a real restored-index question, 401 for unauthenticated keyed access and 404 for another principal's document/source access.

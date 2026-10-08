@@ -2,6 +2,11 @@
 
 Start with the [02:04 short walkthrough](walkthrough-short.mp4), or watch the [08:16 desktop](walkthrough-desktop.mp4) and [04:33 mobile](walkthrough-mobile.mp4) recordings. All open with J1's HIGH result.
 
+These preserved recordings measure policy 4 on the tested GPU laptop, before
+policy 5's 0.99 confidence presentation ceiling and hopelessness threshold correction.
+Their inputs and responses have not been rewritten. The [policy-5 seen regression](../reports/JOURNAL_POLICY5_REGRESSION.md)
+documents the final changes separately; it is not new unseen evidence.
+
 The videos show real local inference at normal speed, with permanently embedded captions below the untouched app viewport. Journal results are held for 14 seconds, supported answers and expanded quotes for 12 seconds, source pages for 8 seconds, and the final unsupported result for 16 seconds. Mobile scrolls each complete result into view.
 
 Desktop covers eleven diverse pack scenarios, a one-fact instruction-attack entry (J17), and a complete 512-word development journal. The long entry is pasted visibly rather than typed character by character. Inputs are an AI-assisted self-test pack with predicted expectations plus development data; predictions are not ground truth.
@@ -43,7 +48,7 @@ Both viewports use the supplied three-page handbook. Desktop requires a fresh HT
 
 Current summaries come from the real Qwen3 4B generator with evidence verification; a verified extractive fallback is available after two failures. One-fact entries receive non-repeating scope text. Confidence uses the selected emotion decision score or winning sentiment confidence for a consistency override. It does not establish risk correctness.
 
-The [compiled video results](VIDEO_TEST_RESULTS.md) contain every input and response. Separate [current development results](../reports/JOURNAL_POLICY4_REGRESSION.md) include generator metadata and independent long-entry timings. The [ten unseen results](../reports/UNSEEN_REVIEW_10.md) were run once without tuning: U6/U10 retained screening misses. Those cases are reported separately and are not re-recorded as development successes.
+The [compiled video results](VIDEO_TEST_RESULTS.md) contain every input and response. Separate [policy-4 development results](../reports/JOURNAL_POLICY4_REGRESSION.md) include generator metadata and independent long-entry timings. The [ten original unseen results](../reports/UNSEEN_REVIEW_10.md), written with AI assistance, were run once without tuning at that stage: U6/U10 retained screening misses. Those historical cases remain unchanged. Their later policy-5 reruns are explicitly seen development regressions, not re-recorded unseen successes.
 
 The [raw recording report](../reports/walkthrough-recording.json) preserves requests, responses, viewport sizes and checkpoints. MP4 result/final frames were decoded for visual checks, including nonblank source-page canvases. Prior [policy-3](../reports/walkthrough-policy3-recording.json) and [policy-2](../reports/walkthrough-policy2-recording.json) raw recordings remain historical evidence.
 
