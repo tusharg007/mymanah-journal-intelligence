@@ -10,7 +10,7 @@ Thank you for the opportunity. I have completed the assignment and am sharing my
 
 Reviewed commit: submission-v2
 
-I built structured journal analysis and PDF question answering with verbatim page-level citations and evidence-based abstention. Only pinned, local Hugging Face models run: RoBERTa, DeBERTa NLI, E5 and Qwen3 4B through Ollama. The application uses FastAPI, React, isolated PDF parsing and principal-scoped persistence.
+I built structured journal analysis and PDF question answering with verbatim page-level citations and evidence-based abstention. Only pinned, local Hugging Face models run: RoBERTa, DeBERTa NLI, E5 and Qwen3 4B through Ollama. No hosted LLM APIs are used. The application uses FastAPI, React, isolated PDF parsing and principal-scoped persistence.
 
 After the README's Windows dependency setup, with Ollama running, the three-command quick start is:
 
@@ -22,7 +22,7 @@ After the README's Windows dependency setup, with Ollama running, the three-comm
 
 A Linux CPU Docker profile is also included. Open http://127.0.0.1:8000. Bootstrap downloads models; inference runs locally afterward. All 129 deterministic tests pass. Recorded timings are from my tested GPU laptop, not a CPU-only guarantee.
 
-I assume English journals and text-based English PDFs. OCR and Hindi/Hinglish are not implemented. Screening and confidence are uncalibrated, non-clinical outputs. Fresh testing missed two screening cases: some passive-ideation phrasing can be rated LOW or MEDIUM instead of HIGH. AI-assisted expectations and limitations are disclosed in the notes.
+The current version supports English journals and English PDFs with selectable text, not scanned PDFs or Hindi/Hinglish. Risk labels and confidence scores are estimates, not clinical assessments. In testing, two concerning entries received LOW or MEDIUM when HIGH was expected. These expectations were AI-assisted, not clinical ground truth. The linked notes include both entries and the remaining limitations.
 
 Best regards,
 Tushar
