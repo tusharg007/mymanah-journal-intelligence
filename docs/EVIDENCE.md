@@ -99,7 +99,11 @@ every subprocess. Embedded storage and one process are not a distributed deploym
 ## Media and Residual Risk
 
 [Walkthrough guide](WALKTHROUGH.md) and [compiled recording results](VIDEO_TEST_RESULTS.md)
-identify each video's policy and actual outputs. The prior
+identify the newly recorded policy-5 desktop and overview responses. Their source
+fingerprints match the frozen W1-W8 assessment. The replaced desktop had confidence
+above the final 0.99 ceiling in six cases and J12's earlier abstract summary.
+The original desktop remains at `submission-v1`; mobile was not re-recorded and is
+not part of the current submission walkthrough. The prior
 [26-link anonymous check](../reports/submission-link-check.json) checked commit
 `3b9f2e9`, with media sizes and GitHub rate-limit backoffs; it is not presented as
 a check of later edited documents or replaced media.

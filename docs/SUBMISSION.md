@@ -10,7 +10,7 @@
 
 [Repository](https://github.com/tusharg007/mymanah-journal-intelligence) |
 [Policy-5 overview](walkthrough-short.mp4) |
-[Full recordings and timestamps](WALKTHROUGH.md)
+[Full desktop recording and timestamps](WALKTHROUGH.md)
 
 ## Approach
 

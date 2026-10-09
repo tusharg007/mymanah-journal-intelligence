@@ -7,7 +7,9 @@ const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
 const overview = process.argv.includes('--overview');
-const output = path.join(root, 'artifacts', overview ? 'walkthrough-policy5-overview' : 'walkthrough-v5');
+const desktopOnly = process.argv.includes('--desktop-only');
+assert.ok(!(overview && desktopOnly), 'Choose either overview or desktop-only');
+const output = path.join(root, 'artifacts', overview ? 'walkthrough-policy5-overview' : desktopOnly ? 'walkthrough-policy5-desktop' : 'walkthrough-v5');
 const origin = process.env.APP_URL || 'http://127.0.0.1:8000';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pack = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'reviewer-test-pack.json'), 'utf8'));
@@ -45,7 +47,7 @@ function resultCaption(result, expected) {
     return JSON.parse(result.stdout);
   };
   const frozen = snapshot();
-  if (overview) {
+  if (overview || desktopOnly) {
     const assessment = JSON.parse(fs.readFileSync(path.join(root, 'reports', 'unseen-hopelessness-8.json'), 'utf8'));
     assert.deepEqual(frozen.implementation_sha256, assessment.implementation_sha256, 'Inference code must remain frozen after W1-W8');
   }
@@ -58,7 +60,7 @@ function resultCaption(result, expected) {
   const reports = [];
   let uploadedId;
   try {
-    for (const [name, width, height] of (overview ? [['desktop', 1440, 960]] : [['desktop', 1440, 960], ['mobile', 390, 844]])) {
+    for (const [name, width, height] of (overview || desktopOnly ? [['desktop', 1440, 960]] : [['desktop', 1440, 960], ['mobile', 390, 844]])) {
       const context = await browser.newContext({ viewport: { width, height },
         recordVideo: { dir: output, size: { width, height } } });
       const page = await context.newPage();
@@ -207,7 +209,7 @@ function resultCaption(result, expected) {
         assert.deepEqual(unsupported.citations, []);
         await page.locator('.answer-status').filter({ hasText: 'INSUFFICIENT EVIDENCE' }).waitFor();
         await frame('.answer', 'Completed unsupported-question result',
-          overview ? 'INSUFFICIENT EVIDENCE | No unsupported claim or citations.\nScreening misses W2/W3 remain disclosed in SUBMISSION.md.'
+          overview || desktopOnly ? 'INSUFFICIENT EVIDENCE | No unsupported claim or citations.\nScreening misses W2/W3 remain disclosed in SUBMISSION.md.'
             : 'INSUFFICIENT EVIDENCE\nThe completed result has no answer claim or citations.', 16000);
         if (overview && seconds() < 124.2) await pause((124.2 - seconds()) * 1000);
         assert.equal(await page.locator('.activity').count(), 0);

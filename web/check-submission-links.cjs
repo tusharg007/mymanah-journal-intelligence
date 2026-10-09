@@ -59,7 +59,7 @@ const { execFileSync } = require('node:child_process');
           row.status = destination.status();
         }
         if (row.status !== 200) throw new Error(`Link failed: ${JSON.stringify(row)}`);
-        const reference = ['main', 'submission-v1'].find(ref => link.url.startsWith(`${base}/blob/${ref}/`));
+        const reference = ['main', 'submission-v1', 'submission-v2'].find(ref => link.url.startsWith(`${base}/blob/${ref}/`));
         if (reference) {
           const marker = `/blob/${reference}/`;
           const relative = decodeURIComponent(link.url.slice((base + marker).length));

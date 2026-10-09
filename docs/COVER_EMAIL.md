@@ -4,11 +4,11 @@ Dear Rakesh,
 
 Thank you for the opportunity. I have completed the assignment and am sharing my implementation:
 
-- [GitHub repository](https://github.com/tusharg007/mymanah-journal-intelligence/tree/submission-v1)
-- [2:05 policy-5 walkthrough](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v1/docs/walkthrough-short.mp4)
-- [Approach, results and limitations](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v1/docs/SUBMISSION.md)
+- [GitHub repository](https://github.com/tusharg007/mymanah-journal-intelligence/tree/submission-v2)
+- [2:05 policy-5 walkthrough](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v2/docs/walkthrough-short.mp4)
+- [Approach, results and limitations](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v2/docs/SUBMISSION.md)
 
-Reviewed commit: submission-v1
+Reviewed commit: submission-v2
 
 I built structured journal analysis and PDF question answering with verbatim page-level citations and evidence-based abstention. Only pinned, local Hugging Face models run: RoBERTa, DeBERTa NLI, E5 and Qwen3 4B through Ollama. The application uses FastAPI, React, isolated PDF parsing and principal-scoped persistence.
 

@@ -174,8 +174,9 @@ rechecks U6/U10 and the U7-U9 controls after diagnosing all seven safety scores.
 They are now seen development inputs, not fresh generalization evidence.
 The original unseen and frozen held-out reports remain unchanged. All timing
 observations above are from the tested GPU laptop; CPU-only performance can be
-slower, and long journals can exhaust the 60-second deadline. Full desktop/mobile
-videos preserve policy 4; the re-recorded overview measures frozen policy 5.
+slower, and long journals can exhaust the 60-second deadline. The re-recorded full
+desktop and overview videos measure frozen policy 5. The old mobile file is historical
+and is not part of the current submission walkthrough.
 
 The fresh [W1-W8 assessment](reports/UNSEEN_HOPELESSNESS_8.md) was run once with
 no tuning afterward: eight valid responses, six matching supplied expectations.

@@ -21,11 +21,14 @@ def stamp(seconds: float) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--overview", action="store_true")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--overview", action="store_true")
+    modes.add_argument("--desktop-only", action="store_true")
     args = parser.parse_args()
-    recordings = ROOT / "artifacts/walkthrough-policy5-overview" if args.overview else RECORDINGS
+    recordings = (ROOT / "artifacts/walkthrough-policy5-overview" if args.overview
+                  else ROOT / "artifacts/walkthrough-policy5-desktop" if args.desktop_only else RECORDINGS)
     reports = json.loads((recordings / "recording-report.json").read_text(encoding="utf-8"))
-    assert {row["name"] for row in reports} == ({"desktop"} if args.overview else {"desktop", "mobile"}), "Requested recordings must finish"
+    assert {row["name"] for row in reports} == ({"desktop"} if args.overview or args.desktop_only else {"desktop", "mobile"}), "Requested recordings must finish"
     for row in reports:
         name = row["name"]
         source = recordings / f"{name}.webm"
@@ -71,7 +74,8 @@ def main() -> None:
             "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-sseof", "-0.25", "-i", str(destination),
             "-frames:v", "1", str(recordings / f"{name}-decoded-final.png")
         ], check=True)
-    report_name = "walkthrough-policy5-overview.json" if args.overview else "walkthrough-recording.json"
+    report_name = ("walkthrough-policy5-overview.json" if args.overview
+                   else "walkthrough-policy5-desktop.json" if args.desktop_only else "walkthrough-recording.json")
     (ROOT / "reports" / report_name).write_text(json.dumps(reports, indent=2), encoding="utf-8")
 
 
