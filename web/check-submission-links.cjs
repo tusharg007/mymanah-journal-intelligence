@@ -35,17 +35,18 @@ const { execFileSync } = require('node:child_process');
       if (response.status() !== 200) throw new Error(`${file}: HTTP ${response.status()}`);
       const article = page.locator('article.markdown-body');
       await article.waitFor({ timeout: 30000 });
-      const links = await article.locator('a[href]').evaluateAll(elements => elements.map(a => ({ text: a.textContent, url: a.href })));
+      const links = await article.locator('a[href]').evaluateAll(elements => elements.map(a => ({ text: a.textContent, url: a.href, href: a.getAttribute('href') })));
       if (!report.documents.some(row => row.file === file)) report.documents.push({ file, source, status: response.status(), link_count: links.length });
       // GitHub inserts heading-permalink anchors; only the actual Markdown links are submission targets.
       for (const link of links.filter(link => !link.url.includes('#'))) {
         if (report.links.some(row => row.document === file && row.url === link.url && row.status === 200)) continue;
-        const anchor = page.locator('article.markdown-body a').filter({ hasText: link.text }).first();
+        const anchor = article.locator(`a[href=${JSON.stringify(link.href)}]`).first();
         await anchor.waitFor({ timeout: 30000 });
         const popup = context.waitForEvent('page', { timeout: 60000 });
         await anchor.click({ modifiers: ['Control'] });
         const target = await popup;
         await target.waitForLoadState('domcontentloaded');
+        if (target.url() !== link.url) throw new Error(`Wrong link destination: expected ${link.url}, opened ${target.url()}`);
         const previous = report.links.find(row => row.url === target.url() && row.status === 200);
         let destination = previous ? null : await context.request.get(target.url(), { timeout: 60000, maxRetries: 2 });
         const row = { document: file, text: link.text, url: link.url, final_url: target.url(), status: previous ? 200 : destination.status() };
@@ -67,6 +68,8 @@ const { execFileSync } = require('node:child_process');
           if (!local.startsWith(root + path.sep) || !fs.existsSync(local)) throw new Error(`Missing local asset: ${relative}`);
           row.local_bytes = fs.statSync(local).size;
           if (/\.(mp4|pdf)$/.test(relative)) {
+            row.media_reference = reference;
+            row.expected_bytes = Number(execFileSync('git', ['cat-file', '-s', `${reference}:${relative}`], { cwd: root, encoding: 'utf8' }).trim());
             const media = await context.request.get(`https://raw.githubusercontent.com/tusharg007/mymanah-journal-intelligence/${reference}/${relative}`, {
               headers: { Range: 'bytes=0-31' }, timeout: 60000 });
             const bytes = await media.body();
@@ -76,8 +79,8 @@ const { execFileSync } = require('node:child_process');
             row.remote_total_bytes = range ? Number(range.match(/\/(\d+)$/)[1]) : bytes.length;
             row.media_signature_matches = relative.endsWith('.pdf') ? bytes.subarray(0, 5).toString() === '%PDF-' : bytes.subarray(4, 8).toString() === 'ftyp';
             if (![200, 206].includes(media.status()) || !row.media_signature_matches) throw new Error(`Unavailable media: ${relative}`);
-            if (row.remote_total_bytes !== row.local_bytes) throw new Error(`Published media size mismatch: ${relative}`);
-            if (relative.endsWith('.mp4')) row.below_100_mib = row.local_bytes < 100 * 1024 * 1024;
+            if (row.remote_total_bytes !== row.expected_bytes) throw new Error(`Published media size mismatch: ${reference}:${relative}`);
+            if (relative.endsWith('.mp4')) row.below_100_mib = row.remote_total_bytes < 100 * 1024 * 1024;
           }
         }
         report.links.push(row);
