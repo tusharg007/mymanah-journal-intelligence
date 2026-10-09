@@ -5,7 +5,7 @@ Dear Rakesh,
 Thank you for the opportunity. I have completed the assignment and am sharing my implementation:
 
 - [GitHub repository](https://github.com/tusharg007/mymanah-journal-intelligence/tree/submission-v2)
-- [2:05 policy-5 walkthrough](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v2/docs/walkthrough-short.mp4)
+- [Full desktop walkthrough (8:09)](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v2/docs/walkthrough-desktop.mp4)
 - [Approach, results and limitations](https://github.com/tusharg007/mymanah-journal-intelligence/blob/submission-v2/docs/SUBMISSION.md)
 
 Reviewed commit: submission-v2
